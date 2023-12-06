@@ -11,7 +11,7 @@ NAME=os.getenv("DB_NAME")
 
 
 
-SQLALCHEMY_DATABASE_URL = f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB}"
+SQLALCHEMY_DATABASE_URL = f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{Name}"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
