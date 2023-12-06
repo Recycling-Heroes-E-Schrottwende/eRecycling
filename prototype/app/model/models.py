@@ -41,7 +41,7 @@ class Picture(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     product_id = Column(Integer, ForeignKey("products.id"))
-    picture_name = Column(String, index=True)
+    image_location = Column(String, index=True)
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     product = relationship("Product", back_populates="pictures")
