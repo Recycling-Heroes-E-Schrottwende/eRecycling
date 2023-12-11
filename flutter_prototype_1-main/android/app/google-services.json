@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "700052199078",
+    "project_id": "erecyclingchat",
+    "storage_bucket": "erecyclingchat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:700052199078:android:61d8fc2efb3794ca1c4667",
+        "android_client_info": {
+          "package_name": "com.example.flutter_prototype_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkQ86d5WgF3ld4O7PJhUdWMdrmCCsC9u8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
