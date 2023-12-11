@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_prototype_1/shared/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if(kIsWeb){
+    //run the inizialization for web
+    await Firebase.initializeApp(options: 
+    FirebaseOptions(
+      apiKey: Constants.apiKey, 
+      appId: Constants.appId, 
+      messagingSenderId: Constants.messagingSenderId, 
+      projectId: Constants.projectId)
+    ); 
+  }else{
+    //run inizialisazion for mobile
+    await Firebase.initializeApp();
+  }
+
+
+  
   runApp(MyApp());
 }
 
