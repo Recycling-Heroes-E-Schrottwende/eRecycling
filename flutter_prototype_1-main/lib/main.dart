@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                       .map((product) => ProductCard(
                             title: product['product_name'],
                             description: product['description'],
-                            imagePathFuture: fetch_imagelink(),
+                            imagePathFuture: fetch_imagelink(product['id']),
                             productId: product['id'],
                           ))
                       .toList(),

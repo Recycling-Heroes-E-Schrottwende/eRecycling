@@ -4,13 +4,13 @@ import 'fetch.dart';
 class ProductPage extends StatelessWidget {
   final String title;
   final String imagePath;
-  final int productId; // Hinzugefügt
+  final int productId;
 
   const ProductPage({
     Key? key,
     required this.title,
     required this.imagePath,
-    required this.productId, // Hinzugefügt
+    required this.productId,
   }) : super(key: key);
 
   @override
@@ -23,101 +23,51 @@ class ProductPage extends StatelessWidget {
         future: fetch_product_details(productId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            print(snapshot.data);
             if (snapshot.hasData) {
-              // Daten anzeigen
+              final data = snapshot.data!;
               return SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Image.asset(imagePath,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width),
+                    // Bild anzeigen
+                    Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                      width: MediaQuery.of(context).size.width,
+                      height: 250, // Festgelegte Höhe für das Bild
+                    ),
+                    // Textbereich für die Beschreibung
                     Padding(
                       padding: EdgeInsets.all(16.0),
-                      child: Text(
-                        snapshot.data
-                            .toString(), // Ersetzen Sie dies durch eine bessere Formatierung
-                        style: TextStyle(fontSize: 16, height: 1.5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            data['product_name'] ?? 'N/A',
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          Divider(),
+                          Text('Beschreibung: ${data['description'] ?? 'N/A'}'),
+                          Text('Zustand: ${data['condition'] ?? 'N/A'}'),
+                          Text('Preis: \$${data['price']?.toStringAsFixed(2) ?? 'N/A'}'),
+                          Text('Standort: ${data['location'] ?? 'N/A'}'),
+                          Text('Postleitzahl: ${data['postcode'] ?? 'N/A'}'),
+                          Text('Details: ${data['details'] ?? 'N/A'}'),
+                          Text('Technische Details: ${data['technical_details'] ?? 'N/A'}'),
+                          Text('Übergabe: ${data['transfer_method'] ?? 'N/A'}'),
+                        ],
                       ),
                     ),
                   ],
                 ),
               );
             } else if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
+              return Center(child: Text("Error: ${snapshot.error}"));
             }
           }
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
-  }
-
-  String getProductDescription(String title) {
-    switch (title) {
-      case 'Motherboard':
-        return '''Übergabe: Selbstabholung
-Zustand: Gebraucht
-Preis: €50
-
-Beschreibung:
-Das Gigabyte H81M Motherboard ist ideal für den Aufbau eines leistungsstarken, aber kompakten Systems. Es bietet USB 3.0 Anschlüsse, LAN mit ESD Protection, COM, DVI und D-SUB. Dieses Mainboard ist in einem guten gebrauchten Zustand und wurde stets sorgfältig behandelt. Perfekt für PC-Bastler und Upgrader!
-
-Bitte bei Interesse eine Nachricht senden oder anrufen!''';
-      case 'Raspberry Pi':
-        return '''Übergabe: Selbstabholung
-Zustand: Neuwertig
-Preis: €75
-
-Beschreibung Raspberry:
-Marke: Raspberry Pi
-Raspberry Pi4 Model B
-- 4GB RAM
-- Inkl. Kühlkörper, Lüfter, 64GB Kingston microSDXC Card, SDCard Adapter, offizielles Netzteil USB-C, 5.1V, 3A, 15,3W
-
-Technische Daten:
-- GPU: Broadcom VideoCore VI
-- Video Ausgänge: 2x Micro HDMI 2.0, 1x MIPI DSI
-- Video Eingänge: 1x MIPI CSI2
-- Audio: 1x 3.5mm Klinke, 1x Micro HDMI 2.0
-- Anschlüsse extern: 2x USB-A 3.0, 2x USB-A 2.0, 1x microSDXC
-- Anschlüsse intern: 1x PoE-Header
-- GPIO: 26-Pin, 40-Pin gesamt
-- Wireless: WLAN 802.11a/b/g/n/ac, Bluetooth 5.0, BLE
-- LAN: 1x Gb LAN
-- Abmessungen: 93x20x63.5mm
-
-Funktion 1A, neuwertig!
-
-Bitte Nachricht senden, anrufen, WhatsApp oder SMS!
-+ 43 664 3411421
-
-Keine Garantie lt. geltenden Gesetz für Privatverkäufer!
-Es kann nach Absprache Vorort getestet und besichtigt werden!''';
-      case 'Gaming PC':
-        return '''Übergabe: Selbstabholung
-Zustand: Gebraucht
-Preis: €800
-
-Beschreibung Gaming PC:
-Marke: Andere Marken
-Eigenschaften:
-- Gehäuse: NZXT H510i Rot
-- Gehäuselüfter: 4 Stück, 120 mm NZXT
-- Mainboard: Asus PRIME Z370-II
-- CPU: i5-9400f (6 core, 6 Threads)
-- Arbeitsspeicher: 2x Corsair Vengeance 8 GB 3000 MHz
-- GPU: ASUS GTX 1060 6 GB
-- Netzteil: Chieftec 550W
-- SSD: 120 GB Kingston
-
-Beschreibung:
-Dieser PC wurde für Gaming und Lernen verwendet. Keine Komponenten wurden übertaktet. Verkauft, da auf Laptop umgestiegen wurde. Funktioniert einwandfrei, Tests vor Ort möglich.
-
-Was nach dem Kauf zu tun ist: Wärmeleitpaste auf der CPU austauschen.''';
-      default:
-        return 'Beschreibung nicht verfügbar';
-    }
   }
 }

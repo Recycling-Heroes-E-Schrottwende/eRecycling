@@ -16,14 +16,14 @@ class Test:
     return res.json()
 
   def get_product_by_id(self, product_id):
-        res = requests.get(self.url + f"products/?skip={-1+product_id}&limit={1}")
+        res = requests.get(self.url + f"products/{product_id}")
         if res.status_code == 200:
-            return res.json()
+            return [res.json()]
         else:
             return {'error': 'Product not found or failed to load'}
 
-  def get_image(self):
-    res = requests.get(self.url + "images/image_location?skip=0&limit=1")
+  def get_image(self, product_id):
+    res = requests.get(self.url + f"images/image_location?product_id={product_id}")
     return res.json()
 
   def post(self):
@@ -39,12 +39,11 @@ def index():
 
 @app.route('/product/<int:product_id>')
 def get_product(product_id):
-    product_details = test.get_product_by_id(product_id)
-    return jsonify(product_details)
+    return jsonify(test.get_product_by_id(product_id))
 
-@app.route('/image')
-def image():
-  image_list = test.get_image()
+@app.route('/image/<int:product_id>')
+def image(product_id):
+  image_list = test.get_image(product_id)
   image_path = image_list[0]
   return image_path
 
