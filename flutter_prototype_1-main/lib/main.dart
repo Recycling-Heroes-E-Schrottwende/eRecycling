@@ -90,6 +90,7 @@ class HomeScreen extends StatelessWidget {
                             title: product['product_name'],
                             description: product['description'],
                             imagePathFuture: fetch_imagelink(),
+                            productId: product['id'],
                           ))
                       .toList(),
                 );

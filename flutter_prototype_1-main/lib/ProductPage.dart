@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'fetch.dart';
 
 class ProductPage extends StatelessWidget {
   final String title;
   final String imagePath;
+  final int productId; // Hinzugefügt
 
   const ProductPage({
     Key? key,
     required this.title,
     required this.imagePath,
+    required this.productId, // Hinzugefügt
   }) : super(key: key);
 
   @override
@@ -16,24 +19,37 @@ class ProductPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width,
-            ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                getProductDescription(title),
-                style: TextStyle(fontSize: 16, height: 1.5),
-              ),
-            ),
-          ],
-        ),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: fetch_product_details(productId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            print(snapshot.data);
+            if (snapshot.hasData) {
+              // Daten anzeigen
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset(imagePath,
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width),
+                    Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: Text(
+                        snapshot.data
+                            .toString(), // Ersetzen Sie dies durch eine bessere Formatierung
+                        style: TextStyle(fontSize: 16, height: 1.5),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text("Error: ${snapshot.error}");
+            }
+          }
+          return CircularProgressIndicator();
+        },
       ),
     );
   }

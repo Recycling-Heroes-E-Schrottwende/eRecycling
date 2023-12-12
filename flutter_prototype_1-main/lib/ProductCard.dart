@@ -5,12 +5,14 @@ class ProductCard extends StatelessWidget {
   final String title;
   final String description;
   final Future<String> imagePathFuture;
+  final int productId; // Hinzugefügt
 
   const ProductCard({
     Key? key,
     required this.title,
     required this.description,
     required this.imagePathFuture,
+    required this.productId, // Hinzugefügt
   }) : super(key: key);
 
   @override
@@ -35,7 +37,11 @@ class ProductCard extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProductPage(title: title, imagePath: snapshot.data ?? ''),
+                    builder: (context) => ProductPage(
+                      title: title,
+                      imagePath: snapshot.data ?? '',
+                      productId: productId, // Hinzugefügt
+                    ),
                   ),
                 );
               },

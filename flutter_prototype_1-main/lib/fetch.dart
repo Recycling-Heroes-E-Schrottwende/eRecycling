@@ -21,3 +21,19 @@ Future<String> fetch_imagelink() async {
         'Failed to load image link with status code: ${response.statusCode}');
   }
 }
+
+Future<Map<String, dynamic>> fetch_product_details(int productId) async {
+  final response = await http.get(Uri.parse('http://127.0.0.1:3829/product/$productId'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> responseBody = jsonDecode(response.body);
+    if (responseBody.isNotEmpty) {
+      // Gibt das erste Element der Liste zurück
+      return responseBody.first;
+    } else {
+      throw Exception('Product not found');
+    }
+  } else {
+    throw Exception('Failed to load product details with status code: ${response.statusCode}');
+  }
+}
