@@ -34,14 +34,14 @@ class Product(Base):
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     user = relationship("User", back_populates="products")
-    pictures = relationship("Picture", back_populates="product")
+    images = relationship("Image", back_populates="product")
 
-class Picture(Base):
-    __tablename__ = "pictures"
+class Image(Base):
+    __tablename__ = "images"
 
     id = Column(Integer, primary_key=True, index=True)
     product_id = Column(Integer, ForeignKey("products.id"))
     image_location = Column(String)
     created_at = Column(TIMESTAMP, server_default=func.now())
 
-    product = relationship("Product", back_populates="pictures")
+    product = relationship("Product", back_populates="images")

@@ -4,15 +4,18 @@ from sqlalchemy.orm import joinedload
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List
+from model.database import SessionLocal, engine
+import auth
 
 
 from model import models
-from model import posts
 from model import shemas
-from model.database import SessionLocal, engine
+from model import posts
 from model.shemas import UserCreate
+from model.shemas import ProductCreate
 
 app = FastAPI()
+app.include_router(auth.router)
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -53,7 +56,7 @@ async def read_products(product_id: int, db: Session = Depends(get_db)):
     products = db.query(models.Product).filter(models.Product.id == product_id).first()
     return products
 
-@app.get("/images/image_location")
+@app.get("/images/image_location/{product_id}")
 async def read_pictures(product_id: int, db: Session = Depends(get_db)):
     images = db.query(models.Image.image_location).filter(models.Image.product_id == product_id).all()
     return [image.image_location for image in images]
@@ -62,22 +65,12 @@ async def read_pictures(product_id: int, db: Session = Depends(get_db)):
 
 @app.post("/create_user/")
 async def create_user(user_create: UserCreate, db: Session = Depends(get_db)):
-    # Überprüfen Sie, ob die E-Mail-Adresse bereits vorhanden ist
-    existing_user = db.query(models.User).filter(models.User.email == user_create.email).first()
-    if existing_user:
-        raise HTTPException(status_code=400, detail="Die E-Mail-Adresse ist bereits registriert")
+    return posts.Usercreate(user_create, db)
 
-    # Erstellen Sie einen neuen Benutzer
-    new_user = models.User(
-        username=user_create.username,
-        password=user_create.password,
-        email=user_create.email,
-        created_at=datetime.now()
-    )
+@app.post("/create_product/")
+async def create_product(product_create: shemas.ProductCreate, db: Session = Depends(get_db)):
+    return posts.Productcreate(product_create, db)
 
-    # Fügen Sie den Benutzer zur Datenbank hinzu
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
-    return new_user
+@app.post("/create_image/")
+async def create_image(image_create: shemas.ImageCreate, db: Session = Depends(get_db)):
+    return posts.Imagecreate(image_create, db)
