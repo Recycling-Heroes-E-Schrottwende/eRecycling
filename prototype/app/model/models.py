@@ -15,7 +15,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     created_at = Column(TIMESTAMP)
 
-    products = relationship("Product", back_populates="user")
+    products = relationship("Product", back_populates="user", cascade="all, delete-orphan")
 
 class Product(Base):
     __tablename__ = "products"
@@ -34,7 +34,7 @@ class Product(Base):
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     user = relationship("User", back_populates="products")
-    images = relationship("Image", back_populates="product")
+    images = relationship("Image", back_populates="product", cascade="all, delete-orphan")
 
 class Image(Base):
     __tablename__ = "images"

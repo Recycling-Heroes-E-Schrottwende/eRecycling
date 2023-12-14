@@ -12,10 +12,11 @@ from model import models
 from model import shemas
 from model import posts
 from model.shemas import UserCreate
+from model import deletes
 from model.shemas import ProductCreate
 
 app = FastAPI()
-app.include_router(auth.router)
+#app.include_router(auth.router)
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -74,3 +75,19 @@ async def create_product(product_create: shemas.ProductCreate, db: Session = Dep
 @app.post("/create_image/")
 async def create_image(image_create: shemas.ImageCreate, db: Session = Depends(get_db)):
     return posts.Imagecreate(image_create, db)
+
+@app.delete("/delete_user/{user_id}")
+async def delete_user(user_id: int, db: Session = Depends(get_db)):
+    deleted_user = deletes.DeleteUser(user_id, db)
+    return {"message": f"User {deleted_user.id} deleted successfully"}
+
+@app.delete("/delete_product/{product_id}")
+async def delete_product(product_id: int, db: Session = Depends(get_db)):
+    deleted_product =  deletes.DeleteProduct(product_id, db)
+    return {"message": f"Product {deleted_product.id} deleted successfully"}
+
+
+@app.delete("/delete_image/{image_id}")
+async def delete_image(image_id: int, db: Session = Depends(get_db)):
+    deleted_image =  deletes.DeleteImage(image_id, db)
+    return {"message": f"Image {deleted_image.id} deleted successfully"}
