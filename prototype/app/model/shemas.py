@@ -1,11 +1,11 @@
 from pydantic import BaseModel
 
-class UserCreate(BaseModel):
+class User(BaseModel):
     username: str
     password: str
     email: str
 
-class ProductCreate(BaseModel):
+class Product(BaseModel):
     user_id: int
     product_name: str
     price: int
@@ -17,7 +17,7 @@ class ProductCreate(BaseModel):
     details: str
     transfer_method: str
 
-class ImageCreate(BaseModel):
+class Image(BaseModel):
     product_id: int
     image_location: str
 

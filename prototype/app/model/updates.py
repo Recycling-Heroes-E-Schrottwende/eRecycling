@@ -1,10 +1,10 @@
 # updates.py
 
 from sqlalchemy.orm import Session
-from . import models, schemas
+from . import shemas, models
 
 class UpdateUser:
-    def __init__(self, user_id: int, user_update: schemas.UserUpdate, db: Session):
+    def __init__(self, user_id: int, user_update: shemas.User, db: Session):
         self.user_id = user_id
         self.user_update = user_update
         self.db = db
@@ -20,7 +20,7 @@ class UpdateUser:
         return None
 
 class UpdateProduct:
-    def __init__(self, product_id: int, product_update: schemas.ProductUpdate, db: Session):
+    def __init__(self, product_id: int, product_update: shemas.Product, db: Session):
         self.product_id = product_id
         self.product_update = product_update
         self.db = db
@@ -36,7 +36,7 @@ class UpdateProduct:
         return None
 
 class UpdateImage:
-    def __init__(self, image_id: int, image_update: schemas.ImageUpdate, db: Session):
+    def __init__(self, image_id: int, image_update: shemas.Image, db: Session):
         self.image_id = image_id
         self.image_update = image_update
         self.db = db

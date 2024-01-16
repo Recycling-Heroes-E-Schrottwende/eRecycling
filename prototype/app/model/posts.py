@@ -21,7 +21,7 @@ def create_jwt_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-def Usercreate(user_create: shemas.UserCreate, db: Session):
+def Usercreate(user_create: shemas.User, db: Session):
     existing_user = db.query(models.User).filter(models.User.email == user_create.email).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Die E-Mail-Adresse ist bereits registriert")
@@ -44,7 +44,7 @@ def Usercreate(user_create: shemas.UserCreate, db: Session):
 
     return {"user": new_user, "access_token": token, "token_type": "bearer"}
 
-def Productcreate(product_create: shemas.ProductCreate, db: Session):
+def Productcreate(product_create: shemas.Product, db: Session):
     # Erstellen Sie ein neues Produkt
     new_product = models.Product(
         user_id=product_create.user_id,
@@ -66,7 +66,7 @@ def Productcreate(product_create: shemas.ProductCreate, db: Session):
 
     return new_product
 
-def Imagecreate(image_create: shemas.ImageCreate, db: Session):
+def Imagecreate(image_create: shemas.Image, db: Session):
     # Erstellen Sie ein neues Bild
     new_image = models.Picture(
         product_id=image_create.product_id,
