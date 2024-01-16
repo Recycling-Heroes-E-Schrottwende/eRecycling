@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import List
 from model.database import SessionLocal, engine
-import auth
+#import auth
 
 
 from model import models
@@ -13,10 +13,11 @@ from model import shemas
 from model import posts
 from model.shemas import UserCreate
 from model import deletes
+from model import updates
 from model.shemas import ProductCreate
 
 app = FastAPI()
-#app.include_router(auth.router)
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -32,31 +33,28 @@ def get_db():
 
 
 @app.get("/users/")
-async def read_user(db: Session = Depends(get_db)):
-    query = db.query(models.User)
-    user = query.all()
-    return user
-@app.get("/users/{user_id}")
-async def read_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(models.User).filter(models.User.id == user_id).first()
-    return user
+async def read_users(user_id: int = None, db: Session = Depends(get_db)):
+    if user_id is None:
+        users = db.query(models.User).all()
+        return users
+    else:
+        user = db.query(models.User).filter(models.User.id == user_id).first()
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user
 
 @app.get("/products/")
-async def read_products(db: Session = Depends(get_db)):
+async def read_products(user_id: int = None, product_id: int = None, db: Session = Depends(get_db)):
     query = db.query(models.Product)
-    products = query.all()
+    if user_id is not None:
+        products = query.filter(models.Product.user_id == user_id).all()
+    elif product_id is not None:
+        products = query.filter(models.Product.id == product_id).first()
+        if products is None:
+            raise HTTPException(status_code=404, detail="Product not found")
+    else:
+        products = query.all()
     return products
-
-@app.get("/products/by_user/{user_id}")
-async def read_products(user_id: int, db: Session = Depends(get_db)):
-    products = db.query(models.Product).filter(models.Product.user_id == user_id).all()
-    return products
-
-@app.get("/products/{product_id}")
-async def read_products(product_id: int, db: Session = Depends(get_db)):
-    products = db.query(models.Product).filter(models.Product.id == product_id).first()
-    return products
-
 @app.get("/images/image_location/{product_id}")
 async def read_pictures(product_id: int, db: Session = Depends(get_db)):
     images = db.query(models.Image.image_location).filter(models.Image.product_id == product_id).all()
@@ -75,6 +73,28 @@ async def create_product(product_create: shemas.ProductCreate, db: Session = Dep
 @app.post("/create_image/")
 async def create_image(image_create: shemas.ImageCreate, db: Session = Depends(get_db)):
     return posts.Imagecreate(image_create, db)
+
+@app.put("/update_user/{user_id}")
+async def update_user(user_id: int, user_update: models.User, db: Session = Depends(get_db)):
+    updated_user = updates.UpdateUser(user_id, user_update, db)
+    if updated_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return updated_user
+
+@app.put("/update_product/{product_id}")
+async def update_product(product_id: int, product_update: models.Product, db: Session = Depends(get_db)):
+    updated_product = updates.UpdateProduct(product_id, product_update, db)
+    if updated_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return updated_product
+
+@app.put("/update_image/{image_id}")
+async def update_image(image_id: int, image_update: models.Image, db: Session = Depends(get_db)):
+    updated_image = updates.UpdateImage(image_id, image_update, db)
+    if updated_image is None:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return updated_image
+
 
 @app.delete("/delete_user/{user_id}")
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
