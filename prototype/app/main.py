@@ -18,6 +18,7 @@ from model.updates import UpdateProduct
 from model.shemas import Product
 from model.updates import UpdateImage
 from model.shemas import Image
+from model import utils
 
 app = FastAPI()
 
