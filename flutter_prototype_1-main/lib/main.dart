@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'fetch.dart';
 import 'ProductCard.dart';
 import 'ProductPage.dart';
-import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
