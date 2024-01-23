@@ -38,7 +38,7 @@ class ProductPage extends StatelessWidget {
                     ),
                     // Textbereich für die Beschreibung
                     Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -46,7 +46,7 @@ class ProductPage extends StatelessWidget {
                             data['product_name'] ?? 'N/A',
                             style: Theme.of(context).textTheme.headlineSmall,
                           ),
-                          Divider(),
+                          const Divider(),
                           Text('Beschreibung: ${data['description'] ?? 'N/A'}'),
                           Text('Zustand: ${data['condition'] ?? 'N/A'}'),
                           Text('Preis: \$${data['price']?.toStringAsFixed(2) ?? 'N/A'}'),
@@ -65,7 +65,7 @@ class ProductPage extends StatelessWidget {
               return Center(child: Text("Error: ${snapshot.error}"));
             }
           }
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         },
       ),
     );
