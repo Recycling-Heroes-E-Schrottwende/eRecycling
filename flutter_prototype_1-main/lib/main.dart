@@ -5,10 +5,12 @@ import 'ProductCard.dart';
 import 'ProductPage.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         ),
         appBarTheme: AppBarTheme(
           color: Colors.white,
-          iconTheme: IconThemeData(color: Colors.green),
+          iconTheme: const IconThemeData(color: Colors.green),
           titleTextStyle: GoogleFonts.lato(
             color: Colors.green,
             fontSize: 20,
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
           ),
-          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           elevation: 5,
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -45,12 +47,14 @@ class MyApp extends StatelessWidget {
           labelStyle: TextStyle(color: Colors.green[600]),
         ),
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,10 +63,10 @@ class HomeScreen extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16.0),
           child: Image.asset('assets/images/logo.png'),
         ),
-        title: Text('Recycling Heroes'),
+        title: const Text('Recycling Heroes'),
         actions: [
           IconButton(
-            icon: Icon(Icons.person),
+            icon: const Icon(Icons.person),
             onPressed: () {
               // Profilseite Navigator.push...
             },
@@ -71,8 +75,8 @@ class HomeScreen extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: TextField(
               decoration: InputDecoration(
                 labelText: 'Search',
@@ -100,7 +104,7 @@ class HomeScreen extends StatelessWidget {
               }
 
               // By default, show a loading spinner.
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             },
           ),
         ],
