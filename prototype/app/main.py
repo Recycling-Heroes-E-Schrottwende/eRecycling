@@ -5,7 +5,6 @@ from pydantic import BaseModel
 from datetime import datetime
 from typing import List
 from model.database import SessionLocal, engine
-#import auth
 
 
 from model import models
