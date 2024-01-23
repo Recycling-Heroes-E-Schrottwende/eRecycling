@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'fetch.dart';
 import 'ProductCard.dart';
 import 'ProductPage.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -89,7 +90,8 @@ class HomeScreen extends StatelessWidget {
                       .map((product) => ProductCard(
                             title: product['product_name'],
                             description: product['description'],
-                            imagePathFuture: fetch_imagelink(product['id']),
+                            imageUrl: "https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                            //imagePathFuture: fetch_imagelink(product['id']),
                             productId: product['id'],
                           ))
                       .toList(),

@@ -30,7 +30,7 @@ class ProductPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Bild anzeigen
-                    Image.asset(
+                    Image.network(
                       imagePath,
                       fit: BoxFit.cover,
                       width: MediaQuery.of(context).size.width,
