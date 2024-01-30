@@ -26,12 +26,7 @@ Future<Map<String, dynamic>> fetch_product_details(int productId) async {
   final response = await http.get(Uri.parse('http://127.0.0.1:3829/product/$productId'));
 
   if (response.statusCode == 200) {
-    List<dynamic> responseBody = jsonDecode(response.body);
-    if (responseBody.isNotEmpty) {
-      return responseBody.first;
-    } else {
-      throw Exception('Product not found');
-    }
+    return Map<String, dynamic>.from(jsonDecode(response.body));
   } else {
     throw Exception('Failed to load product details with status code: ${response.statusCode}');
   }

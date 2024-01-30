@@ -10,6 +10,7 @@ class ProductService:
 
     def get_product_by_id(self, product_id):
         response = requests.get(self.url + f"products/?product_id={product_id}")
+        print(response.json())
         if response.status_code == 200:
             return response.json()
         else:
@@ -24,12 +25,4 @@ class ProductService:
 
     def post_product(self, product_data):
         response = requests.post(self.url + "products/", json=product_data)
-        return response.json()
-
-class UserService:
-    def __init__(self):
-        self.url = "http://128.140.3.14:8000/"
-
-    def get_users(self):
-        response = requests.get(self.url + "users/")
         return response.json()

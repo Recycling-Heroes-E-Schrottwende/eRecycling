@@ -11,7 +11,7 @@ product_service = ProductService()
 def products():
     return jsonify(product_service.get_products())
 
-@app.route('/products/<int:product_id>')
+@app.route('/product/<int:product_id>')
 def product_detail(product_id):
     return jsonify(product_service.get_product_by_id(product_id))
 
