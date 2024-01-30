@@ -2,7 +2,7 @@ import requests
 
 class ProductService:
     def __init__(self):
-        self.url = "http://128.140.3.14:8000/"
+        self.url = "http://app.recyclingheroes.at/"
 
     def get_products(self):
         response = requests.get(self.url + "products/")
