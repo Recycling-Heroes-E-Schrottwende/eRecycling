@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'fetch.dart';
 import 'ProductCard.dart';
+import 'ProductPage.dart'; // Stellen Sie sicher, dass Sie ProductPage importieren, falls Sie sie verwenden möchten
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Recycling Heroes', // Titel der App
       theme: ThemeData(
         primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -60,53 +62,56 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.only(left: 16.0),
-          child: Image.asset('assets/images/logo.png'),
+          child: Image.asset('assets/images/logo.png'), // Stellen Sie sicher, dass das Logo-Bild vorhanden ist
         ),
         title: const Text('Recycling Heroes'),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              // Profilseite Navigator.push...
+              // Implementierung der Profilseiten-Navigation
             },
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(16.0),
-            child: TextField(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
               decoration: InputDecoration(
-                labelText: 'Search',
-                suffixIcon: Icon(Icons.search, color: Colors.green),
+                labelText: 'Suche',
+                suffixIcon: const Icon(Icons.search, color: Colors.green),
               ),
             ),
-          ),
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: fetch_products(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  children: snapshot.data!
-                      .map((product) => ProductCard(
-                            title: product['product_name'],
-                            description: product['description'],
-                            imageUrl: "https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                            //imagePathFuture: fetch_imagelink(product['id']),
-                            productId: product['id'],
-                          ))
-                      .toList(),
-                );
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
-        ],
+            const SizedBox(height: 20),
+            Expanded(
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: fetch_products(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Error: ${snapshot.error}"));
+                  } else if (snapshot.hasData) {
+                    return ListView(
+                      children: snapshot.data!
+                          .map((product) => ProductCard(
+                                title: product['product_name'],
+                                description: product['description'],
+                                imageUrl: "https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                                productId: product['id'],
+                              ))
+                          .toList(),
+                    );
+                  } else {
+                    return const Center(child: Text('Keine Produkte gefunden'));
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
