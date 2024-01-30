@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'fetch.dart';
 import 'ProductCard.dart';
-import 'ProductPage.dart'; // Stellen Sie sicher, dass Sie ProductPage importieren, falls Sie sie verwenden möchten
 
 void main() {
   runApp(const MyApp());
@@ -78,10 +77,10 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 labelText: 'Suche',
-                suffixIcon: const Icon(Icons.search, color: Colors.green),
+                suffixIcon: Icon(Icons.search, color: Colors.green),
               ),
             ),
             const SizedBox(height: 20),

@@ -42,7 +42,7 @@ class ProductPage extends StatelessWidget {
                         children: [
                           Text(
                             data['product_name'] ?? 'N/A',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -50,7 +50,7 @@ class ProductPage extends StatelessWidget {
                           const SizedBox(height: 10),
                           Text(
                             'Beschreibung: ${data['description'] ?? 'N/A'}',
-                            style: TextStyle(fontSize: 16.0),
+                            style:const TextStyle(fontSize: 16.0),
                           ),
                           const SizedBox(height: 10),
                           _buildSectionTitle(context, 'Details'),
@@ -95,16 +95,16 @@ class ProductPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 4.0),
       child: RichText(
         text: TextSpan(
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 16.0,
           ),
           children: [
             TextSpan(
               text: '$label: ',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            TextSpan(text: value ?? 'N/A'),
+            TextSpan(text: value),
           ],
         ),
       ),
