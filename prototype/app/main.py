@@ -1,10 +1,15 @@
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from pydantic import BaseModel
 from datetime import datetime
 from typing import List
 from model.database import SessionLocal, engine
+from fastapi.responses import FileResponse
+from starlette.responses import StreamingResponse
+from io import BytesIO
+from typing_extensions import Annotated
+import os.path
 
 
 from model import models
@@ -18,6 +23,7 @@ from model.shemas import Product
 from model.updates import UpdateImage
 from model.shemas import Image
 from model import utils
+from model import miniouploader
 
 app = FastAPI()
 
@@ -33,7 +39,6 @@ def get_db():
 
 
 # Get Requests
-
 
 @app.get("/users/")
 async def read_users(user_id: int = None, db: Session = Depends(get_db)):
@@ -58,10 +63,11 @@ async def read_products(user_id: int = None, product_id: int = None, db: Session
     else:
         products = query.all()
     return products
-@app.get("/images/image_location/{product_id}")
-async def read_pictures(product_id: int, db: Session = Depends(get_db)):
-    images = db.query(models.Image.image_location).filter(models.Image.product_id == product_id).all()
-    return [image.image_location for image in images]
+
+@app.get("/presigned-url/{object_name}")
+async def get_presigned_url(object_name: str):
+    url = miniouploader.create_presigned_url("pictures", object_name)
+    return {"url": url}
 
 # Post Requests
 
@@ -73,11 +79,29 @@ async def create_user(user_create: shemas.User, db: Session = Depends(get_db)):
 async def create_product(product_create: shemas.Product, db: Session = Depends(get_db)):
     return posts.Productcreate(product_create, db)
 
-@app.post("/create_image/")
-async def create_image(image_create: shemas.Image, db: Session = Depends(get_db)):
-    return posts.Imagecreate(image_create, db)
+@app.post("/uploadImage")
+async def upload_image(product_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    bucket_name = "pictures"
+
+    # Create a new database entry and get the id
+    new_image = models.Image(product_id=product_id, created_at=datetime.now())
+    db.add(new_image)
+    db.commit()
+    db.refresh(new_image)
+    id = new_image.id
+
+    destination_file = f"{product_id}-{id}.webp"
+
+    # Read the file
+    file_content = await file.read()
+
+    # Upload the file to MinIO
+    result = miniouploader.upload_to_minio(bucket_name, destination_file, file_content)
+
+    return result
 
 
+# Delete Requests
 @app.delete("/delete_user/{user_id}")
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
     deleted_user = deletes.DeleteUser(user_id, db)
@@ -93,6 +117,8 @@ async def delete_image(image_id: int, db: Session = Depends(get_db)):
     deleted_image =  deletes.DeleteImage(image_id, db)
     return {"message": f"Image {deleted_image.id} deleted successfully"}
 
+
+# Update Requests
 @app.put("/update_user/{user_id}")
 async def update_user(user_id: int, user_update: User, db: Session = Depends(get_db)):
     updated_user = UpdateUser(user_id, user_update, db).update_user()
@@ -113,3 +139,10 @@ async def update_image(image_id: int, image_update: Image, db: Session = Depends
     if updated_image is None:
         raise HTTPException(status_code=404, detail="Image not found")
     return updated_image
+
+# Picture Requests
+
+
+
+
+

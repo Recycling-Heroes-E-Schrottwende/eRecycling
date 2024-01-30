@@ -19,7 +19,6 @@ class Product(BaseModel):
 
 class Image(BaseModel):
     product_id: int
-    image_location: str
 
 
 class UserResponse(BaseModel):
