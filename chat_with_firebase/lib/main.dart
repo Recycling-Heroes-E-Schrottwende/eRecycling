@@ -1,3 +1,4 @@
+import 'package:chat_with_firebase/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -111,9 +112,12 @@ class MainMenuScreen extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            // Hier kannst du die Navigation zu deiner Chat-Seite implementieren
-            // Zum Beispiel: Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
-            print('Chat button pressed');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatScreen(receiverId: '04e9baHD2zZjZ8fJvxDd48B21Bo1'), // Hier die empfängerId eintragen
+              ),
+            );
           },
           child: Text('Chat'),
         ),
