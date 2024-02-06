@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+  
+void main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -44,6 +49,11 @@ class _AuthScreenState extends State<AuthScreen> {
         password: _passwordController.text,
       );
       print('Login successful: ${userCredential.user?.uid}');
+      // Nach dem Login zur Hauptmenüseite navigieren
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainMenuScreen()),
+      );
     } catch (e) {
       print('Login failed: $e');
     }
@@ -85,6 +95,27 @@ class _AuthScreenState extends State<AuthScreen> {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class MainMenuScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Main Menu'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Hier kannst du die Navigation zu deiner Chat-Seite implementieren
+            // Zum Beispiel: Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+            print('Chat button pressed');
+          },
+          child: Text('Chat'),
         ),
       ),
     );
