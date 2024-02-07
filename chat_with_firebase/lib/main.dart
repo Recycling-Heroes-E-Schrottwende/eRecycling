@@ -1,4 +1,3 @@
-import 'package:chat_with_firebase/chat_screen.dart';
 import 'package:chat_with_firebase/chat_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
