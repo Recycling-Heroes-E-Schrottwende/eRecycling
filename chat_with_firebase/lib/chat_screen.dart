@@ -104,13 +104,10 @@ class _ChatScreenState extends State<ChatScreen> {
   String _generateChatId() {
     var user = _auth.currentUser;
     var receiverId = widget.receiverId;
-
-    // Hier verwendet man eine eindeutige Reihenfolge für die Chat-ID
-    var chatIds = [user?.uid, receiverId];
-    chatIds.sort();
-    return chatIds.join('_');
+    var ids = [user?.uid, receiverId];
+    ids.sort();
+    return ids.join('_');
   }
-
 }
 
 class MessageWidget extends StatelessWidget {
