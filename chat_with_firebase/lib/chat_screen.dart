@@ -82,24 +82,25 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _sendMessage() async {
-    var user = _auth.currentUser;
-    if (user != null) {
-      var chatId = _generateChatId();
-      var messageText = _messageController.text.trim();
+  var user = _auth.currentUser;
+  if (user != null) {
+    var chatId = _generateChatId();
+    var messageText = _messageController.text.trim();
 
-      await _firestore
-          .collection('chats')
-          .doc(chatId)
-          .collection('messages')
-          .add({
+    await _firestore
+      .collection('chats')
+      .doc(chatId)  // Hier wird ebenfalls die eindeutige Chatroom-ID verwendet
+      .collection('messages')
+      .add({
         'text': messageText,
         'senderId': user.uid,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      _messageController.clear();
-    }
+    _messageController.clear();
   }
+}
+
 
   String _generateChatId() {
     var user = _auth.currentUser;

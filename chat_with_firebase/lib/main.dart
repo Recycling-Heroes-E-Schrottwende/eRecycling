@@ -1,4 +1,5 @@
 import 'package:chat_with_firebase/chat_screen.dart';
+import 'package:chat_with_firebase/chat_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -115,7 +116,7 @@ class MainMenuScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ChatScreen(receiverId: '04e9baHD2zZjZ8fJvxDd48B21Bo1'), // Hier die empfängerId eintragen
+                builder: (context) => ChatSelectionScreen(), // Hier die empfängerId eintragen
               ),
             );
           },
