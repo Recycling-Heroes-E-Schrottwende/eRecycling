@@ -1,4 +1,5 @@
 import 'package:chat_with_firebase/chat_selection_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,8 +29,10 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
 
   Future<void> _register() async {
     try {
@@ -37,6 +40,13 @@ class _AuthScreenState extends State<AuthScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+
+      await _firestore.collection('users').doc(userCredential.user?.uid).set({
+        'uid': userCredential.user?.uid,
+        'username': _userNameController.text,
+        'email': _emailController.text,
+      });
+
       print('Registration successful: ${userCredential.user?.uid}');
     } catch (e) {
       print('Registration failed: $e');
@@ -72,6 +82,11 @@ class _AuthScreenState extends State<AuthScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              controller: _userNameController,
+              decoration: InputDecoration(labelText: 'Username'),
+            ),
+            SizedBox(height: 16),
+            TextField(
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
@@ -103,6 +118,7 @@ class _AuthScreenState extends State<AuthScreen> {
 }
 
 class MainMenuScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,7 +131,7 @@ class MainMenuScreen extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ChatSelectionScreen(), // Hier die empfängerId eintragen
+                builder: (context) => ChatSelectionScreen(),
               ),
             );
           },

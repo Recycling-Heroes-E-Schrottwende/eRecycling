@@ -1,4 +1,5 @@
 import 'package:chat_with_firebase/chat_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -8,7 +9,7 @@ class ChatSelectionScreen extends StatefulWidget {
 }
 
 class _ChatSelectionScreenState extends State<ChatSelectionScreen> {
-  List<String> availableUsers = [];
+  List<Map<String, dynamic>> availableUsers = [];
   String selectedUserId = '';
 
   @override
@@ -19,10 +20,14 @@ class _ChatSelectionScreenState extends State<ChatSelectionScreen> {
 
   Future<void> _fetchAvailableUsers() async {
     try {
+      String currentUserId = FirebaseAuth.instance.currentUser?.uid ?? '';
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('users').get();
 
       setState(() {
-        availableUsers = querySnapshot.docs.map((doc) => doc.id).toList();
+        availableUsers = querySnapshot.docs
+          .where((doc) => doc.id != currentUserId) // Ausschluss des eigenen Benutzers
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
       });
     } catch (e) {
       print('Error fetching users: $e');
@@ -38,13 +43,13 @@ class _ChatSelectionScreenState extends State<ChatSelectionScreen> {
       body: ListView.builder(
         itemCount: availableUsers.length,
         itemBuilder: (context, index) {
-          String userId = availableUsers[index];
+          String username = availableUsers[index]['username'];
 
           return ListTile(
-            title: Text(userId),
+            title: Text(username),
             onTap: () {
               setState(() {
-                selectedUserId = userId;
+                selectedUserId = availableUsers[index]['uid'];
               });
 
               //Hier kannst du zusätzliche Aktionen durchführen, z.B. den Chat öffnen
