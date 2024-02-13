@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-final String serverUrl = 'http://app.recyclingheroes.at/flask-api';
+const String serverUrl = 'http://app.recyclingheroes.at/flask-api';
 
 Future<List<Map<String, dynamic>>> fetch_products() async {
   final response = await http.get(Uri.parse('$serverUrl/products'));
@@ -18,7 +18,7 @@ Future<String> fetch_imagelink(int productId) async {
   final response = await http.get(Uri.parse('$serverUrl/image/$productId'));
 
   if (response.statusCode == 200) {
-    return response.body as String;
+    return response.body;
   } else {
     throw Exception(
         'Failed to load image link with status code: ${response.statusCode}');
