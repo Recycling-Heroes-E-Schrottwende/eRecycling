@@ -20,4 +20,4 @@ def product_image(product_id):
     return jsonify(product_service.get_image(product_id))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='127.0.0.1', port=3829)
+    app.run(host='localhost', port=3829)

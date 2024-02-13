@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                           .map((product) => ProductCard(
                                 title: product['product_name'],
                                 description: product['description'],
-                                imageUrl: "https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                                imageUrl: "https://heise.cloudimg.io/width/610/q85.png-lossy-85.webp-lossy-85.foil1/_www-heise-de_/imgs/18/3/6/2/7/3/4/9/urn-newsml-dpa-com-20090101-180117-99-674215_large_4_3-730e65d735747fae.jpeg",
                                 productId: product['id'],
                               ))
                           .toList(),

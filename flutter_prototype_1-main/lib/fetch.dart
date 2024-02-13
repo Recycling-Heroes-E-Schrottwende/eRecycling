@@ -1,8 +1,11 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+final String serverUrl = 'http://app.recyclingheroes.at/flask-api';
+
 Future<List<Map<String, dynamic>>> fetch_products() async {
-  final response = await http.get(Uri.parse('http://127.0.0.1:3829/products'));
+  final response = await http.get(Uri.parse('$serverUrl/products'));
+  
 
   if (response.statusCode == 200) {
     return List<Map<String, dynamic>>.from(jsonDecode(response.body));
@@ -12,7 +15,7 @@ Future<List<Map<String, dynamic>>> fetch_products() async {
 }
 
 Future<String> fetch_imagelink(int productId) async {
-  final response = await http.get(Uri.parse('http://127.0.0.1:3829/image/$productId'));
+  final response = await http.get(Uri.parse('$serverUrl/image/$productId'));
 
   if (response.statusCode == 200) {
     return response.body as String;
@@ -23,7 +26,7 @@ Future<String> fetch_imagelink(int productId) async {
 }
 
 Future<Map<String, dynamic>> fetch_product_details(int productId) async {
-  final response = await http.get(Uri.parse('http://127.0.0.1:3829/product/$productId'));
+  final response = await http.get(Uri.parse('$serverUrl/product/$productId'));
 
   if (response.statusCode == 200) {
     return Map<String, dynamic>.from(jsonDecode(response.body));
