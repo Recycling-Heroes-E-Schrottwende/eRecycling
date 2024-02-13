@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class ChatScreen extends StatefulWidget {
   final String receiverId;
 
-  ChatScreen({required this.receiverId});
+  const ChatScreen({super.key, required this.receiverId});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -20,7 +20,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Private Chat'),
+        title: const Text('Private Chat'),
       ),
       body: Column(
         children: [
@@ -34,7 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -64,13 +64,13 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Enter your message...',
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: _sendMessage,
                 ),
               ],
@@ -115,23 +115,23 @@ class MessageWidget extends StatelessWidget {
   final String text;
   final bool isMe;
 
-  MessageWidget({required this.text, required this.isMe});
+  const MessageWidget({super.key, required this.text, required this.isMe});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Align(
         alignment: isMe ? Alignment.topRight : Alignment.topLeft,
         child: Container(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             color: isMe ? Colors.blue : Colors.grey,
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
             text,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ),

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatSelectionScreen extends StatefulWidget {
+  const ChatSelectionScreen({super.key});
+
   @override
   _ChatSelectionScreenState createState() => _ChatSelectionScreenState();
 }
@@ -38,7 +40,7 @@ class _ChatSelectionScreenState extends State<ChatSelectionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select a User'),
+        title: const Text('Select a User'),
       ),
       body: ListView.builder(
         itemCount: availableUsers.length,
