@@ -3,6 +3,31 @@ import 'package:google_fonts/google_fonts.dart';
 import 'fetch.dart';
 import 'ProductCard.dart';
 
+
+/**
+ * void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Your App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: '/', // Startseite definieren
+      routes: {
+        '/': (context) => HomeScreen(), // Routen für die Startseite definieren
+        '/chat': (context) => ChatScreen(), // Routen für den Chat definieren
+      },
+    );
+  }
+}
+ */
+
+
 void main() {
   runApp(const MyApp());
 }
