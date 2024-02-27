@@ -4,6 +4,9 @@ class UserService:
     def __init__(self):
         self.url = "http://app.recyclingheroes.at/"
 
-    def get_user_products(self, user_id):
-        response = requests.get(self.url + f"user/{user_id}/products")
-        return response.json()
+    def get_favourites(self):
+        response = requests.get(self.url + "user/favourites/")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {'error': 'Failed to load favourite products'}, 404

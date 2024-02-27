@@ -6,7 +6,17 @@ class ProductService:
 
     def get_products(self):
         response = requests.get(self.url + "products/")
-        return response.json()
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {'error': 'Failed to load products'}, 404
+
+    def get_new_products(self):
+        response = requests.get(self.url + "products/new")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {'error': 'Failed to load new products'}, 404
 
     def get_product_by_id(self, product_id):
         response = requests.get(self.url + f"products/?product_id={product_id}")
