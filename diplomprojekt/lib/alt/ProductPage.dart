@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'fetch.dart';
+import '../fetch.dart';
 
 class ProductPage extends StatelessWidget {
   final String title;

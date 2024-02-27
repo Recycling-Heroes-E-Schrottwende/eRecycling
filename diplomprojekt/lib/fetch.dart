@@ -1,7 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-const String serverUrl = 'http://app.recyclingheroes.at/flask-api';
+//const String serverUrl = 'http://app.recyclingheroes.at/flask-api';
+const String serverUrl = 'http://localhost:3830';
 
 Future<List<Map<String, dynamic>>> fetch_products() async {
   final response = await http.get(Uri.parse('$serverUrl/products'));
