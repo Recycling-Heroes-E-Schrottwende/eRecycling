@@ -9,7 +9,7 @@ sleep 5
 
 # Starten der Flutter-App
 echo "Starte Flutter App in Chrome..."
-cd flutter_prototype_1-main/
+cd diplomprojekt/
 flutter run -d chrome
 
 # Beenden der Hintergrundprozesse beim Beenden des Skripts

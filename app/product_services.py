@@ -3,7 +3,6 @@ import requests
 class ProductService:
     def __init__(self):
         self.url = "http://app.recyclingheroes.at/"
-        #self.url = "http://localhost:8000/"
 
     def get_products(self):
         response = requests.get(self.url + "products/")
@@ -28,7 +27,3 @@ class ProductService:
     def post_product(self, product_data):
         response = requests.post(self.url + "products/", json=product_data)
         return response.json()
-
-class UserService:
-    def __init__(self):
-        self.url = "http://app.recyclingheroes.at/"
