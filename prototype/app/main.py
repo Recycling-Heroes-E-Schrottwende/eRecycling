@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse
 from starlette.responses import StreamingResponse
 from io import BytesIO
 from typing_extensions import Annotated
+from fastapi.middleware.cors import CORSMiddleware
 import os.path
 
 
@@ -37,6 +38,17 @@ def get_db():
     finally:
         db.close()
 
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Get Requests
 
@@ -52,21 +64,30 @@ async def read_users(user_id: int = None, db: Session = Depends(get_db)):
         return user
 
 @app.get("/products/")
-async def read_products(user_id: int = None, product_id: int = None, db: Session = Depends(get_db)):
+async def read_products(user_id: int = None, product_id: int = None, condition: str = None, transfer_method: str = None, location: str = None, category: str = None, brand: str = None, db: Session = Depends(get_db)):
     query = db.query(models.Product)
-    if user_id is not None:
-        products = query.filter(models.Product.user_id == user_id).all()
-    elif product_id is not None:
-        products = query.filter(models.Product.id == product_id).first()
-        if products is None:
-            raise HTTPException(status_code=404, detail="Product not found")
-    else:
+    if user_id is None and product_id is None and condition is None and transfer_method is None and location is None:
         products = query.all()
+        return products
+    if user_id:
+        query = query.filter(models.Product.user_id == user_id)
+    if product_id:
+        query = query.filter(models.Product.id == product_id)     
+    if condition:
+        query = query.filter(models.Product.condition == condition)
+    if transfer_method:
+        query = query.filter(models.Product.transfer_method == transfer_method)
+    if location:
+        query = query.filter(models.Product.location == location)
+    if brand:
+        query = query.filter(models.Product.brand == brand)
+
+    products = query.all()
     return products
 
-@app.get("/presigned-url/{object_name}")
-async def get_presigned_url(object_name: str):
-    url = miniouploader.create_presigned_url("pictures", object_name)
+@app.get("/presigned-url/")
+async def get_presigned_url(product_id: int):
+    url = miniouploader.create_presigned_url("pictures", product_id)
     return {"url": url}
 
 # Post Requests
@@ -112,9 +133,10 @@ async def delete_product(product_id: int, db: Session = Depends(get_db)):
     deleted_product =  deletes.DeleteProduct(product_id, db)
     return {"message": f"Product {deleted_product.id} deleted successfully"}
 
-@app.delete("/delete_image/{image_id}")
-async def delete_image(image_id: int, db: Session = Depends(get_db)):
+@app.delete("/delete_image/")
+async def delete_image(image_id: int, product_id: int, db: Session = Depends(get_db)):
     deleted_image =  deletes.DeleteImage(image_id, db)
+    miniouploader.delete_image(pictures, )
     return {"message": f"Image {deleted_image.id} deleted successfully"}
 
 
@@ -132,17 +154,3 @@ async def update_product(product_id: int, product_update: Product, db: Session =
     if updated_product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return updated_product
-
-@app.put("/update_image/{image_id}")
-async def update_image(image_id: int, image_update: Image, db: Session = Depends(get_db)):
-    updated_image = UpdateImage(image_id, image_update, db).update_image()
-    if updated_image is None:
-        raise HTTPException(status_code=404, detail="Image not found")
-    return updated_image
-
-# Picture Requests
-
-
-
-
-

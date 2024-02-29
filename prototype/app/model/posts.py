@@ -5,18 +5,13 @@ from . import shemas, models, utils
 from datetime import datetime, timedelta
 
 def Usercreate(user_create: shemas.User, db: Session):
-    existing_user = db.query(models.User).filter(models.User.email == user_create.email).first()
+    existing_user = db.query(models.User).filter(models.User.username == user_create.username).first()
     if existing_user:
-        raise HTTPException(status_code=400, detail="Die E-Mail-Adresse ist bereits registriert")
-
-    # Hashes the Password
-    hashed_pw = utils.hash_pass(user_create.password)
+        raise HTTPException(status_code=400, detail="Der Username wird schon verwendet")
 
     # Erstellen Sie einen neuen Benutzer
     new_user = models.User(
         username=user_create.username,
-        password=hashed_pw,
-        email=user_create.email,
         created_at=datetime.now()
     )
 
@@ -36,6 +31,8 @@ def Productcreate(product_create: shemas.Product, db: Session):
         postcode=product_create.postcode,
         location=product_create.location,
         condition=product_create.condition,
+        category=product_create.category,
+        brand=product_create.brand,
         technical_details=product_create.technical_details,
         description=product_create.description,
         details=product_create.details,

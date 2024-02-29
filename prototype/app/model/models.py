@@ -11,8 +11,6 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, index=True)
-    password = Column(String)
-    email = Column(String, unique=True, index=True)
     created_at = Column(TIMESTAMP)
 
     products = relationship("Product", back_populates="user", cascade="all, delete-orphan")
@@ -27,6 +25,8 @@ class Product(Base):
     postcode = Column(String)
     location = Column(String)
     condition = Column(String)
+    category = Column(String)
+    brand = Column(String)
     technical_details = Column(String)
     description = Column(String)
     details = Column(String)

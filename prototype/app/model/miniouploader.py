@@ -4,31 +4,34 @@ import io
 from datetime import timedelta
 import os
 
-
-def upload_to_minio(bucket_name, destination_file, file_content):
-    client = Minio(
-        "172.17.0.3:9000",
-        access_key=os.getenv("access_key"),
-        secret_key=os.getenv("secret_key"),
+client = Minio(
+        "172.17.0.2:9000",
+        access_key="IAL0YRiMfz0xRDkQZcbb",
+        secret_key="fZb4MJXFnauK0XPEin5cFTHlwbBD1uabsIbzTIst",
         secure=False
     )
 
+def upload_to_minio(bucket_name, destination_file, file_content):
     try:
         client.put_object(bucket_name, destination_file, io.BytesIO(file_content), len(file_content))
         return destination_file
     except S3Error as err:
         print(err)
 
-def create_presigned_url(bucket_name, object_name):
-    client = Minio(
-        "172.17.0.3:9000",
-        access_key=os.getenv("access_key"),
-        secret_key=os.getenv("secret_key"),
-        secure=False
-    )
+def create_presigned_url(bucket_name, product_id):
+    image_urls = []
 
-    try:
-        presigned_url = client.presigned_get_object(bucket_name, object_name, timedelta(hours=1))        
-        return presigned_url
+    objects = client.list_objects(bucket_name, prefix=f"{product_id}-", recursive=True)
+    object_name = None
+    try: 
+        for obj in objects:
+            object_name = obj.object_name
+            presigned_url = client.presigned_get_object(bucket_name, object_name, timedelta(hours=1))        
+            image_urls.append(presigned_url)
+        return image_urls
     except S3Error as err:
         print(err)
+
+def delete_image(bucked_name, product_id, picture_id):
+
+    return null

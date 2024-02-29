@@ -2,16 +2,16 @@ from pydantic import BaseModel
 
 class User(BaseModel):
     username: str
-    password: str
-    email: str
 
 class Product(BaseModel):
     user_id: int
     product_name: str
-    price: int
+    price: float
     postcode: str
     location: str
     condition: str
+    category: str
+    brand: str
     technical_details: str
     description: str
     details: str
