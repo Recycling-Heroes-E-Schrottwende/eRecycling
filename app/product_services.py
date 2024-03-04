@@ -42,10 +42,6 @@ class ProductService:
             return {'error': 'Image not found or failed to load'}
 
     def post_product(self, title, desc, image):
-        if image:
-            filename = secure_filename(image.filename)
-            image.save(os.path.join("./" + filename))
-        
         product_data = {
             "user_id": 1,
             "product_name": title,
@@ -61,4 +57,10 @@ class ProductService:
             "transfer_method": "test"
         }
         response = requests.post(self.url + "create_product", json=product_data)
-        print(response.json())
+
+        # Save image
+        if image:
+            filename = secure_filename(image.filename)
+            image.save(os.path.join("./" + filename))
+        
+        response = requests.post(self.url + "uploadImage/?product_id=29", files={"file": open(filename, "rb")})

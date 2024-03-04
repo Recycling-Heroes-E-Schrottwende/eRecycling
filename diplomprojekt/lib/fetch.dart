@@ -16,9 +16,7 @@ Future<List<Map<String, dynamic>>> fetch_products() async {
     List<Map<String, dynamic>> products =
         List<Map<String, dynamic>>.from(productsJson);
 
-    // Iterieren Sie über jedes Produkt und fügen Sie die Bild-URL hinzu
     for (var product in products) {
-      // Achten Sie darauf, dass Sie die ID korrekt aus dem Produkt extrahieren
       int productId = product['id'];
       String imageUrl = await fetch_image(productId);
       product['image_url'] = imageUrl;
