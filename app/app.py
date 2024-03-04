@@ -28,7 +28,6 @@ class App:
 
         @self.app.route('/create/product', methods=['POST'])
         def create_product():
-            #return jsonify(self.product_service.post_product(request.form['title'], request.form['desc'], request.files['image']))
             title = request.form['title']
             desc = request.form['desc']
             image = request.files['image'] if 'image' in request.files else None
