@@ -289,6 +289,24 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         .addToStart(SizedBox(height: 12.0)),
                   ),
                   Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 8.0),
+                    child: _image != null
+                        ? Image.network(
+                            _image!.path,
+                            width: double.infinity,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            width: double.infinity,
+                            height: 200.0,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFE5E7EB),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                  ),
+                  Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                     child: Container(
@@ -304,50 +322,40 @@ class _AddProductWidgetState extends State<AddProductWidget>
                           width: 2.0,
                         ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Icon(
-                              Icons.add_a_photo_rounded,
-                              color: Color(0xFF81AC26),
-                              size: 32.0,
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'Produktbild hochladen',
-                                textAlign: TextAlign.center,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      color: Color(0xFF15161E),
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                      child: InkWell(
+                        onTap: pickImage,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Icon(
+                                Icons.add_a_photo_rounded,
+                                color: Color(0xFF81AC26),
+                                size: 32.0,
                               ),
-                            ),
-                          ],
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 0.0, 0.0, 0.0),
+                                child: Text(
+                                  'Produktbild hochladen',
+                                  textAlign: TextAlign.center,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        color: Color(0xFF15161E),
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ).animateOnPageLoad(
                         animationsMap['containerOnPageLoadAnimation']!),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.0),
-                    child: Column(
-                      children: [
-                        if (_image != null)
-                          Image.network(_image!.path, height: 200),
-                        ElevatedButton(
-                          onPressed: pickImage,
-                          child: Text('Bild auswählen'),
-                        ),
-                      ],
-                    ),
                   ),
                   Padding(
                     padding:
