@@ -4,7 +4,7 @@ import os
 
 class ProductService:
     def __init__(self):
-        self.url = "http://app.recyclingheroes.at/api/"
+        self.url = "http://localhost:8000/"
 
     def get_products(self):
         response = requests.get(self.url + "products/")
@@ -30,9 +30,10 @@ class ProductService:
                 return {'error': 'Product not found or more than one product found'}, 404
 
     def get_image(self, product_id):
-        response = requests.get(self.url + f"images/image_location/{product_id}")
+        response = requests.get(self.url + f"picture_url?product_id={product_id}")
+        
         if response.status_code == 200:
-            return response.json()
+            return response.json()["url"][0]
         else:
             return {'error': 'Image not found or failed to load'}, 404
 

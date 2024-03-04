@@ -22,6 +22,17 @@ Future<List<Map<String, dynamic>>> fetch_products() async {
   }
 }
 
+Future<String> fetch_image(int productId) async {
+  final response = await http.get(Uri.parse('$serverUrl/image/$productId'));
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception(
+        'Failed to load image with status code: ${response.statusCode}');
+  }
+}
+
 Future<List<Map<String, dynamic>>> fetch_newest_products() async {
   final response = await http.get(Uri.parse('$serverUrl/products/new'));
 

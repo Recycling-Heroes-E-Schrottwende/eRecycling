@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from product_services import ProductService
 from user_services import UserService
+#import boto3
 
 class App:
     def __init__(self):
@@ -44,7 +45,15 @@ class App:
 
         @self.app.route('/image/<int:product_id>')
         def product_image(product_id):
-            return jsonify(self.product_service.get_image(product_id))
+            return self.product_service.get_image(product_id)
+            #return "test"
+            #image_data = self.product_service.get_image(product_id)
+            #if image_data.get('error'):
+            #    return make_response('<h1>Image not found or failed to load</h1>', 404)
+            #else:
+            #    image_url = image_data.get('url')  # Angenommen, die URL des Bildes ist im 'url'-Feld der Antwort
+            #    html = f'<img src="{image_url}" alt="Product Image">'
+            #    return make_response(html)
 
         @self.app.route('/user/favourites')
         def user_favourites():
@@ -52,4 +61,4 @@ class App:
 
 if __name__ == '__main__':
     app_instance = App()
-    app_instance.app.run(host='localhost', port=3830)
+    app_instance.app.run(host='localhost', port=3829)
