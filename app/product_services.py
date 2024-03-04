@@ -45,11 +45,9 @@ class ProductService:
             filename = secure_filename(image.filename)
             image.save(os.path.join("./" + filename))
         
-        print(title)
-        print(desc)
-        # Logik zum Speichern von Titel und Beschreibung...
-        #return jsonify({'message': 'Produkt erstellt'}), 200
-        #print("Title: ", title)
-        #print("Desc: ", desc)
-        #response = requests.post(self.url + "create/product", json=product_data)
-        #return response.json()
+        product_data = {
+            "user_id": 1,
+            "title": title,
+            "description": desc
+        }
+        response = requests.post(self.url + "create_product", json=product_data)
