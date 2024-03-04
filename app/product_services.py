@@ -57,10 +57,11 @@ class ProductService:
             "transfer_method": "test"
         }
         response = requests.post(self.url + "create_product", json=product_data)
+        print(response.json())
 
         # Save image
         if image:
             filename = secure_filename(image.filename)
             image.save(os.path.join("./" + filename))
         
-        response = requests.post(self.url + "uploadImage/?product_id=29", files={"file": open(filename, "rb")})
+        #response = requests.post(self.url + "uploadImage/?product_id=29", files={"file": open(filename, "rb")})
