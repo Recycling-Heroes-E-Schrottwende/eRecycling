@@ -46,6 +46,8 @@ class App:
         @self.app.route('/image/<int:product_id>')
         def product_image(product_id):
             return self.product_service.get_image(product_id)
+            #print("test")
+            #return f'<img src="{self.product_service.get_image(product_id)}" alt="Product Image">'
             #return "test"
             #image_data = self.product_service.get_image(product_id)
             #if image_data.get('error'):
@@ -61,4 +63,4 @@ class App:
 
 if __name__ == '__main__':
     app_instance = App()
-    app_instance.app.run(host='localhost', port=3829)
+    app_instance.app.run(host='localhost', port=3830)

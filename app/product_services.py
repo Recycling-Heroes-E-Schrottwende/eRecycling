@@ -32,10 +32,13 @@ class ProductService:
     def get_image(self, product_id):
         response = requests.get(self.url + f"picture_url?product_id={product_id}")
         
-        if response.status_code == 200:
-            return response.json()["url"][0]
-        else:
-            return {'error': 'Image not found or failed to load'}, 404
+        try:
+            if response.status_code == 200:
+                return response.json()["url"][0]
+            else:
+                return {'error': 'Image not found or failed to load'}
+        except:
+            return {'error': 'Image not found or failed to load'}
 
     def post_product(self, title, image, desc):
         if image:

@@ -12,13 +12,26 @@ Future<List<Map<String, dynamic>>> fetch_products() async {
   final response = await http.get(Uri.parse('$serverUrl/products'));
 
   if (response.statusCode == 200) {
+    List<dynamic> productsJson = jsonDecode(response.body);
+    List<Map<String, dynamic>> products =
+        List<Map<String, dynamic>>.from(productsJson);
+
+    // Iterieren Sie über jedes Produkt und fügen Sie die Bild-URL hinzu
+    for (var product in products) {
+      // Achten Sie darauf, dass Sie die ID korrekt aus dem Produkt extrahieren
+      int productId = product['id'];
+      String imageUrl = await fetch_image(productId);
+      product['image_url'] = imageUrl;
+    }
+
+    return products;
+  } else {
     if (response.body.contains('error')) {
       throw Exception(
           'Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
+    } else {
+      throw Exception('Failed to load data');
     }
-    return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to load data');
   }
 }
 
