@@ -4,7 +4,8 @@ import os
 
 class ProductService:
     def __init__(self):
-        self.url = "http://localhost:8000/"
+        #self.url = "http://localhost:8000/"
+        self.url = "http://app.recyclingheroes.at/api/"
 
     def get_products(self):
         response = requests.get(self.url + "products/")
@@ -40,14 +41,24 @@ class ProductService:
         except:
             return {'error': 'Image not found or failed to load'}
 
-    def post_product(self, title, image, desc):
+    def post_product(self, title, desc, image):
         if image:
             filename = secure_filename(image.filename)
             image.save(os.path.join("./" + filename))
         
         product_data = {
             "user_id": 1,
-            "title": title,
-            "description": desc
+            "product_name": title,
+            "description": desc,
+            "location": "test",
+            "category": "test",
+            "technical_details": "test",
+            "details": "test",
+            "price": 100,
+            "postcode": "test",
+            "condition": "test",
+            "brand": "test",
+            "transfer_method": "test"
         }
         response = requests.post(self.url + "create_product", json=product_data)
+        print(response.json())
