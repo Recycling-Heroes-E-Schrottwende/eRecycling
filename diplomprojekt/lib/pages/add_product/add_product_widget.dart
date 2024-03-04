@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:diplomprojekt/fetch.dart';
+
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -10,6 +14,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'add_product_model.dart';
+import '../../fetch.dart';
+import 'package:image_picker/image_picker.dart';
 export 'add_product_model.dart';
 
 class AddProductWidget extends StatefulWidget {
@@ -22,6 +28,19 @@ class AddProductWidget extends StatefulWidget {
 class _AddProductWidgetState extends State<AddProductWidget>
     with TickerProviderStateMixin {
   late AddProductModel _model;
+  XFile? _image; // Variable für das ausgewählte Bild
+  final ImagePicker _picker = ImagePicker();
+
+  // Methode zum Auswählen eines Bildes
+  Future<void> pickImage() async {
+    final XFile? selectedImage =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (selectedImage != null) {
+      setState(() {
+        _image = selectedImage;
+      });
+    }
+  }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -331,11 +350,28 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         animationsMap['containerOnPageLoadAnimation']!),
                   ),
                   Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.0),
+                    child: Column(
+                      children: [
+                        if (_image != null)
+                          Image.network(_image!.path, height: 200),
+                        ElevatedButton(
+                          onPressed: pickImage,
+                          child: Text('Bild auswählen'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
                     child: FFButtonWidget(
                       onPressed: () {
-                        print('Button pressed ...');
+                        String title = _model.textController1.text;
+                        String description = _model.textController2.text;
+
+                        // Call the create_product method with the title and description
+                        create_product(title, description, _image);
                       },
                       text: 'Anzeige hochladen ',
                       icon: Icon(

@@ -2,7 +2,7 @@ import requests
 
 class UserService:
     def __init__(self):
-        self.url = "http://app.recyclingheroes.at/"
+        self.url = "http://app.recyclingheroes.at/api/"
 
     def get_favourites(self):
         response = requests.get(self.url + "user/favourites/")

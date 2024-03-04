@@ -1,4 +1,6 @@
 import requests
+from werkzeug.utils import secure_filename
+import os
 
 class ProductService:
     def __init__(self):
@@ -34,6 +36,16 @@ class ProductService:
         else:
             return {'error': 'Image not found or failed to load'}, 404
 
-    def post_product(self, product_data):
-        response = requests.post(self.url + "products/", json=product_data)
-        return response.json()
+    def post_product(self, title, image, desc):
+        if image:
+            filename = secure_filename(image.filename)
+            image.save(os.path.join("./" + filename))
+        
+        print(title)
+        print(desc)
+        # Logik zum Speichern von Titel und Beschreibung...
+        #return jsonify({'message': 'Produkt erstellt'}), 200
+        #print("Title: ", title)
+        #print("Desc: ", desc)
+        #response = requests.post(self.url + "create/product", json=product_data)
+        #return response.json()
