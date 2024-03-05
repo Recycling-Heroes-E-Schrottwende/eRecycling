@@ -1,14 +1,21 @@
+import 'package:diplomprojekt/index.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import '/auth/custom_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/firebase_options.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'login_model.dart';
 export 'login_model.dart';
+
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
@@ -19,6 +26,7 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   late LoginModel _model;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -293,12 +301,20 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       0.0, 0.0, 0.0, 16.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      await authManager.signIn();
-
-                                      context.goNamedAuth(
-                                          'List13PropertyListview',
-                                          context.mounted);
+                                      try {
+                                        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+                                          email: _model.emailAddressController.text,
+                                          password: _model.passwordController.text,
+                                        );
+                                        print('Login successful: ${userCredential.user?.uid}');
+                                        // Nach dem Login zur Hauptmenüseite navigieren
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => List13PropertyListviewWidget()),
+                                        );
+                                      } catch (e) {
+                                        print('Login failed: $e');
+                                      }
                                     },
                                     text: 'Anmelden',
                                     options: FFButtonOptions(
