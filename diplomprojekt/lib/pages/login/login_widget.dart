@@ -308,10 +308,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         );
                                         print('Login successful: ${userCredential.user?.uid}');
                                         // Nach dem Login zur Hauptmenüseite navigieren
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => List13PropertyListviewWidget()),
-                                        );
+                                        context.goNamedAuth(
+                                          'List13PropertyListview',
+                                          context.mounted);
+
                                       } catch (e) {
                                         print('Login failed: $e');
                                       }
