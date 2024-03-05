@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
 
-const String serverUrl = 'http://app.recyclingheroes.at/flask-api/';
+const String serverUrl = 'http://app.recyclingheroes.at/flask-api';
 //const String serverUrl = 'http://localhost:3833';
 
 Future<List<Map<String, dynamic>>> fetch_products() async {
