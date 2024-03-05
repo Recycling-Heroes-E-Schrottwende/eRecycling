@@ -1,3 +1,9 @@
+
+import 'package:diplomprojekt/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,21 +14,40 @@ import 'auth/custom_auth/custom_auth_user_provider.dart';
 
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
-
+  
+  print("Initializing FlutterFlowTheme");
   await FlutterFlowTheme.initialize();
 
+  print("Initializing authManager");
   await authManager.initialize();
 
+  try {
+    print("Initializing Firebase");
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print("Firebase Initialization Error: $e");
+  }
+
+
+  print("Running MyApp");
   runApp(MyApp());
 }
 
+
 class MyApp extends StatefulWidget {
+  
   // This widget is the root of your application.
   @override
   State<MyApp> createState() => _MyAppState();

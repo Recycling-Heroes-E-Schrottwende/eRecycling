@@ -7,6 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'register_model.dart';
 export 'register_model.dart';
 
@@ -19,6 +23,10 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   late RegisterModel _model;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -455,7 +463,30 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 16.0),
                                   child: FFButtonWidget(
-                                    onPressed: () async {},
+                                    onPressed: () async {
+                                        if (_model.passwordController.text == _model.passwordConfirmController.text) {
+                                        try {
+                                          UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+                                            email: _model.emailAddressController.text,
+                                            password: _model.passwordController.text,
+                                          );
+
+                                          await _firestore.collection('users').doc(userCredential.user?.uid).set({
+                                            'uid': userCredential.user?.uid,
+                                            'username': _model.usernameController.text,
+                                            'email': _model.passwordController.text,
+                                          });
+
+                                          print('Registration successful: ${userCredential.user?.uid}');
+                                        } catch (e) {
+                                          print('Registration failed: $e');
+                                        }
+                                        context.pushNamed('login');
+                                      } else {
+                                        print('Passwords do not match');
+                                      }
+                                    },
+
                                     text: 'Konto erstellen',
                                     options: FFButtonOptions(
                                       width: 370.0,
