@@ -291,7 +291,7 @@ class _List13PropertyListviewWidgetState
                                     scrollDirection: Axis.vertical,
                                     children: [
                                       FutureBuilder<List<Map<String, dynamic>>>(
-                                        future: fetch_products(),
+                                        future: fetch_newest_products(),
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
