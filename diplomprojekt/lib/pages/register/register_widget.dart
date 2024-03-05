@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +23,7 @@ class RegisterWidget extends StatefulWidget {
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   late RegisterModel _model;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -484,6 +486,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                         print('Passwords do not match');
                                       }
                                     },
+
                                     text: 'Konto erstellen',
                                     options: FFButtonOptions(
                                       width: 370.0,

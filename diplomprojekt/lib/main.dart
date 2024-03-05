@@ -1,3 +1,4 @@
+
 import 'package:diplomprojekt/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,18 +14,17 @@ import 'auth/custom_auth/custom_auth_user_provider.dart';
 
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'firebase_options.dart';
 
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
-
+  
   print("Initializing FlutterFlowTheme");
   await FlutterFlowTheme.initialize();
 

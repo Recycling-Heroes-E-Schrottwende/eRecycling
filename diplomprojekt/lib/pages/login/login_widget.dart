@@ -1,3 +1,4 @@
+
 import 'package:diplomprojekt/index.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -5,18 +6,19 @@ import '/auth/custom_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+
 import '/firebase_options.dart';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login_model.dart';
 export 'login_model.dart';
-
-
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
 
@@ -26,7 +28,9 @@ class LoginWidget extends StatefulWidget {
 
 class _LoginWidgetState extends State<LoginWidget> {
   late LoginModel _model;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
