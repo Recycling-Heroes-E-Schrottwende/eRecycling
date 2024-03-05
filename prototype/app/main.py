@@ -85,10 +85,15 @@ async def read_products(user_id: int = None, product_id: int = None, condition: 
     products = query.all()
     return products
 
-@app.get("/presigned-url/")
+@app.get("/picture_url")
 async def get_presigned_url(product_id: int):
     url = miniouploader.create_presigned_url("pictures", product_id)
     return {"url": url}
+
+@app.get("/favourites/")
+async def read_favourites(user_id: int, db: Session = Depends(get_db)):
+    favourites = db.query(models.Favourite).filter(models.Favourite.user_id == user_id).all()
+    return favourites
 
 # Post Requests
 
@@ -100,7 +105,7 @@ async def create_user(user_create: shemas.User, db: Session = Depends(get_db)):
 async def create_product(product_create: shemas.Product, db: Session = Depends(get_db)):
     return posts.Productcreate(product_create, db)
 
-@app.post("/uploadImage")
+@app.post("/uploadImage/")
 async def upload_image(product_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
     bucket_name = "pictures"
 
@@ -120,6 +125,10 @@ async def upload_image(product_id: int, file: UploadFile = File(...), db: Sessio
     result = miniouploader.upload_to_minio(bucket_name, destination_file, file_content)
 
     return result
+
+@app.post("/addFavourite/")
+async def add_favourite(add_favourites: shemas.Favourite, db: Session = Depends(get_db)):
+    return posts.addfavourite(add_favourites, db)
 
 
 # Delete Requests

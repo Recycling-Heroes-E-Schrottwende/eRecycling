@@ -59,3 +59,18 @@ def Imagecreate(image_create: shemas.Image, db: Session):
     db.refresh(new_image)
 
     return new_image
+
+def addfavourite(addfavourite: shemas.Favourite, db: Session):
+    # Check if the product exists
+    product = db.query(models.Product).filter(models.Product.id == addfavourite.product_id).first()
+    if not product:
+        return HTTPException(status_code=404, detail="Product not found")
+
+    new_favourite = models.Favourite(
+        user_id = addfavourite.user_id,
+        product_id = addfavourite.product_id
+    )
+    db.add(new_favourite)
+    db.commit()
+    db.refresh(new_favourite)
+    return "Added a new Favourite"

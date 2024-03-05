@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, ForeignKeyConstraint
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -14,6 +14,7 @@ class User(Base):
     created_at = Column(TIMESTAMP)
 
     products = relationship("Product", back_populates="user", cascade="all, delete-orphan")
+    favourites = relationship("Favourite", back_populates="user", cascade="all, delete-orphan")
 
 class Product(Base):
     __tablename__ = "products"
@@ -35,6 +36,7 @@ class Product(Base):
 
     user = relationship("User", back_populates="products")
     images = relationship("Image", back_populates="product", cascade="all, delete-orphan")
+    favourites = relationship("Favourite", back_populates="product", cascade="all, delete-orphan")
 
 class Image(Base):
     __tablename__ = "images"
@@ -44,3 +46,18 @@ class Image(Base):
     created_at = Column(TIMESTAMP, server_default=func.now())
 
     product = relationship("Product", back_populates="images")
+
+class Favourite(Base):
+    __tablename__ = "favourites"
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    product_id = Column(Integer, ForeignKey("products.id"), primary_key=True)
+
+
+    user = relationship("User", back_populates="favourites")
+    product = relationship("Product", back_populates="favourites")
+
+    __table_args__ = (
+        ForeignKeyConstraint(['user_id'], ['users.id']),
+        ForeignKeyConstraint(['product_id'], ['products.id']),
+    )

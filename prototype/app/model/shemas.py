@@ -20,6 +20,9 @@ class Product(BaseModel):
 class Image(BaseModel):
     product_id: int
 
+class Favourite(BaseModel):
+    user_id: int
+    product_id: int
 
 class UserResponse(BaseModel):
     id: int

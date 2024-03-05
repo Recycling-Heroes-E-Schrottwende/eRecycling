@@ -10,7 +10,7 @@ client = Minio(
         secret_key="fZb4MJXFnauK0XPEin5cFTHlwbBD1uabsIbzTIst",
         secure=False
     )
-
+    
 def upload_to_minio(bucket_name, destination_file, file_content):
     try:
         client.put_object(bucket_name, destination_file, io.BytesIO(file_content), len(file_content))
@@ -33,5 +33,4 @@ def create_presigned_url(bucket_name, product_id):
         print(err)
 
 def delete_image(bucked_name, product_id, picture_id):
-
-    return null
+    return "Successfully deleted image"
