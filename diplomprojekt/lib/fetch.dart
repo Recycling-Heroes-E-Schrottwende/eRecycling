@@ -6,7 +6,7 @@ import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 
 //const String serverUrl = 'http://app.recyclingheroes.at/';
-const String serverUrl = 'http://localhost:3830';
+const String serverUrl = 'http://localhost:3833';
 
 Future<List<Map<String, dynamic>>> fetch_products() async {
   final response = await http.get(Uri.parse('$serverUrl/products'));

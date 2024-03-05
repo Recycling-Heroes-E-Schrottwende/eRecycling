@@ -44,4 +44,4 @@ class App:
 
 if __name__ == '__main__':
     app_instance = App()
-    app_instance.app.run(host='localhost', port=3830)
+    app_instance.app.run(host='localhost', port=3833)

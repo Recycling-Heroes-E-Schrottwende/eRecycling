@@ -42,6 +42,7 @@ class ProductService:
             return {'error': 'Image not found or failed to load'}
 
     def post_product(self, title, desc, image):
+        print(title, desc, image)
         product_data = {
             "user_id": 1,
             "product_name": title,
