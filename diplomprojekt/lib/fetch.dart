@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
 
-const String serverUrl = 'http://app.recyclingheroes.at/flask-api/';
+const String serverUrl = 'http://app.recyclingheroes.at/flask-api';
 //const String serverUrl = 'http://localhost:3833';
 
 Future<List<Map<String, dynamic>>> fetch_products() async {
@@ -48,13 +48,24 @@ Future<List<Map<String, dynamic>>> fetch_newest_products() async {
   final response = await http.get(Uri.parse('$serverUrl/products/new'));
 
   if (response.statusCode == 200) {
+    List<dynamic> productsJson = jsonDecode(response.body);
+    List<Map<String, dynamic>> products =
+        List<Map<String, dynamic>>.from(productsJson);
+
+    for (var product in products) {
+      int productId = product['id'];
+      String imageUrl = await fetch_image(productId);
+      product['image_url'] = imageUrl;
+    }
+
+    return products;
+  } else {
     if (response.body.contains('error')) {
       throw Exception(
           'Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
+    } else {
+      throw Exception('Failed to load data');
     }
-    return List<Map<String, dynamic>>.from(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to load data');
   }
 }
 
