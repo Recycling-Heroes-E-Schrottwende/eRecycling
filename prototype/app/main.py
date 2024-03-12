@@ -145,8 +145,9 @@ async def delete_product(product_id: int, db: Session = Depends(get_db)):
 @app.delete("/delete_image/")
 async def delete_image(image_id: int, product_id: int, db: Session = Depends(get_db)):
     deleted_image =  deletes.DeleteImage(image_id, db)
-    miniouploader.delete_image(pictures, )
+    miniouploader.delete_image("pictures", product_id, image_id)
     return {"message": f"Image {deleted_image.id} deleted successfully"}
+    #return {"message": f"Image deleted successfully"}
 
 
 # Update Requests

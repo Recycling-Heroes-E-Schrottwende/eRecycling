@@ -3,6 +3,7 @@ from fastapi import HTTPException, Depends
 
 from . import shemas, models
 from datetime import datetime
+from . import miniouploader
 
 
 from fastapi import HTTPException
@@ -11,6 +12,13 @@ def DeleteUser(id: int, db: Session):
     user = db.query(models.User).filter(models.User.id == id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    
+    products = db.query(models.Product).filter(models.Product.user_id == id).all()
+
+    for product in products:
+        image_ids = db.query(models.Image.id).filter(models.Image.product_id == product.id).all()
+        for image_id in image_ids:
+            miniouploader.delete_image('pictures', product.id, image_id[0])
 
     try:
         db.delete(user)
@@ -24,9 +32,16 @@ def DeleteUser(id: int, db: Session):
 
 
 def DeleteProduct(id: int, db: Session):
-    product = DB.query(models.Product).filter(models.Product.id == id).first()
+    product = db.query(models.Product).filter(models.Product.id == id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+
+    query = db.query(models.Image)
+    query = query.with_entities(models.Image.id).filter(models.Image.product_id == id).all()
+    image_ids = [id for (id,) in query]
+
+    for image_id in image_ids:
+        miniouploader.delete_image('pictures', id, image_id)
 
     try:
         db.delete(product)
@@ -40,7 +55,7 @@ def DeleteProduct(id: int, db: Session):
 
 
 def DeleteImage(id: int, db: Session):
-    image = DB.query(models.Image).filter(models.Image.id == id).first()
+    image = db.query(models.Image).filter(models.Image.id == id).first()
     if not image:
         raise HTTPException(status_code=404, detail="Image not found")
 

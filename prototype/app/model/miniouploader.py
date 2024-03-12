@@ -5,7 +5,7 @@ from datetime import timedelta
 import os
 
 client = Minio(
-        "172.17.0.2:9000",
+        "172.17.0.1:9000",
         access_key="IAL0YRiMfz0xRDkQZcbb",
         secret_key="fZb4MJXFnauK0XPEin5cFTHlwbBD1uabsIbzTIst",
         secure=False
@@ -32,5 +32,11 @@ def create_presigned_url(bucket_name, product_id):
     except S3Error as err:
         print(err)
 
-def delete_image(bucked_name, product_id, picture_id):
+def delete_image(bucket_name, product_id, picture_id):
+    object_name = f"{product_id}-{picture_id}.webp"
+    try:
+        client.remove_object(bucket_name, object_name)
+        return "Successfully deleted image"
+    except S3Error as err:
+        print(err)
     return "Successfully deleted image"
