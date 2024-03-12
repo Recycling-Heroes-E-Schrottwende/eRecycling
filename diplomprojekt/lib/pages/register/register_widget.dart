@@ -14,6 +14,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'register_model.dart';
 export 'register_model.dart';
 
+import 'package:http/http.dart' as http;
+
+
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
 
@@ -477,11 +480,50 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                             'email': _model.passwordController.text,
                                           });
 
+                                          try {
+                                            var username = _model.usernameController.text;
+                                            final response = await http.post(
+                                              Uri.parse("http://app.recyclingheroes.at/api/create_user/?user=$username"),
+                                            );
+
+                                            if (response.statusCode == 200) {
+                                              // Erfolgreiche Antwort
+                                              print('Erfolgreiche POST-Anfrage: ${response.body}');
+                                            } else {
+                                              // Fehlerhafte Antwort
+                                              print('Fehlerhafte POST-Anfrage: ${response.statusCode}');
+                                            }
+                                          } catch (error) {
+                                            // Fehler während der Anfrage
+                                            print('Fehler während der POST-Anfrage: $error');
+                                          }
+
                                           print('Registration successful: ${userCredential.user?.uid}');
+                                          context.pushNamed('login');
                                         } catch (e) {
                                           print('Registration failed: $e');
+                                          //show popup error message
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('Fehler'),
+                                                content: Text('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    child: Text('OK'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+
+                                          
                                         }
-                                        context.pushNamed('login');
+                                        
                                       } else {
                                         print('Passwords do not match');
                                       }

@@ -311,11 +311,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           password: _model.passwordController.text,
                                         );
                                         print('Login successful: ${userCredential.user?.uid}');
-                                        // Nach dem Login zur Hauptmenüseite navigieren
-                                        context.goNamedAuth(
-                                          'List13PropertyListview',
-                                          context.mounted);
-
                                       } catch (e) {
                                         print('Login failed: $e');
                                       }
