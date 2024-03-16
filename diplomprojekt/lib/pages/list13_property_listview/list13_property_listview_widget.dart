@@ -18,10 +18,16 @@ class List13PropertyListviewWidget extends StatefulWidget {
 }
 
 class _List13PropertyListviewWidgetState
-    extends State<List13PropertyListviewWidget> with TickerProviderStateMixin {
+    extends State<List13PropertyListviewWidget>
+    with
+        TickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin<List13PropertyListviewWidget> {
   late List13PropertyListviewModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -44,6 +50,8 @@ class _List13PropertyListviewWidgetState
 
     super.dispose();
   }
+
+    Map<String, List<Map<String, dynamic>>> _cachedData = {};
 
   Widget _buildProductCard(Map<String, dynamic> product) {
     return ProductCard(
@@ -232,7 +240,7 @@ class _List13PropertyListviewWidgetState
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   children: [
-                                    FutureBuilder<List<Map<String, dynamic>>>(
+                                    FutureBuilder<List<Map<String, dynamic>>> (
                                         future: fetch_products(),
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
