@@ -733,7 +733,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
 
                         // Call the create_product method with the title and description
                         create_product(title, description, category!,
-                            condition!, delivery!, postcode, price);
+                            condition!, delivery!, postcode, price, imageBytesList);
                       },
                       text: 'Anzeige hochladen ',
                       icon: Icon(

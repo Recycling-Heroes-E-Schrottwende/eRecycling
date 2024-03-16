@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -120,9 +121,17 @@ Future<Map<String, dynamic>> fetch_product_details(int productId) async {
   }
 }
 
-Future<void> create_product(String title, String desc, String category, String condition, String delivery, String postcode, String price) async {
-  var uri = Uri.parse('$serverUrl/create/product');
-  var request = http.MultipartRequest('POST', uri)
+Future<void> create_product(
+    String title,
+    String desc,
+    String category,
+    String condition,
+    String delivery,
+    String postcode,
+    String price,
+    List<Uint8List> imageBytesList) async {
+  var createProductUri = Uri.parse('$serverUrl/create/product');
+  var createRequest = http.MultipartRequest('POST', createProductUri)
     ..fields['title'] = title
     ..fields['desc'] = desc
     ..fields['category'] = category
@@ -130,51 +139,68 @@ Future<void> create_product(String title, String desc, String category, String c
     ..fields['delivery'] = delivery
     ..fields['postcode'] = postcode
     ..fields['price'] = price;
-  
-  var response = await request.send();
 
-  if (response.statusCode == 200) {
+  var createResponse = await createRequest.send();
+  var createResponseBody = await http.Response.fromStream(createResponse);
+
+  if (createResponse.statusCode == 200) {
     print('Produkt erfolgreich erstellt');
+
+    // Abrufen der Produktliste, um die ID des zuletzt erstellten Produkts zu ermitteln
+    var getProductsUri =
+        Uri.parse('http://app.recyclingheroes.at/api/products/');
+    var getProductsResponse = await http.get(getProductsUri);
+
+    if (getProductsResponse.statusCode == 200) {
+      var products = json.decode(getProductsResponse.body);
+      if (products.isNotEmpty) {
+        // Annahme: Die Produkte sind nach "created_at" absteigend sortiert
+        var lastProduct = products.last;
+        int productId = lastProduct['id'];
+
+        // Bilder für das zuletzt erstellte Produkt hochladen
+        await uploadImage(productId, imageBytesList);
+      } else {
+        print(
+            'Keine Produkte gefunden, um die ID für den Bildupload zu erhalten');
+      }
+    } else {
+      print(
+          'Fehler beim Abrufen der Produkte: ${getProductsResponse.reasonPhrase}');
+    }
   } else {
-    print('Fehler beim Erstellen des Produkts: ' + response.toString());
+    print(
+        'Fehler beim Erstellen des Produkts: ${createResponseBody.reasonPhrase}');
   }
 }
 
-Future<void> uploadImage(File imageFile, int productId) async {
-  // Erkennen des MIME-Typs des Bildes
-  final mimeTypeData =
-      lookupMimeType(imageFile.path, headerBytes: [0xFF, 0xD8])?.split('/');
+Future<void> uploadImage(int productId, List<Uint8List> imageBytesList) async {
+  var uri = Uri.parse(
+      'http://app.recyclingheroes.at/api/uploadImage/?product_id=$productId');
 
-  // Erstellen eines MultipartRequest
-  var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(
-          'http://app.recyclingheroes.at/api/upload_image/?product_id=$productId'));
+  // Für jedes Bild in der Liste eine separate Anfrage erstellen und senden
+  for (int i = 0; i < imageBytesList.length; i++) {
+    var request = http.MultipartRequest('POST', uri);
+    var image = imageBytesList[i];
+    String fileName =
+        'image_$i.png'; // Der Dateiname kann eindeutig generiert oder statisch sein
 
-  // Hinzufügen des Bildes
-  request.files.add(await http.MultipartFile.fromPath(
-    'file',
-    imageFile.path,
-    contentType: MediaType.parse('${mimeTypeData![0]}/${mimeTypeData[1]}'),
-  ));
+    // Fügt das Bild als Multipart-Datei hinzu
+    request.files.add(http.MultipartFile.fromBytes(
+      'file', // Der Name des Formularfeldes (muss mit der Servererwartung übereinstimmen)
+      image,
+      filename: fileName,
+      contentType: MediaType('image', 'png'), // Setzt den MIME-Typ
+    ));
 
-  // Hinzufügen weiterer Felder, falls benötigt
-  // request.fields['key'] = 'value';
-
-  try {
-    // Senden des Requests
-    var streamedResponse = await request.send();
-
-    // Empfangen der Antwort
-    var response = await http.Response.fromStream(streamedResponse);
-
+    // Senden der Anfrage
+    var response = await request.send();
     if (response.statusCode == 200) {
-      print("Bild erfolgreich hochgeladen!");
+      print('Bild $i erfolgreich hochgeladen');
     } else {
-      print("Fehler beim Hochladen des Bildes: ${response.body}");
+      // Ausgabe im Fehlerfall
+      print('Fehler beim Hochladen des Bildes $i: ${response.reasonPhrase}');
     }
-  } catch (e) {
-    print("Ausnahme beim Hochladen des Bildes: $e");
   }
 }
 
