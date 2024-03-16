@@ -1,10 +1,8 @@
-import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'chat_model.dart';
@@ -47,39 +45,16 @@ class _ChatWidgetState extends State<ChatWidget> {
         appBar: AppBar(
           backgroundColor: Color(0xFFF1F4F8),
           automaticallyImplyLeading: false,
-          leading: FlutterFlowIconButton(
-            buttonSize: 60.0,
-            icon: Icon(
-              Icons.menu,
-              color: Color(0xFF14181B),
-              size: 24.0,
-            ),
-            onPressed: () {
-              print('IconButton pressed ...');
-            },
-          ),
           title: Text(
-            'Messages',
+            'Nachrichten',
             style: FlutterFlowTheme.of(context).headlineLarge.override(
-                  fontFamily: 'Inter',
+                  fontFamily: 'Outfit',
                   color: Color(0xFF14181B),
                   fontSize: 32.0,
-                  fontWeight: FontWeight.normal,
+                  fontWeight: FontWeight.w600,
                 ),
           ),
-          actions: [
-            FlutterFlowIconButton(
-              buttonSize: 60.0,
-              icon: FaIcon(
-                FontAwesomeIcons.search,
-                color: Color(0xFF14181B),
-                size: 24.0,
-              ),
-              onPressed: () {
-                print('IconButton pressed ...');
-              },
-            ),
-          ],
+          actions: [],
           centerTitle: false,
           elevation: 0.0,
         ),
@@ -94,29 +69,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Chats',
-                        style:
-                            FlutterFlowTheme.of(context).headlineLarge.override(
-                                  fontFamily: 'Inter',
-                                  color: Color(0xFF14181B),
-                                  fontSize: 32.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                      ),
-                      FlutterFlowIconButton(
-                        buttonSize: 60.0,
-                        icon: Icon(
-                          Icons.add_circle_outline,
-                          color: Color(0xFF19DB8A),
-                          size: 24.0,
-                        ),
-                        onPressed: () {
-                          print('IconButton pressed ...');
-                        },
-                      ),
-                    ],
+                    children: [],
                   ),
                 ),
                 Padding(
@@ -142,32 +95,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    width: 44.0,
-                                    height: 44.0,
-                                    decoration: BoxDecoration(
-                                      color: Color(0x4C19DB8A),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Color(0xFF19DB8A),
-                                        width: 2.0,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          2.0, 2.0, 2.0, 2.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        child: Image.network(
-                                          'https://images.unsplash.com/photo-1526948128573-703ee1aeb6fa?w=1280&h=720',
-                                          width: 44.0,
-                                          height: 44.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                   Expanded(
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
@@ -178,7 +105,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Randy Mcdonald',
+                                            'Max Mustermann',
                                             textAlign: TextAlign.start,
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyLarge
@@ -194,7 +121,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 4.0, 0.0, 0.0),
                                             child: Text(
-                                              'This was really great, I\'m so glad that we could catch up this weekend.',
+                                              'Hey, ist der Artikel noch erhältlich?',
                                               textAlign: TextAlign.start,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -217,7 +144,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                     .fromSTEB(
                                                         0.0, 4.0, 0.0, 0.0),
                                                 child: Text(
-                                                  'Mon. July 3rd - 4:12pm',
+                                                  'Mi. 1. Januar - 9:20 Uhr',
                                                   textAlign: TextAlign.start,
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -273,32 +200,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    width: 44.0,
-                                    height: 44.0,
-                                    decoration: BoxDecoration(
-                                      color: Color(0x4C19DB8A),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Color(0xFF19DB8A),
-                                        width: 2.0,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          2.0, 2.0, 2.0, 2.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        child: Image.network(
-                                          'https://images.unsplash.com/photo-1694878982093-25e8897ec9d5?w=1280&h=720',
-                                          width: 44.0,
-                                          height: 44.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                   Expanded(
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
@@ -309,7 +210,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Sarah Williams',
+                                            'Max Mustermann',
                                             textAlign: TextAlign.start,
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyLarge
@@ -325,7 +226,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 4.0, 0.0, 0.0),
                                             child: Text(
-                                              'Are we still on for the meeting tomorrow?',
+                                              'Hey, ist der Artikel noch erhältlich?',
                                               textAlign: TextAlign.start,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -348,7 +249,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                     .fromSTEB(
                                                         0.0, 4.0, 0.0, 0.0),
                                                 child: Text(
-                                                  'Tue. July 4th - 1:45pm',
+                                                  'Mi. 1. Januar - 9:20 Uhr',
                                                   textAlign: TextAlign.start,
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -404,32 +305,6 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    width: 44.0,
-                                    height: 44.0,
-                                    decoration: BoxDecoration(
-                                      color: Color(0x4C19DB8A),
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Color(0xFF19DB8A),
-                                        width: 2.0,
-                                      ),
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          2.0, 2.0, 2.0, 2.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(40.0),
-                                        child: Image.network(
-                                          'https://images.unsplash.com/photo-1614594642171-902bc291ff3f?w=1280&h=720',
-                                          width: 44.0,
-                                          height: 44.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                   Expanded(
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
@@ -440,7 +315,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'Mark Johnson',
+                                            'Max Mustermann',
                                             textAlign: TextAlign.start,
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyLarge
@@ -456,7 +331,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 4.0, 0.0, 0.0),
                                             child: Text(
-                                              'I sent you the files, let me know if you need anything else.',
+                                              'Hey, ist der Artikel noch erhältlich?',
                                               textAlign: TextAlign.start,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -479,7 +354,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                     .fromSTEB(
                                                         0.0, 4.0, 0.0, 0.0),
                                                 child: Text(
-                                                  'Wed. July 5th - 9:20am',
+                                                  'Mi. 1. Januar - 9:20 Uhr',
                                                   textAlign: TextAlign.start,
                                                   style: FlutterFlowTheme.of(
                                                           context)

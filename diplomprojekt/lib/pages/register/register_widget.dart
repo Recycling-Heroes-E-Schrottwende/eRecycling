@@ -197,6 +197,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                             color: Color(0xFF101213),
                                             fontWeight: FontWeight.w500,
                                           ),
+                                      cursorColor: Color(0xFF387B2E),
                                       validator: _model
                                           .usernameControllerValidator
                                           .asValidator(context),
@@ -455,7 +456,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 16.0),
                                   child: FFButtonWidget(
-                                    onPressed: () async {},
+                                    onPressed: () async {
+                                      context
+                                          .pushNamed('List13PropertyListview');
+                                    },
                                     text: 'Konto erstellen',
                                     options: FFButtonOptions(
                                       width: 370.0,
@@ -497,8 +501,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       context.pushNamed('login');
                                     },
                                     child: RichText(
-                                      textScaleFactor: MediaQuery.of(context)
-                                          .textScaleFactor,
+                                      textScaler:
+                                          MediaQuery.of(context).textScaler,
                                       text: TextSpan(
                                         children: [
                                           TextSpan(

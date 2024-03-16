@@ -5,8 +5,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
 
-import '/auth/custom_auth/custom_auth_user_provider.dart';
+import '/auth/base_auth_user_provider.dart';
 
 import '/index.dart';
 import '/main.dart';
@@ -27,8 +28,8 @@ class AppStateNotifier extends ChangeNotifier {
   static AppStateNotifier? _instance;
   static AppStateNotifier get instance => _instance ??= AppStateNotifier._();
 
-  DiplomprojektAuthUser? initialUser;
-  DiplomprojektAuthUser? user;
+  BaseAuthUser? initialUser;
+  BaseAuthUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -53,7 +54,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(DiplomprojektAuthUser newUser) {
+  void update(BaseAuthUser newUser) {
     final shouldUpdate =
         user?.uid == null || newUser.uid == null || user?.uid != newUser.uid;
     initialUser ??= newUser;
@@ -123,6 +124,33 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'addProduct')
               : AddProductWidget(),
+        ),
+        FFRoute(
+          name: 'productDetails',
+          path: '/productDetails',
+          builder: (context, params) => ProductDetailsWidget(),
+        ),
+        FFRoute(
+          name: 'editProfile',
+          path: '/editProfile',
+          builder: (context, params) => EditProfileWidget(),
+        ),
+        FFRoute(
+          name: 'filterSearch',
+          path: '/filterSearch',
+          builder: (context, params) => FilterSearchWidget(),
+        ),
+        FFRoute(
+          name: 'insideChat',
+          path: '/insideChat',
+          asyncParams: {
+            'users': getDoc(['users'], UsersRecord.fromSnapshot),
+          },
+          builder: (context, params) => InsideChatWidget(
+            chats: params.getParam(
+                'chats', ParamType.DocumentReference, false, ['chats']),
+            users: params.getParam('users', ParamType.Document),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -241,6 +269,7 @@ class FFParameters {
     String paramName,
     ParamType type, [
     bool isList = false,
+    List<String>? collectionNamePath,
   ]) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -254,11 +283,8 @@ class FFParameters {
       return param;
     }
     // Return serialized value.
-    return deserializeParam<T>(
-      param,
-      type,
-      isList,
-    );
+    return deserializeParam<T>(param, type, isList,
+        collectionNamePath: collectionNamePath);
   }
 }
 

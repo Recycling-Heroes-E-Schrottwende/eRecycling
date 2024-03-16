@@ -1,4 +1,4 @@
-import '/auth/custom_auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -294,9 +294,18 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   child: FFButtonWidget(
                                     onPressed: () async {
                                       GoRouter.of(context).prepareAuthEvent();
-                                      await authManager.signIn();
 
-                                      context.goNamedAuth(
+                                      final user =
+                                          await authManager.signInWithEmail(
+                                        context,
+                                        _model.emailAddressController.text,
+                                        _model.passwordController.text,
+                                      );
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      context.pushNamedAuth(
                                           'List13PropertyListview',
                                           context.mounted);
                                     },
@@ -341,8 +350,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       context.pushNamed('register');
                                     },
                                     child: RichText(
-                                      textScaleFactor: MediaQuery.of(context)
-                                          .textScaleFactor,
+                                      textScaler:
+                                          MediaQuery.of(context).textScaler,
                                       text: TextSpan(
                                         children: [
                                           TextSpan(
