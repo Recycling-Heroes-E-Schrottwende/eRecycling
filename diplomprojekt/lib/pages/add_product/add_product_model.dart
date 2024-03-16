@@ -33,6 +33,8 @@ class AddProductModel extends FlutterFlowModel<AddProductWidget> {
   FormFieldController<List<String>>? choiceChipsValueController1;
   String? get choiceChipsValue1 =>
       choiceChipsValueController1?.value?.firstOrNull;
+
+  get choiceChipsController1 => null;
   set choiceChipsValue1(String? val) =>
       choiceChipsValueController1?.value = val != null ? [val] : [];
   // State field(s) for ChoiceChips widget.

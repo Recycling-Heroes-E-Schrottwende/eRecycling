@@ -33,11 +33,11 @@ class ProductCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ProductDetailsWidget(
               title: title,
-              postcode: 54321,
-              condition: "Used",
+              postcode: postcode,
+              condition: condition,
               imageUrl: imageUrl,
               description: description,
-              category: "Electronics",
+              category: category,
               price: price,
               productId: productId,
             )

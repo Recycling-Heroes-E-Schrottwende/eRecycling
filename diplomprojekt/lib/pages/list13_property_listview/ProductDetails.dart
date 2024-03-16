@@ -296,7 +296,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                 children: [
                   Padding(
                       padding: const EdgeInsetsDirectional.fromSTEB(
-                          32.0, 0.0, 0.0, 0.0),
+                          0.0, 0.0, 0.0, 0.0),
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -389,6 +389,28 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                 12.0, 0.0, 12.0, 0.0),
                             child: Text(
                               widget.postcode.toString(),
+                              style: FlutterFlowTheme.of(context).bodySmall,
+                            ),
+                          ),
+                        ).animateOnPageLoad(
+                            animationsMap['containerOnPageLoadAnimation2']!),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 0.0, 0.0),
+                        child: Container(
+                          height: 36.0,
+                          decoration: BoxDecoration(
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            borderRadius: BorderRadius.circular(40.0),
+                          ),
+                          alignment: const AlignmentDirectional(0.0, 0.0),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                12.0, 0.0, 12.0, 0.0),
+                            child: Text(
+                              widget.productId.toString(),
                               style: FlutterFlowTheme.of(context).bodySmall,
                             ),
                           ),
