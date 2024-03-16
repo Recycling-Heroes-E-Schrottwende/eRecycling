@@ -135,3 +135,15 @@ Future<void> create_product(String title, String desc, XFile? imageFile) async {
     print('Fehler beim Erstellen des Produkts: ' + response.toString());
   }
 }
+
+Future<List<String>> fetchImageUrls(int productId) async {
+  final response = await http.get(Uri.parse('http://app.recyclingheroes.at/api/picture_url/?product_id=$productId'));
+
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    List<String> imageUrls = List<String>.from(data['url']);
+    return imageUrls;
+  } else {
+    throw Exception('Failed to load image urls');
+  }
+}

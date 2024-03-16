@@ -47,13 +47,15 @@ class _List13PropertyListviewWidgetState
 
   Widget _buildProductCard(Map<String, dynamic> product) {
     return ProductCard(
-      title: product['product_name'] ?? 'Unbekanntes Produkt',
-      description: product['description'] ?? 'Keine Beschreibung verfügbar.',
-      imageUrl: product['image_url'] ??
-          'https://microsites.pearl.de/i/76/sd2208_5.jpg',
-      productId: product['id'],
-      price: product['price'].toDouble(),
-    );
+        title: product['product_name'] ?? 'Unbekanntes Produkt',
+        description: product['description'] ?? 'Keine Beschreibung verfügbar.',
+        imageUrl: product['image_url'] ??
+            'https://microsites.pearl.de/i/76/sd2208_5.jpg',
+        productId: product['id'],
+        price: product['price'].toDouble(),
+        postcode: int.tryParse(product['postcode']) ?? 1190,
+        condition: product['condition'],
+        category: product['category']);
   }
 
   Widget _error_message(var snapshot) {
@@ -231,51 +233,33 @@ class _List13PropertyListviewWidgetState
                                   scrollDirection: Axis.vertical,
                                   children: [
                                     FutureBuilder<List<Map<String, dynamic>>>(
-                                      future: fetch_products(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        } else if (snapshot.hasError) {
-                                          // Verbesserte Fehleranzeige
-                                          return _error_message(snapshot);
-                                        } else if (snapshot.hasData) {
-                                          // Verwenden Sie hier eine Column oder eine ListView.builder
-                                          return ListView.builder(
-                                            padding: EdgeInsets.zero,
-                                            shrinkWrap:
-                                                true, // Wichtig, um innerhalb einer Column zu arbeiten
-                                            physics:
-                                                const NeverScrollableScrollPhysics(), // Verhindert Scroll-Konflikte mit der äußeren ScrollView
-                                            itemCount: snapshot.data!.length,
-                                            itemBuilder: (context, index) {
-                                              var product =
-                                                  snapshot.data![index];
-                                              return ProductCard(
-                                                title:
-                                                    product['product_name'] ??
-                                                        'Unbekanntes Produkt',
-                                                description: product[
-                                                        'description'] ??
-                                                    'Keine Beschreibung verfügbar.',
-                                                imageUrl: product[
-                                                        'image_url'] ??
-                                                    'https://microsites.pearl.de/i/76/sd2208_5.jpg',
-                                                productId: product['id'],
-                                                price:
-                                                    product['price'].toDouble(),
-                                              );
-                                            },
-                                          );
-                                        } else {
-                                          return const Center(
-                                              child: Text(
-                                                  'Keine Produkte gefunden'));
-                                        }
-                                      },
-                                    ),
+                                        future: fetch_products(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else if (snapshot.hasError) {
+                                            return _error_message(snapshot);
+                                          } else if (snapshot.hasData) {
+                                            return ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              cacheExtent:
+                                                  10, // Optimierung der Performance
+                                              itemCount: snapshot.data!.length,
+                                              itemBuilder: (context, index) {
+                                                return _buildProductCard(
+                                                    snapshot.data![index]);
+                                              },
+                                            );
+                                          } else {
+                                            return const Center(
+                                                child: Text(
+                                                    'Keine Produkte gefunden'));
+                                          }
+                                        })
                                   ],
                                 ),
                               ],
@@ -291,50 +275,34 @@ class _List13PropertyListviewWidgetState
                                     scrollDirection: Axis.vertical,
                                     children: [
                                       FutureBuilder<List<Map<String, dynamic>>>(
-                                        future: fetch_newest_products(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          } else if (snapshot.hasError) {
-                                            return _error_message(snapshot);
-                                          } else if (snapshot.hasData) {
-                                            // Verwenden Sie hier eine Column oder eine ListView.builder
-                                            return ListView.builder(
-                                              padding: EdgeInsets.zero,
-                                              shrinkWrap:
-                                                  true, // Wichtig, um innerhalb einer Column zu arbeiten
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(), // Verhindert Scroll-Konflikte mit der äußeren ScrollView
-                                              itemCount: snapshot.data!.length,
-                                              itemBuilder: (context, index) {
-                                                var product =
-                                                    snapshot.data![index];
-                                                return ProductCard(
-                                                  title:
-                                                      product['product_name'] ??
-                                                          'Unbekanntes Produkt',
-                                                  description: product[
-                                                          'description'] ??
-                                                      'Keine Beschreibung verfügbar.',
-                                                  imageUrl: product[
-                                                          'image_url'] ??
-                                                      'https://microsites.pearl.de/i/76/sd2208_5.jpg',
-                                                  productId: product['id'],
-                                                  price: product['price']
-                                                      .toDouble(),
-                                                );
-                                              },
-                                            );
-                                          } else {
-                                            return const Center(
-                                                child: Text(
-                                                    'Keine Produkte gefunden'));
-                                          }
-                                        },
-                                      ),
+                                          future: fetch_newest_products(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return _error_message(snapshot);
+                                            } else if (snapshot.hasData) {
+                                              return ListView.builder(
+                                                padding: EdgeInsets.zero,
+                                                shrinkWrap: true,
+                                                cacheExtent:
+                                                    10, // Optimierung der Performance
+                                                itemCount:
+                                                    snapshot.data!.length,
+                                                itemBuilder: (context, index) {
+                                                  return _buildProductCard(
+                                                      snapshot.data![index]);
+                                                },
+                                              );
+                                            } else {
+                                              return const Center(
+                                                  child: Text(
+                                                      'Keine Produkte gefunden'));
+                                            }
+                                          })
                                     ]),
                               ],
                             ),
@@ -362,8 +330,6 @@ class _List13PropertyListviewWidgetState
                                           return ListView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
                                             cacheExtent:
                                                 10, // Optimierung der Performance
                                             itemCount: snapshot.data!.length,
