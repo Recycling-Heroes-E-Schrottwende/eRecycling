@@ -120,17 +120,17 @@ Future<Map<String, dynamic>> fetch_product_details(int productId) async {
   }
 }
 
-Future<void> create_product(String title, String desc, XFile? imageFile) async {
+Future<void> create_product(String title, String desc, String category, String condition, String delivery, String postcode, String price) async {
   var uri = Uri.parse('$serverUrl/create/product');
   var request = http.MultipartRequest('POST', uri)
     ..fields['title'] = title
-    ..fields['desc'] = desc;
-  if (imageFile != null) {
-    request.files.add(await http.MultipartFile.fromPath(
-      'image',
-      imageFile.path,
-    ));
-  }
+    ..fields['desc'] = desc
+    ..fields['category'] = category
+    ..fields['condition'] = condition
+    ..fields['delivery'] = delivery
+    ..fields['postcode'] = postcode
+    ..fields['price'] = price;
+  
   var response = await request.send();
 
   if (response.statusCode == 200) {

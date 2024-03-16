@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:diplomprojekt/fetch.dart';
+
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -14,9 +18,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'add_product_model.dart';
 export 'add_product_model.dart';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:image_picker/image_picker.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class AddProductWidget extends StatefulWidget {
-  const AddProductWidget({super.key});
+  AddProductWidget({super.key});
 
   @override
   State<AddProductWidget> createState() => _AddProductWidgetState();
@@ -25,6 +34,28 @@ class AddProductWidget extends StatefulWidget {
 class _AddProductWidgetState extends State<AddProductWidget>
     with TickerProviderStateMixin {
   late AddProductModel _model;
+
+  List<XFile>? selectedImages = [];
+  List<Uint8List> imageBytesList = [];
+
+  Future<void> selectAndUploadImages() async {
+    final ImagePicker _picker = ImagePicker();
+    final List<XFile>? images = await _picker.pickMultiImage();
+
+    if (images != null) {
+      // Bilder für Web in Byte-Daten konvertieren
+      if (kIsWeb) {
+        List<Uint8List> newImageBytesList =
+            await Future.wait(images.map((image) => image.readAsBytes()));
+        setState(() {
+          imageBytesList
+              .addAll(newImageBytesList); // Hinzufügen neuer Bilder zur Liste
+        });
+      }
+    } else {
+      print("Keine Bilder ausgewählt");
+    }
+  }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -148,64 +179,95 @@ class _AddProductWidgetState extends State<AddProductWidget>
                       Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: Image.asset(
-                            'assets/images/istockphoto-1226328537-612x612.jpg',
-                            width: 400.0,
-                            height: 200.0,
-                            fit: BoxFit.cover,
-                          ),
+                        child: Container(
+                          height: 200.0, // Höhe des Containers festlegen
+                          child: imageBytesList.isEmpty
+                              ? Image.asset(
+                                  'assets/images/istockphoto-1226328537-612x612.jpg',
+                                  width: 400.0,
+                                  height: 400.0,
+                                  fit: BoxFit.cover,
+                                )
+                              : ListView.builder(
+                                  scrollDirection: Axis
+                                      .horizontal, // Horizontale Scroll-Richtung
+                                  itemCount: imageBytesList
+                                      .length, // Anzahl der Bilder in der Liste
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                          right:
+                                              8.0), // Abstand zwischen den Bildern
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        child: Image.memory(
+                                          imageBytesList[
+                                              index], // Zugriff auf das Bild an Position index
+                                          width: 400.0, // Breite jedes Bildes
+                                          fit: BoxFit
+                                              .cover, // Bild an den ClipRRect anpassen
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                         ),
                       ),
                       Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                        child: Container(
-                          width: double.infinity,
-                          constraints: BoxConstraints(
-                            maxWidth: 500.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12.0),
-                            border: Border.all(
-                              color: Color(0xFFE5E7EB),
-                              width: 2.0,
+                        child: GestureDetector(
+                          onTap: () async {
+                            selectAndUploadImages();
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            constraints: BoxConstraints(
+                              maxWidth: 500.0,
                             ),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Icon(
-                                  Icons.add_a_photo_rounded,
-                                  color: Color(0xFF81AC26),
-                                  size: 32.0,
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16.0, 0.0, 0.0, 0.0),
-                                  child: Text(
-                                    'Produktbilder hochladen',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Plus Jakarta Sans',
-                                          color: Color(0xFF15161E),
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.0),
+                              border: Border.all(
+                                color: Color(0xFFE5E7EB),
+                                width: 2.0,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Icon(
+                                    Icons.add_a_photo_rounded,
+                                    color: Color(0xFF81AC26),
+                                    size: 32.0,
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        16.0, 0.0, 0.0, 0.0),
+                                    child: Text(
+                                      'Produktbilder hochladen',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Plus Jakarta Sans',
+                                            color: Color(0xFF15161E),
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ).animateOnPageLoad(
-                            animationsMap['containerOnPageLoadAnimation']!),
-                      ),
+                        ),
+                      ).animateOnPageLoad(
+                          animationsMap['containerOnPageLoadAnimation']!),
                       TextFormField(
                         controller: _model.textController1,
                         focusNode: _model.textFieldFocusNode1,
@@ -670,7 +732,8 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         String price = _model.textController4.text;
 
                         // Call the create_product method with the title and description
-                        create_product(title, description, category, condition, delivery, postcode, price);
+                        create_product(title, description, category!,
+                            condition!, delivery!, postcode, price);
                       },
                       text: 'Anzeige hochladen ',
                       icon: Icon(
