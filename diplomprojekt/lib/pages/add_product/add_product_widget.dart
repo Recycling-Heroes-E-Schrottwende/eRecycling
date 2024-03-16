@@ -661,7 +661,16 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
                     child: FFButtonWidget(
                       onPressed: () {
-                        print('Button pressed ...');
+                        String title = _model.textController1.text;
+                        String description = _model.textController2.text;
+                        String? category = _model.dropDownValue;
+                        String? condition = _model.choiceChipsValue1;
+                        String? delivery = _model.choiceChipsValue2;
+                        String postcode = _model.textController3.text;
+                        String price = _model.textController4.text;
+
+                        // Call the create_product method with the title and description
+                        create_product(title, description, category, condition, delivery, postcode, price);
                       },
                       text: 'Anzeige hochladen ',
                       icon: Icon(

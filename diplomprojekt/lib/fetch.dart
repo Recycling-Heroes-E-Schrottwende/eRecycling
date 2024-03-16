@@ -1,9 +1,13 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 const String serverUrl = 'http://app.recyclingheroes.at/flask-api';
 //const String serverUrl = 'http://localhost:3833';
@@ -136,8 +140,47 @@ Future<void> create_product(String title, String desc, XFile? imageFile) async {
   }
 }
 
+Future<void> uploadImage(File imageFile, int productId) async {
+  // Erkennen des MIME-Typs des Bildes
+  final mimeTypeData =
+      lookupMimeType(imageFile.path, headerBytes: [0xFF, 0xD8])?.split('/');
+
+  // Erstellen eines MultipartRequest
+  var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(
+          'http://app.recyclingheroes.at/api/upload_image/?product_id=$productId'));
+
+  // Hinzufügen des Bildes
+  request.files.add(await http.MultipartFile.fromPath(
+    'file',
+    imageFile.path,
+    contentType: MediaType.parse('${mimeTypeData![0]}/${mimeTypeData[1]}'),
+  ));
+
+  // Hinzufügen weiterer Felder, falls benötigt
+  // request.fields['key'] = 'value';
+
+  try {
+    // Senden des Requests
+    var streamedResponse = await request.send();
+
+    // Empfangen der Antwort
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode == 200) {
+      print("Bild erfolgreich hochgeladen!");
+    } else {
+      print("Fehler beim Hochladen des Bildes: ${response.body}");
+    }
+  } catch (e) {
+    print("Ausnahme beim Hochladen des Bildes: $e");
+  }
+}
+
 Future<List<String>> fetchImageUrls(int productId) async {
-  final response = await http.get(Uri.parse('http://app.recyclingheroes.at/api/picture_url/?product_id=$productId'));
+  final response = await http.get(Uri.parse(
+      'http://app.recyclingheroes.at/api/picture_url/?product_id=$productId'));
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
