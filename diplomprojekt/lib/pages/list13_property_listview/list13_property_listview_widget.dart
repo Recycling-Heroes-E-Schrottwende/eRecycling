@@ -229,11 +229,11 @@ class _List13PropertyListviewWidgetState
                       child: TabBarView(
                         controller: _model.tabBarController,
                         children: [
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ListView(
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: ListView(
                                   physics:
                                       const AlwaysScrollableScrollPhysics(),
                                   padding: EdgeInsets.zero,
@@ -251,7 +251,8 @@ class _List13PropertyListviewWidgetState
                                           } else if (snapshot.hasError) {
                                             return _error_message(snapshot);
                                           } else if (snapshot.hasData) {
-                                            return ListView.builder(
+                                            return Expanded(
+                                                child: ListView.builder(
                                               physics:
                                                   const AlwaysScrollableScrollPhysics(),
                                               padding: EdgeInsets.zero,
@@ -263,7 +264,7 @@ class _List13PropertyListviewWidgetState
                                                 return _buildProductCard(
                                                     snapshot.data![index]);
                                               },
-                                            );
+                                            ));
                                           } else {
                                             return const Center(
                                                 child: Text(
@@ -272,14 +273,14 @@ class _List13PropertyListviewWidgetState
                                         })
                                   ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ListView(
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: ListView(
                                     physics:
                                         const AlwaysScrollableScrollPhysics(),
                                     padding: EdgeInsets.zero,
@@ -297,7 +298,8 @@ class _List13PropertyListviewWidgetState
                                             } else if (snapshot.hasError) {
                                               return _error_message(snapshot);
                                             } else if (snapshot.hasData) {
-                                              return ListView.builder(
+                                              return Expanded(
+                                                  child: ListView.builder(
                                                 physics:
                                                     const AlwaysScrollableScrollPhysics(),
                                                 padding: EdgeInsets.zero,
@@ -310,7 +312,7 @@ class _List13PropertyListviewWidgetState
                                                   return _buildProductCard(
                                                       snapshot.data![index]);
                                                 },
-                                              );
+                                              ));
                                             } else {
                                               return const Center(
                                                   child: Text(
@@ -318,14 +320,14 @@ class _List13PropertyListviewWidgetState
                                             }
                                           })
                                     ]),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ListView(
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: ListView(
                                   physics:
                                       const AlwaysScrollableScrollPhysics(),
                                   padding: EdgeInsets.zero,
@@ -343,7 +345,8 @@ class _List13PropertyListviewWidgetState
                                         } else if (snapshot.hasError) {
                                           return _error_message(snapshot);
                                         } else if (snapshot.hasData) {
-                                          return ListView.builder(
+                                          return Expanded(
+                                              child: ListView.builder(
                                             physics:
                                                 const AlwaysScrollableScrollPhysics(),
                                             padding: EdgeInsets.zero,
@@ -355,7 +358,7 @@ class _List13PropertyListviewWidgetState
                                               return _buildProductCard(
                                                   snapshot.data![index]);
                                             },
-                                          );
+                                          ));
                                         } else {
                                           return const Center(
                                               child: Text(
@@ -365,8 +368,8 @@ class _List13PropertyListviewWidgetState
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
