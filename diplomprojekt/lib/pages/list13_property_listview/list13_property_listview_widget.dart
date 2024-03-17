@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:diplomprojekt/pages/list13_property_listview/ProductCard.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -51,8 +49,6 @@ class _List13PropertyListviewWidgetState
     super.dispose();
   }
 
-    Map<String, List<Map<String, dynamic>>> _cachedData = {};
-
   Widget _buildProductCard(Map<String, dynamic> product) {
     return ProductCard(
         title: product['product_name'] ?? 'Unbekanntes Produkt',
@@ -66,6 +62,7 @@ class _List13PropertyListviewWidgetState
         category: product['category']);
   }
 
+  // ignore: non_constant_identifier_names
   Widget _error_message(var snapshot) {
     return Center(
       child: Column(
@@ -106,6 +103,7 @@ class _List13PropertyListviewWidgetState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -231,16 +229,18 @@ class _List13PropertyListviewWidgetState
                       child: TabBarView(
                         controller: _model.tabBarController,
                         children: [
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ListView(
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: ListView(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   children: [
-                                    FutureBuilder<List<Map<String, dynamic>>> (
+                                    FutureBuilder<List<Map<String, dynamic>>>(
                                         future: fetch_products(),
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
@@ -251,7 +251,10 @@ class _List13PropertyListviewWidgetState
                                           } else if (snapshot.hasError) {
                                             return _error_message(snapshot);
                                           } else if (snapshot.hasData) {
-                                            return ListView.builder(
+                                            return Expanded(
+                                                child: ListView.builder(
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
                                               padding: EdgeInsets.zero,
                                               shrinkWrap: true,
                                               cacheExtent:
@@ -261,7 +264,7 @@ class _List13PropertyListviewWidgetState
                                                 return _buildProductCard(
                                                     snapshot.data![index]);
                                               },
-                                            );
+                                            ));
                                           } else {
                                             return const Center(
                                                 child: Text(
@@ -270,14 +273,16 @@ class _List13PropertyListviewWidgetState
                                         })
                                   ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ListView(
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: ListView(
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
@@ -293,7 +298,10 @@ class _List13PropertyListviewWidgetState
                                             } else if (snapshot.hasError) {
                                               return _error_message(snapshot);
                                             } else if (snapshot.hasData) {
-                                              return ListView.builder(
+                                              return Expanded(
+                                                  child: ListView.builder(
+                                                physics:
+                                                    const AlwaysScrollableScrollPhysics(),
                                                 padding: EdgeInsets.zero,
                                                 shrinkWrap: true,
                                                 cacheExtent:
@@ -304,7 +312,7 @@ class _List13PropertyListviewWidgetState
                                                   return _buildProductCard(
                                                       snapshot.data![index]);
                                                 },
-                                              );
+                                              ));
                                             } else {
                                               return const Center(
                                                   child: Text(
@@ -312,14 +320,16 @@ class _List13PropertyListviewWidgetState
                                             }
                                           })
                                     ]),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ListView(
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: ListView(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
@@ -335,7 +345,10 @@ class _List13PropertyListviewWidgetState
                                         } else if (snapshot.hasError) {
                                           return _error_message(snapshot);
                                         } else if (snapshot.hasData) {
-                                          return ListView.builder(
+                                          return Expanded(
+                                              child: ListView.builder(
+                                            physics:
+                                                const AlwaysScrollableScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             cacheExtent:
@@ -345,7 +358,7 @@ class _List13PropertyListviewWidgetState
                                               return _buildProductCard(
                                                   snapshot.data![index]);
                                             },
-                                          );
+                                          ));
                                         } else {
                                           return const Center(
                                               child: Text(
@@ -355,8 +368,8 @@ class _List13PropertyListviewWidgetState
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
