@@ -79,26 +79,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Container(
-                        width: 70.0,
-                        height: 70.0,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFE0E3E7),
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Image.asset(
-                              'assets/images/Bildschirmfoto_vom_2024-02-25_19-10-27.png',
-                              width: 100.0,
-                              height: 100.0,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
@@ -107,7 +87,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              ' BigJ',
+                              'Max M.',
                               style: FlutterFlowTheme.of(context)
                                   .headlineSmall
                                   .override(
@@ -121,7 +101,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 4.0, 0.0, 0.0),
                               child: Text(
-                                'king.bigj@gmail.com',
+                                'mmustermann@student.tgm.ac.at',
                                 style: FlutterFlowTheme.of(context)
                                     .bodySmall
                                     .override(
@@ -202,21 +182,31 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   ),
                                   Align(
                                     alignment: AlignmentDirectional(-0.85, 0.0),
-                                    child: Container(
-                                      width: 36.0,
-                                      height: 36.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 4.0,
-                                            color: Color(0x430B0D0F),
-                                            offset: Offset(0.0, 2.0),
-                                          )
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        shape: BoxShape.rectangle,
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context.pushNamed(
+                                            'List13PropertyListview');
+                                      },
+                                      child: Container(
+                                        width: 36.0,
+                                        height: 36.0,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 4.0,
+                                              color: Color(0x430B0D0F),
+                                              offset: Offset(0.0, 2.0),
+                                            )
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                          shape: BoxShape.rectangle,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -316,81 +306,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(24.0, 12.0, 0.0, 12.0),
-                    child: Text(
-                      'Kontoeinstellungen',
-                      style: FlutterFlowTheme.of(context).labelMedium.override(
-                            fontFamily: 'Plus Jakarta Sans',
-                            color: Color(0xFF57636C),
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 60.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5.0,
-                        color: Color(0x3416202A),
-                        offset: Offset(0.0, 2.0),
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(12.0),
-                    shape: BoxShape.rectangle,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              12.0, 0.0, 0.0, 0.0),
-                          child: Text(
-                            'Passwort ändern',
-                            style: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .override(
-                                  fontFamily: 'Plus Jakarta Sans',
-                                  color: Color(0xFF57636C),
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Align(
-                            alignment: AlignmentDirectional(0.9, 0.0),
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Color(0xFF57636C),
-                              size: 18.0,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20.0, 12.0, 20.0, 0.0),
                 child: Container(
@@ -431,10 +346,19 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         Expanded(
                           child: Align(
                             alignment: AlignmentDirectional(0.9, 0.0),
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              color: Color(0xFF57636C),
-                              size: 18.0,
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                context.pushNamed('editProfile');
+                              },
+                              child: Icon(
+                                Icons.arrow_forward_ios,
+                                color: Color(0xFF57636C),
+                                size: 18.0,
+                              ),
                             ),
                           ),
                         ),
@@ -461,11 +385,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         iconPadding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Colors.white,
+                        color: Color(0xFF387B2E),
                         textStyle:
                             FlutterFlowTheme.of(context).bodySmall.override(
                                   fontFamily: 'Lexend Deca',
-                                  color: Color(0xFF14181B),
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
                                   fontSize: 14.0,
                                   fontWeight: FontWeight.normal,
                                 ),
