@@ -282,7 +282,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
               context.pushNamed('List13PropertyListview');
             },
           ),
-          actions: [],
+          actions: const [],
           centerTitle: false,
           elevation: 0.0,
         ),
@@ -292,6 +292,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
             SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
@@ -304,17 +305,19 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                 FullScreenImagePage(imageUrl: widget.imageUrl),
                           ));
                         },
-                        child: Image.network(
-                          widget.imageUrl,
-                          width: double.infinity,
-                          height: 320.0,
-                          fit: BoxFit.fitWidth,
-                        ).animateOnPageLoad(
-                            animationsMap['imageOnPageLoadAnimation1']!),
+                        child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Image.network(
+                              widget.imageUrl,
+                              //height: 320.0,
+                              width: double.infinity,
+                              fit: BoxFit.fitWidth,
+                            ).animateOnPageLoad(
+                                animationsMap['imageOnPageLoadAnimation1']!)),
                       )),
                   Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(
-                        24.0, 0.0, 0.0, 0.0),
+                        24.0, 15.0, 0.0, 0.0),
                     child: Text(
                       widget.title,
                       style: FlutterFlowTheme.of(context).headlineMedium,
@@ -433,8 +436,8 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                       clipBehavior: Clip.none,
                       children: [
                         FutureBuilder<List<String>>(
-                          future:
-                              fetchImageUrls(widget.productId), // Produkt-ID hier übergeben
+                          future: fetchImageUrls(
+                              widget.productId), // Produkt-ID hier übergeben
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
@@ -491,7 +494,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                       FlutterFlowTheme.of(context).accent4,
                       FlutterFlowTheme.of(context).secondaryBackground
                     ],
-                    stops: [0.0, 0.7],
+                    stops: const [0.0, 0.7],
                     begin: const AlignmentDirectional(0.0, -1.0),
                     end: const AlignmentDirectional(0, 1.0),
                   ),
@@ -502,7 +505,6 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                       24.0, 0.0, 24.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () {
-                      print('Button pressed ...');
                     },
                     text: 'Verkäufer kontaktieren',
                     options: FFButtonOptions(
