@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -18,6 +20,8 @@ class EditProfileWidget extends StatefulWidget {
 
 class _EditProfileWidgetState extends State<EditProfileWidget> {
   late EditProfileModel _model;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -41,6 +45,30 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  Future<void> updateUsername(String newUsername) async {
+    if (newUsername.isEmpty) return;
+    try {
+      final userDocRef =
+          _firestore.collection('users').doc(_auth.currentUser?.uid);
+      await userDocRef.update({'username': newUsername});
+      print('Username updated successfully');
+    } catch (e) {
+      print('Error updating username: $e');
+    }
+  }
+
+  Future<void> updateEmail(String newEmail) async {
+    if (newEmail.isEmpty) return;
+    try {
+      final userDocRef =
+          _firestore.collection('users').doc(_auth.currentUser?.uid);
+      await userDocRef.update({'email': newEmail});
+      print('Email updated successfully');
+    } catch (e) {
+      print('Error updating username: $e');
+    }
   }
 
   @override
@@ -305,7 +333,15 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
               ),
               FFButtonWidget(
                 onPressed: () {
-                  print('Button pressed ...');
+                  updateUsername(_model.textController1.text);
+                  updateEmail(_model.textController2.text);
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Changes saved successfully!'),
+                    ),
+                  );
+                  context.pushNamed('list13PropertyListview');
                 },
                 text: 'Save Changes',
                 options: FFButtonOptions(

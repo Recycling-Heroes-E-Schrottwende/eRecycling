@@ -485,8 +485,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                             'uid': userCredential.user?.uid,
                                             'username':
                                                 _model.usernameController.text,
-                                            'email':
-                                                _model.passwordController.text,
+                                            'email': _model
+                                                .emailAddressController.text,
                                           });
 
                                           try {
