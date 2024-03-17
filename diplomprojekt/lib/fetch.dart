@@ -1,9 +1,14 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:mime/mime.dart';
 
 const String serverUrl = 'http://app.recyclingheroes.at/flask-api';
 //const String serverUrl = 'http://localhost:3833';
@@ -116,22 +121,98 @@ Future<Map<String, dynamic>> fetch_product_details(int productId) async {
   }
 }
 
-Future<void> create_product(String title, String desc, XFile? imageFile) async {
-  var uri = Uri.parse('$serverUrl/create/product');
-  var request = http.MultipartRequest('POST', uri)
+Future<void> create_product(
+    String title,
+    String desc,
+    String category,
+    String condition,
+    String delivery,
+    String postcode,
+    String price,
+    List<Uint8List> imageBytesList) async {
+  var createProductUri = Uri.parse('$serverUrl/create/product');
+  var createRequest = http.MultipartRequest('POST', createProductUri)
     ..fields['title'] = title
-    ..fields['desc'] = desc;
-  if (imageFile != null) {
-    request.files.add(await http.MultipartFile.fromPath(
-      'image',
-      imageFile.path,
-    ));
+    ..fields['desc'] = desc
+    ..fields['category'] = category
+    ..fields['condition'] = condition
+    ..fields['delivery'] = delivery
+    ..fields['postcode'] = postcode
+    ..fields['price'] = price;
+
+  var createResponse = await createRequest.send();
+  var createResponseBody = await http.Response.fromStream(createResponse);
+
+  if (createResponse.statusCode == 200) {
+    print('Produkt erfolgreich erstellt');
+
+    // Abrufen der Produktliste, um die ID des zuletzt erstellten Produkts zu ermitteln
+    var getProductsUri =
+        Uri.parse('http://app.recyclingheroes.at/api/products/');
+    var getProductsResponse = await http.get(getProductsUri);
+
+    if (getProductsResponse.statusCode == 200) {
+      var products = json.decode(getProductsResponse.body);
+      if (products.isNotEmpty) {
+        // Annahme: Die Produkte sind nach "created_at" absteigend sortiert
+        var lastProduct = products.last;
+        int productId = lastProduct['id'];
+
+        // Bilder für das zuletzt erstellte Produkt hochladen
+        await uploadImage(productId, imageBytesList);
+      } else {
+        print(
+            'Keine Produkte gefunden, um die ID für den Bildupload zu erhalten');
+      }
+    } else {
+      print(
+          'Fehler beim Abrufen der Produkte: ${getProductsResponse.reasonPhrase}');
+    }
+  } else {
+    print(
+        'Fehler beim Erstellen des Produkts: ${createResponseBody.reasonPhrase}');
   }
-  var response = await request.send();
+}
+
+Future<void> uploadImage(int productId, List<Uint8List> imageBytesList) async {
+  var uri = Uri.parse(
+      'http://app.recyclingheroes.at/api/uploadImage/?product_id=$productId');
+
+  // Für jedes Bild in der Liste eine separate Anfrage erstellen und senden
+  for (int i = 0; i < imageBytesList.length; i++) {
+    var request = http.MultipartRequest('POST', uri);
+    var image = imageBytesList[i];
+    String fileName =
+        'image_$i.png'; // Der Dateiname kann eindeutig generiert oder statisch sein
+
+    // Fügt das Bild als Multipart-Datei hinzu
+    request.files.add(http.MultipartFile.fromBytes(
+      'file', // Der Name des Formularfeldes (muss mit der Servererwartung übereinstimmen)
+      image,
+      filename: fileName,
+      contentType: MediaType('image', 'png'), // Setzt den MIME-Typ
+    ));
+
+    // Senden der Anfrage
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      print('Bild $i erfolgreich hochgeladen');
+    } else {
+      // Ausgabe im Fehlerfall
+      print('Fehler beim Hochladen des Bildes $i: ${response.reasonPhrase}');
+    }
+  }
+}
+
+Future<List<String>> fetchImageUrls(int productId) async {
+  final response = await http.get(Uri.parse(
+      'http://app.recyclingheroes.at/api/picture_url/?product_id=$productId'));
 
   if (response.statusCode == 200) {
-    print('Produkt erfolgreich erstellt');
+    final data = jsonDecode(response.body);
+    List<String> imageUrls = List<String>.from(data['url']);
+    return imageUrls;
   } else {
-    print('Fehler beim Erstellen des Produkts: ' + response.toString());
+    throw Exception('Failed to load image urls');
   }
 }
