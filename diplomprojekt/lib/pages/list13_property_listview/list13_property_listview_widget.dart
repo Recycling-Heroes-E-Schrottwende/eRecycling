@@ -51,8 +51,6 @@ class _List13PropertyListviewWidgetState
     super.dispose();
   }
 
-    Map<String, List<Map<String, dynamic>>> _cachedData = {};
-
   Widget _buildProductCard(Map<String, dynamic> product) {
     return ProductCard(
         title: product['product_name'] ?? 'Unbekanntes Produkt',
@@ -106,6 +104,7 @@ class _List13PropertyListviewWidgetState
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -236,11 +235,13 @@ class _List13PropertyListviewWidgetState
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 ListView(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   children: [
-                                    FutureBuilder<List<Map<String, dynamic>>> (
+                                    FutureBuilder<List<Map<String, dynamic>>>(
                                         future: fetch_products(),
                                         builder: (context, snapshot) {
                                           if (snapshot.connectionState ==
@@ -252,6 +253,7 @@ class _List13PropertyListviewWidgetState
                                             return _error_message(snapshot);
                                           } else if (snapshot.hasData) {
                                             return ListView.builder(
+                                              physics: const AlwaysScrollableScrollPhysics(),
                                               padding: EdgeInsets.zero,
                                               shrinkWrap: true,
                                               cacheExtent:
@@ -278,6 +280,7 @@ class _List13PropertyListviewWidgetState
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 ListView(
+                                    physics: const AlwaysScrollableScrollPhysics(),
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
@@ -294,6 +297,7 @@ class _List13PropertyListviewWidgetState
                                               return _error_message(snapshot);
                                             } else if (snapshot.hasData) {
                                               return ListView.builder(
+                                                physics: const AlwaysScrollableScrollPhysics(),
                                                 padding: EdgeInsets.zero,
                                                 shrinkWrap: true,
                                                 cacheExtent:
@@ -320,6 +324,7 @@ class _List13PropertyListviewWidgetState
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 ListView(
+                                  physics: const AlwaysScrollableScrollPhysics(),
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
@@ -336,6 +341,7 @@ class _List13PropertyListviewWidgetState
                                           return _error_message(snapshot);
                                         } else if (snapshot.hasData) {
                                           return ListView.builder(
+                                            physics: const AlwaysScrollableScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             cacheExtent:
