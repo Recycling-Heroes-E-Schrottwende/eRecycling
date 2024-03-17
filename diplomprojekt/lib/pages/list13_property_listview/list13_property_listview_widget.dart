@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:diplomprojekt/pages/list13_property_listview/ProductCard.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -64,6 +62,7 @@ class _List13PropertyListviewWidgetState
         category: product['category']);
   }
 
+  // ignore: non_constant_identifier_names
   Widget _error_message(var snapshot) {
     return Center(
       child: Column(
@@ -253,7 +252,8 @@ class _List13PropertyListviewWidgetState
                                             return _error_message(snapshot);
                                           } else if (snapshot.hasData) {
                                             return ListView.builder(
-                                              physics: const AlwaysScrollableScrollPhysics(),
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
                                               padding: EdgeInsets.zero,
                                               shrinkWrap: true,
                                               cacheExtent:
@@ -280,7 +280,8 @@ class _List13PropertyListviewWidgetState
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 ListView(
-                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
@@ -297,7 +298,8 @@ class _List13PropertyListviewWidgetState
                                               return _error_message(snapshot);
                                             } else if (snapshot.hasData) {
                                               return ListView.builder(
-                                                physics: const AlwaysScrollableScrollPhysics(),
+                                                physics:
+                                                    const AlwaysScrollableScrollPhysics(),
                                                 padding: EdgeInsets.zero,
                                                 shrinkWrap: true,
                                                 cacheExtent:
@@ -324,7 +326,8 @@ class _List13PropertyListviewWidgetState
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 ListView(
-                                  physics: const AlwaysScrollableScrollPhysics(),
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
@@ -341,7 +344,8 @@ class _List13PropertyListviewWidgetState
                                           return _error_message(snapshot);
                                         } else if (snapshot.hasData) {
                                           return ListView.builder(
-                                            physics: const AlwaysScrollableScrollPhysics(),
+                                            physics:
+                                                const AlwaysScrollableScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             cacheExtent:
