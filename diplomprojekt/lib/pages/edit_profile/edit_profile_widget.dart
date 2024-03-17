@@ -61,7 +61,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
             size: 25.0,
           ),
           onPressed: () {
-            print('IconButton pressed ...');
+            // redirect to the previous page
+            Navigator.pop(context);
           },
         ),
         title: Text(
