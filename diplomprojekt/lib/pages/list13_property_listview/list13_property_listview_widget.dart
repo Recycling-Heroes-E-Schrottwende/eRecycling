@@ -1,3 +1,4 @@
+import 'package:diplomprojekt/pages/filter_search/filter_search_widget.dart';
 import 'package:diplomprojekt/pages/list13_property_listview/ProductCard.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -8,7 +9,10 @@ import '../../fetch.dart';
 export 'list13_property_listview_model.dart';
 
 class List13PropertyListviewWidget extends StatefulWidget {
-  const List13PropertyListviewWidget({super.key});
+  final FilterOptions? filters;
+
+  const List13PropertyListviewWidget({Key? key, this.filters})
+      : super(key: key);
 
   @override
   State<List13PropertyListviewWidget> createState() =>
@@ -47,6 +51,40 @@ class _List13PropertyListviewWidgetState
     _model.dispose();
 
     super.dispose();
+  }
+
+  bool shouldFilter() {
+    return widget.filters != null && widget.filters!.hasFilters();
+  }
+
+  Future<List<Map<String, dynamic>>> fetch_filtered_products() async {
+    List<Map<String, dynamic>> allProducts =
+        await fetch_products(); // Annahme: Methode zum Abrufen aller Produkte
+
+    if (allProducts.isEmpty)
+      return []; // Rückgabe einer leeren Liste, wenn keine Produkte vorhanden sind
+
+    // Filtern Sie die Produkte basierend auf den Filteroptionen
+    List<Map<String, dynamic>> filteredProducts = allProducts.where((product) {
+      // Filterkriterien überprüfen
+      bool categoryMatch = widget.filters?.categories?.isEmpty ??
+          true || widget.filters!.categories!.contains(product['category']);
+      bool conditionMatch = widget.filters?.conditions?.isEmpty ??
+          true || widget.filters!.conditions!.contains(product['condition']);
+      bool transferMethodMatch = widget.filters?.transferMethods?.isEmpty ??
+          true ||
+              widget.filters!.transferMethods!
+                  .contains(product['transferMethod']);
+      bool postalCodeMatch = widget.filters?.postalCode == null ||
+          widget.filters!.postalCode == product['postalCode'];
+
+      return (categoryMatch ||
+          conditionMatch ||
+          transferMethodMatch ||
+          postalCodeMatch);
+    }).toList();
+
+    return filteredProducts;
   }
 
   Widget _buildProductCard(Map<String, dynamic> product) {
@@ -255,35 +293,38 @@ class _List13PropertyListviewWidgetState
                                   scrollDirection: Axis.vertical,
                                   children: [
                                     FutureBuilder<List<Map<String, dynamic>>>(
-                                        future: fetch_products(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          } else if (snapshot.hasError) {
-                                            return _error_message(snapshot);
-                                          } else if (snapshot.hasData) {
-                                            return ListView.builder(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              padding: EdgeInsets.zero,
-                                              shrinkWrap: true,
-                                              cacheExtent:
-                                                  10, // Optimierung der Performance
-                                              itemCount: snapshot.data!.length,
-                                              itemBuilder: (context, index) {
-                                                return _buildProductCard(
-                                                    snapshot.data![index]);
-                                              },
-                                            );
-                                          } else {
-                                            return const Center(
-                                                child: Text(
-                                                    'Keine Produkte gefunden'));
-                                          }
-                                        })
+                                      future: shouldFilter()
+                                          ? fetch_filtered_products()
+                                          : fetch_products(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return _error_message(snapshot);
+                                        } else if (snapshot.hasData) {
+                                          return ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            padding: EdgeInsets.zero,
+                                            shrinkWrap: true,
+                                            cacheExtent: 10,
+                                            itemCount: snapshot.data!.length,
+                                            itemBuilder: (context, index) {
+                                              return _buildProductCard(
+                                                  snapshot.data![index]);
+                                            },
+                                          );
+                                        } else {
+                                          return const Center(
+                                            child:
+                                                Text('Keine Produkte gefunden'),
+                                          );
+                                        }
+                                      },
+                                    )
                                   ],
                                 ),
                               ),

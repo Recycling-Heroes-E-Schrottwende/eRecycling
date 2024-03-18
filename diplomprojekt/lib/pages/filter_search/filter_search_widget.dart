@@ -11,6 +11,27 @@ import 'package:provider/provider.dart';
 import 'filter_search_model.dart';
 export 'filter_search_model.dart';
 
+class FilterOptions {
+  List<String> categories;
+  List<String> conditions;
+  List<String> transferMethods;
+  String? postalCode;
+
+  FilterOptions({
+    required this.categories,
+    required this.conditions,
+    required this.transferMethods,
+    this.postalCode,
+  });
+
+  bool hasFilters() {
+    return categories != null ||
+        conditions != null ||
+        transferMethods != null ||
+        postalCode != null;
+  }
+}
+
 class FilterSearchWidget extends StatefulWidget {
   const FilterSearchWidget({super.key});
 
@@ -219,7 +240,7 @@ class _FilterSearchWidgetState extends State<FilterSearchWidget> {
                               ),
                             ),
                             FlutterFlowCheckboxGroup(
-                              options: ['Neu', 'Gebraucht'],
+                              options: ['Neu', 'Gebraucht', 'Defekt'],
                               onChanged: (val) => setState(
                                   () => _model.checkboxGroupValues2 = val),
                               controller:
@@ -376,7 +397,15 @@ class _FilterSearchWidgetState extends State<FilterSearchWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 16.0),
                 child: FFButtonWidget(
                   onPressed: () {
-                    print('Button pressed ...');
+                    Navigator.pop(
+                      context,
+                      FilterOptions(
+                        categories: _model.checkboxGroupValues1!,
+                        conditions: _model.checkboxGroupValues2!,
+                        transferMethods: _model.checkboxGroupValues3!,
+                        postalCode: _model.textController.text,
+                      ),
+                    );
                   },
                   text: 'Filter speichern',
                   options: FFButtonOptions(
