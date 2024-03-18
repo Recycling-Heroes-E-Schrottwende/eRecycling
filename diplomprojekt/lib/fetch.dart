@@ -140,6 +140,8 @@ Future<void> create_product(
     ..fields['postcode'] = postcode
     ..fields['price'] = price;
 
+  print(createRequest.fields);
+
   var createResponse = await createRequest.send();
   var createResponseBody = await http.Response.fromStream(createResponse);
 
