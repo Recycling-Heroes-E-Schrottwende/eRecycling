@@ -121,7 +121,7 @@ Future<Map<String, dynamic>> fetch_product_details(int productId) async {
   }
 }
 
-Future<void> create_product(
+Future<bool> create_product(
     String title,
     String desc,
     String category,
@@ -160,17 +160,21 @@ Future<void> create_product(
 
         // Bilder für das zuletzt erstellte Produkt hochladen
         await uploadImage(productId, imageBytesList);
+        return true;
       } else {
         print(
             'Keine Produkte gefunden, um die ID für den Bildupload zu erhalten');
+        return false;
       }
     } else {
       print(
           'Fehler beim Abrufen der Produkte: ${getProductsResponse.reasonPhrase}');
+      return false;
     }
   } else {
     print(
         'Fehler beim Erstellen des Produkts: ${createResponseBody.reasonPhrase}');
+    return false;
   }
 }
 
