@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -70,7 +69,6 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
       print('Error updating username: $e');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
