@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:diplomprojekt/fetch.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -12,21 +11,14 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'add_product_model.dart';
 export 'add_product_model.dart';
-import 'dart:typed_data';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 
-import 'package:image_picker/image_picker.dart';
 
 class AddProductWidget extends StatefulWidget {
-  AddProductWidget({super.key});
+  const AddProductWidget({super.key});
 
   @override
   State<AddProductWidget> createState() => _AddProductWidgetState();
@@ -42,27 +34,23 @@ class _AddProductWidgetState extends State<AddProductWidget>
   List<Uint8List> imageBytesList = [];
 
   Future<void> selectAndUploadImages() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> images = await picker.pickMultiImage();
 
-    if (images != null) {
-      List<Uint8List> compressedImageBytesList = [];
+    List<Uint8List> compressedImageBytesList = [];
 
-      for (var image in images) {
-        // Komprimiere das Bild
-        var compressedBytes = await compressImage(image.path);
-        if (compressedBytes != null) {
-          compressedImageBytesList.add(compressedBytes);
-        }
+    for (var image in images) {
+      // Komprimiere das Bild
+      var compressedBytes = await compressImage(image.path);
+      if (compressedBytes != null) {
+        compressedImageBytesList.add(compressedBytes);
       }
-
-      setState(() {
-        imageBytesList.addAll(compressedImageBytesList);
-      });
-    } else {
-      print("Keine Bilder ausgewählt");
     }
-  }
+
+    setState(() {
+      imageBytesList.addAll(compressedImageBytesList);
+    });
+    }
 
   Future<Uint8List?> compressImage(String imagePath) async {
     var result = await FlutterImageCompress.compressWithFile(
@@ -91,8 +79,8 @@ class _AddProductWidgetState extends State<AddProductWidget>
           curve: Curves.easeInOut,
           delay: 0.ms,
           duration: 600.ms,
-          begin: Offset(0.0, 110.0),
-          end: Offset(0.0, 0.0),
+          begin: const Offset(0.0, 110.0),
+          end: const Offset(0.0, 0.0),
         ),
       ],
     ),
@@ -147,7 +135,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
             borderRadius: 30.0,
             borderWidth: 1.0,
             buttonSize: 60.0,
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_rounded,
               color: Color(0xFF606A85),
               size: 30.0,
@@ -156,14 +144,14 @@ class _AddProductWidgetState extends State<AddProductWidget>
               context.pushNamed('List13PropertyListview');
             },
           ),
-          actions: [],
+          actions: const [],
           centerTitle: false,
           elevation: 0.0,
         ),
         body: SafeArea(
           top: true,
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+            padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -173,18 +161,18 @@ class _AddProductWidgetState extends State<AddProductWidget>
                     'Neue Produktanzeige erstellen',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           fontFamily: 'Outfit',
-                          color: Color(0xFF15161E),
+                          color: const Color(0xFF15161E),
                           fontSize: 24.0,
                           fontWeight: FontWeight.w500,
                         ),
                   ),
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
                     child: Text(
                       'Füllen Sie das nachstehende Formular aus, um Ihren Artikel auf dem Marktplatz zu listen.',
                       style: FlutterFlowTheme.of(context).labelLarge.override(
                             fontFamily: 'Plus Jakarta Sans',
-                            color: Color(0xFF606A85),
+                            color: const Color(0xFF606A85),
                             fontSize: 16.0,
                             fontWeight: FontWeight.w500,
                           ),
@@ -195,8 +183,8 @@ class _AddProductWidgetState extends State<AddProductWidget>
                     children: [
                       Padding(
                         padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: Container(
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                        child: SizedBox(
                           height: 200.0, // Höhe des Containers festlegen
                           child: imageBytesList.isEmpty
                               ? Image.asset(
@@ -213,7 +201,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Padding(
-                                      padding: EdgeInsets.only(
+                                      padding: const EdgeInsets.only(
                                           right:
                                               8.0), // Abstand zwischen den Bildern
                                       child: ClipRRect(
@@ -234,36 +222,36 @@ class _AddProductWidgetState extends State<AddProductWidget>
                       ),
                       Padding(
                         padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                         child: GestureDetector(
                           onTap: () async {
                             selectAndUploadImages();
                           },
                           child: Container(
                             width: double.infinity,
-                            constraints: BoxConstraints(
+                            constraints: const BoxConstraints(
                               maxWidth: 500.0,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(12.0),
                               border: Border.all(
-                                color: Color(0xFFE5E7EB),
+                                color: const Color(0xFFE5E7EB),
                                 width: 2.0,
                               ),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.add_a_photo_rounded,
                                     color: Color(0xFF81AC26),
                                     size: 32.0,
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         16.0, 0.0, 0.0, 0.0),
                                     child: Text(
                                       'Produktbilder hochladen',
@@ -272,7 +260,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                                           .bodyMedium
                                           .override(
                                             fontFamily: 'Plus Jakarta Sans',
-                                            color: Color(0xFF15161E),
+                                            color: const Color(0xFF15161E),
                                             fontSize: 14.0,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -296,56 +284,56 @@ class _AddProductWidgetState extends State<AddProductWidget>
                               .headlineSmall
                               .override(
                                 fontFamily: 'Outfit',
-                                color: Color(0xFF606A85),
+                                color: const Color(0xFF606A85),
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.w500,
                               ),
                           hintStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Plus Jakarta Sans',
-                                    color: Color(0xFF606A85),
+                                    color: const Color(0xFF606A85),
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFE5E7EB),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFF387B2E),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
                           errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFFF5963),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
                           focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFFF5963),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
-                          contentPadding: EdgeInsetsDirectional.fromSTEB(
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 12.0, 16.0, 12.0),
                         ),
                         style:
                             FlutterFlowTheme.of(context).headlineSmall.override(
                                   fontFamily: 'Outfit',
-                                  color: Color(0xFF15161E),
+                                  color: const Color(0xFF15161E),
                                   fontSize: 22.0,
                                   fontWeight: FontWeight.bold,
                                 ),
-                        cursorColor: Color(0xFF6F61EF),
+                        cursorColor: const Color(0xFF6F61EF),
                         validator: _model.textController1Validator
                             .asValidator(context),
                       ),
@@ -358,7 +346,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                           labelStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Plus Jakarta Sans',
-                                    color: Color(0xFF606A85),
+                                    color: const Color(0xFF606A85),
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -367,50 +355,50 @@ class _AddProductWidgetState extends State<AddProductWidget>
                           hintStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Plus Jakarta Sans',
-                                    color: Color(0xFF606A85),
+                                    color: const Color(0xFF606A85),
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w500,
                                   ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFE5E7EB),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFF387B2E),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
                           errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFFF5963),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
                           focusedErrorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Color(0xFFFF5963),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(0.0),
                           ),
-                          contentPadding: EdgeInsetsDirectional.fromSTEB(
+                          contentPadding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 24.0, 16.0, 12.0),
                         ),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Plus Jakarta Sans',
-                              color: Color(0xFF15161E),
+                              color: const Color(0xFF15161E),
                               fontSize: 14.0,
                               fontWeight: FontWeight.w500,
                             ),
                         maxLines: 16,
                         minLines: 6,
-                        cursorColor: Color(0xFF6F61EF),
+                        cursorColor: const Color(0xFF6F61EF),
                         validator: _model.textController2Validator
                             .asValidator(context),
                       ),
@@ -420,7 +408,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                           FlutterFlowDropDown<String>(
                             controller: _model.dropDownValueController ??=
                                 FormFieldController<String>(null),
-                            options: [
+                            options: const [
                               'Desktop Komplettsysteme',
                               'Barebone-PCs',
                               'Laptops & Notebooks',
@@ -497,7 +485,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                             borderColor: FlutterFlowTheme.of(context).alternate,
                             borderWidth: 2.0,
                             borderRadius: 8.0,
-                            margin: EdgeInsetsDirectional.fromSTEB(
+                            margin: const EdgeInsetsDirectional.fromSTEB(
                                 16.0, 4.0, 16.0, 4.0),
                             hidesUnderline: true,
                             isOverButton: true,
@@ -507,9 +495,9 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         ],
                       ),
                       Align(
-                        alignment: AlignmentDirectional(0.0, 1.0),
+                        alignment: const AlignmentDirectional(0.0, 1.0),
                         child: FlutterFlowChoiceChips(
-                          options: [
+                          options: const [
                             ChipData('Neu'),
                             ChipData('Gebraucht'),
                             ChipData('Defekt')
@@ -517,7 +505,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                           onChanged: (val) => setState(() =>
                               _model.choiceChipsValue1 = val?.firstOrNull),
                           selectedChipStyle: ChipStyle(
-                            backgroundColor: Color(0xFF387B2E),
+                            backgroundColor: const Color(0xFF387B2E),
                             textStyle: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -559,14 +547,14 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         ),
                       ),
                       FlutterFlowChoiceChips(
-                        options: [
+                        options: const [
                           ChipData('Abholung', Icons.people_outline),
                           ChipData('Versand', Icons.local_post_office_outlined)
                         ],
                         onChanged: (val) => setState(
                             () => _model.choiceChipsValue2 = val?.firstOrNull),
                         selectedChipStyle: ChipStyle(
-                          backgroundColor: Color(0xFF387B2E),
+                          backgroundColor: const Color(0xFF387B2E),
                           textStyle:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Readex Pro',
@@ -608,11 +596,11 @@ class _AddProductWidgetState extends State<AddProductWidget>
                       ),
                       Container(
                         height: 50.0,
-                        decoration: BoxDecoration(),
+                        decoration: const BoxDecoration(),
                         child: Align(
-                          alignment: AlignmentDirectional(0.0, -1.0),
+                          alignment: const AlignmentDirectional(0.0, -1.0),
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
                                 8.0, 0.0, 8.0, 0.0),
                             child: TextFormField(
                               controller: _model.textController3,
@@ -621,7 +609,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                                 context.pushNamed('List13PropertyListview');
                               },
                               autofocus: true,
-                              autofillHints: [AutofillHints.postalCode],
+                              autofillHints: const [AutofillHints.postalCode],
                               obscureText: false,
                               keyboardType: TextInputType
                                   .number, // Erlaube nur numerische Eingaben
@@ -642,7 +630,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                     color: Color(0xFF387B2E),
                                     width: 2.0,
                                   ),
@@ -676,9 +664,9 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         ),
                       ),
                       Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
+                        alignment: const AlignmentDirectional(0.0, 0.0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 250.0, 0.0),
                           child: TextFormField(
                             controller: _model.textController4,
@@ -710,7 +698,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                   color: Color(0xFF387B2E),
                                   width: 2.0,
                                 ),
@@ -738,12 +726,12 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         ),
                       ),
                     ]
-                        .divide(SizedBox(height: 16.0))
-                        .addToStart(SizedBox(height: 12.0)),
+                        .divide(const SizedBox(height: 16.0))
+                        .addToStart(const SizedBox(height: 12.0)),
                   ),
                   Padding(
                     padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
                     child: FFButtonWidget(
                       onPressed: () {
                         String title = _model.textController1.text;
@@ -766,17 +754,17 @@ class _AddProductWidgetState extends State<AddProductWidget>
                             imageBytesList);
                       },
                       text: 'Anzeige hochladen ',
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.receipt_long,
                         size: 15.0,
                       ),
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 54.0,
-                        padding: EdgeInsets.all(0.0),
+                        padding: const EdgeInsets.all(0.0),
                         iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Color(0xFF81AC26),
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: const Color(0xFF81AC26),
                         textStyle:
                             FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Plus Jakarta Sans',
@@ -785,7 +773,7 @@ class _AddProductWidgetState extends State<AddProductWidget>
                                   fontWeight: FontWeight.w500,
                                 ),
                         elevation: 4.0,
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: Colors.transparent,
                           width: 1.0,
                         ),
