@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:diplomprojekt/fetch.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -11,11 +12,16 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'add_product_model.dart';
 export 'add_product_model.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:image_picker/image_picker.dart';
 
 class AddProductWidget extends StatefulWidget {
   const AddProductWidget({super.key});
@@ -34,23 +40,27 @@ class _AddProductWidgetState extends State<AddProductWidget>
   List<Uint8List> imageBytesList = [];
 
   Future<void> selectAndUploadImages() async {
-    final ImagePicker picker = ImagePicker();
-    final List<XFile> images = await picker.pickMultiImage();
+    final ImagePicker _picker = ImagePicker();
+    final List<XFile>? images = await _picker.pickMultiImage();
 
-    List<Uint8List> compressedImageBytesList = [];
+    if (images != null) {
+      List<Uint8List> compressedImageBytesList = [];
 
-    for (var image in images) {
-      // Komprimiere das Bild
-      var compressedBytes = await compressImage(image.path);
-      if (compressedBytes != null) {
-        compressedImageBytesList.add(compressedBytes);
+      for (var image in images) {
+        // Komprimiere das Bild
+        var compressedBytes = await compressImage(image.path);
+        if (compressedBytes != null) {
+          compressedImageBytesList.add(compressedBytes);
+        }
       }
-    }
 
-    setState(() {
-      imageBytesList.addAll(compressedImageBytesList);
-    });
+      setState(() {
+        imageBytesList.addAll(compressedImageBytesList);
+      });
+    } else {
+      print("Keine Bilder ausgewählt");
     }
+  }
 
   Future<Uint8List?> compressImage(String imagePath) async {
     var result = await FlutterImageCompress.compressWithFile(
