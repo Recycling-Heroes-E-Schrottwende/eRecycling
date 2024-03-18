@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "80415466885",
+    "project_id": "diplomprojekt-hpolng",
+    "storage_bucket": "diplomprojekt-hpolng.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80415466885:android:46f8d6e324e3a57a1090ec",
+        "android_client_info": {
+          "package_name": "com.mycompany.diplomprojekt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnaWWIqkHwU_460W0DOhN46bTc-7mxH9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

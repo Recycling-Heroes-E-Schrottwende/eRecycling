@@ -14,6 +14,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'register_model.dart';
 export 'register_model.dart';
 
+import 'package:http/http.dart' as http;
+
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key});
 
@@ -26,7 +28,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -464,29 +465,98 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       0.0, 0.0, 0.0, 16.0),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                        if (_model.passwordController.text == _model.passwordConfirmController.text) {
+                                      if (_model.passwordController.text ==
+                                          _model
+                                              .passwordConfirmController.text) {
                                         try {
-                                          UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-                                            email: _model.emailAddressController.text,
-                                            password: _model.passwordController.text,
+                                          UserCredential userCredential =
+                                              await _auth
+                                                  .createUserWithEmailAndPassword(
+                                            email: _model
+                                                .emailAddressController.text,
+                                            password:
+                                                _model.passwordController.text,
                                           );
 
-                                          await _firestore.collection('users').doc(userCredential.user?.uid).set({
+                                          await _firestore
+                                              .collection('users')
+                                              .doc(userCredential.user?.uid)
+                                              .set({
                                             'uid': userCredential.user?.uid,
-                                            'username': _model.usernameController.text,
-                                            'email': _model.passwordController.text,
+                                            'username':
+                                                _model.usernameController.text,
+                                            'email': _model
+                                                .emailAddressController.text,
                                           });
 
-                                          print('Registration successful: ${userCredential.user?.uid}');
+                                          try {
+                                            var username =
+                                                _model.usernameController.text;
+                                            final response = await http.post(
+                                              Uri.parse(
+                                                  "http://app.recyclingheroes.at/api/create_user/?user=$username"),
+                                            );
+
+                                            if (response.statusCode == 200) {
+                                              // Erfolgreiche Antwort
+                                              print(
+                                                  'Erfolgreiche POST-Anfrage: ${response.body}');
+                                              print(
+                                                  'Registration successful: ${userCredential.user?.uid}');
+                                              context.pushNamed('login');
+                                            }
+                                          } catch (error) {
+                                            // Fehler während der Anfrage
+                                            print(
+                                                'Fehler während der POST-Anfrage: $error');
+                                          }
                                         } catch (e) {
                                           print('Registration failed: $e');
+                                          //show popup error message
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('Fehler'),
+                                                content: Text(
+                                                    'Registrierung fehlgeschlagen: $e'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text('OK'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
                                         }
-                                        context.pushNamed('login');
                                       } else {
-                                        print('Passwords do not match');
+                                        print(
+                                            'Registration failed: Passwords do not match');
+                                        //show popup error message
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('Fehler'),
+                                              content: Text(
+                                                  'Registrierung fehlgeschlagen: Passwörter stimmen nicht überein.'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('OK'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       }
                                     },
-
                                     text: 'Konto erstellen',
                                     options: FFButtonOptions(
                                       width: 370.0,

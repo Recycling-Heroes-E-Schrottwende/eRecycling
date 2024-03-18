@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -18,11 +20,16 @@ class ProfileWidget extends StatefulWidget {
 class _ProfileWidgetState extends State<ProfileWidget> {
   late ProfileModel _model;
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late String _displayName = '';
+  late String _emailAddress = '';
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _loadUserData();
     _model = createModel(context, () => ProfileModel());
   }
 
@@ -31,6 +38,24 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      final userData = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser?.uid)
+          .get();
+
+      setState(() {
+        _displayName = userData.data()?['username'] ??
+            'Username'; // Wenn 'name' nicht vorhanden ist, wird ein leerer String verwendet
+        _emailAddress = userData.data()?['email'] ??
+            'E-Mail-Adresse'; // Wenn 'email' nicht vorhanden ist, wird ein leerer String verwendet
+      });
+    } catch (e) {
+      print('Error loading user data: $e');
+    }
   }
 
   @override
@@ -87,7 +112,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Max M.',
+                              '$_displayName',
                               style: FlutterFlowTheme.of(context)
                                   .headlineSmall
                                   .override(
@@ -101,7 +126,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 4.0, 0.0, 0.0),
                               child: Text(
-                                'mmustermann@student.tgm.ac.at',
+                                '$_emailAddress',
                                 style: FlutterFlowTheme.of(context)
                                     .bodySmall
                                     .override(

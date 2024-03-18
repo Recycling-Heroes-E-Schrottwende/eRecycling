@@ -1,8 +1,6 @@
-
 import 'package:diplomprojekt/index.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import '/auth/custom_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -19,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'login_model.dart';
 export 'login_model.dart';
+
 class LoginWidget extends StatefulWidget {
   const LoginWidget({super.key});
 
@@ -30,7 +29,6 @@ class _LoginWidgetState extends State<LoginWidget> {
   late LoginModel _model;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -306,18 +304,34 @@ class _LoginWidgetState extends State<LoginWidget> {
                                   child: FFButtonWidget(
                                     onPressed: () async {
                                       try {
-                                        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-                                          email: _model.emailAddressController.text,
-                                          password: _model.passwordController.text,
+                                        UserCredential userCredential =
+                                            await _auth
+                                                .signInWithEmailAndPassword(
+                                          email: _model
+                                              .emailAddressController.text,
+                                          password:
+                                              _model.passwordController.text,
                                         );
-                                        print('Login successful: ${userCredential.user?.uid}');
-                                        // Nach dem Login zur Hauptmenüseite navigieren
-                                        context.goNamedAuth(
-                                          'List13PropertyListview',
-                                          context.mounted);
+                                        print(
+                                            'Login successful: ${userCredential.user?.uid}');
 
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text('Login successful'),
+                                          ),
+                                        );
+                                        context.pushNamed(
+                                            'list13PropertyListview');
                                       } catch (e) {
                                         print('Login failed: $e');
+                                        //show a popum message that the login failed
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text('Login failed: $e'),
+                                          ),
+                                        );
                                       }
                                     },
                                     text: 'Anmelden',
@@ -347,8 +361,6 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     ),
                                   ),
                                 ),
-
-                                // You will have to add an action on this rich text to go to your login page.
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 12.0, 0.0, 12.0),

@@ -1,53 +1,31 @@
-
-import 'package:diplomprojekt/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'auth/firebase_auth/firebase_user_provider.dart';
+import 'auth/firebase_auth/auth_util.dart';
 
-import 'auth/custom_auth/auth_util.dart';
-import 'auth/custom_auth/custom_auth_user_provider.dart';
-
+import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
-
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
-  
-  print("Initializing FlutterFlowTheme");
+  await initFirebase();
+
   await FlutterFlowTheme.initialize();
 
-  print("Initializing authManager");
-  await authManager.initialize();
-
-  try {
-    print("Initializing Firebase");
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  } catch (e) {
-    print("Firebase Initialization Error: $e");
-  }
-
-
-  print("Running MyApp");
   runApp(MyApp());
 }
 
-
 class MyApp extends StatefulWidget {
-  
   // This widget is the root of your application.
   @override
   State<MyApp> createState() => _MyAppState();
@@ -59,10 +37,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
-  late Stream<DiplomprojektAuthUser> userStream;
+  late Stream<BaseAuthUser> userStream;
 
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
+
+  final authUserSub = authenticatedUserStream.listen((_) {});
 
   @override
   void initState() {
@@ -70,13 +50,20 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-    userStream = diplomprojektAuthUserStream()
+    userStream = diplomprojektFirebaseUserStream()
       ..listen((user) => _appStateNotifier.update(user));
-
+    jwtTokenStream.listen((_) {});
     Future.delayed(
       Duration(milliseconds: 1000),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
+  }
+
+  @override
+  void dispose() {
+    authUserSub.cancel();
+
+    super.dispose();
   }
 
   void setThemeMode(ThemeMode mode) => setState(() {
@@ -96,9 +83,11 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [Locale('de', '')],
       theme: ThemeData(
         brightness: Brightness.light,
+        useMaterial3: false,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        useMaterial3: false,
       ),
       themeMode: _themeMode,
       routerConfig: _router,
@@ -147,7 +136,7 @@ class _NavBarPageState extends State<NavBarPage> {
           _currentPageName = tabs.keys.toList()[i];
         }),
         backgroundColor: Colors.white,
-        selectedItemColor: Color(0xFF387B2E),
+        selectedItemColor: Color(0xFF81AC26),
         unselectedItemColor: Color(0x8A000000),
         showSelectedLabels: false,
         showUnselectedLabels: false,
