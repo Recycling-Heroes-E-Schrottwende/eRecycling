@@ -79,6 +79,8 @@ async def read_products(user_id: int = None, product_id: int = None, condition: 
         query = query.filter(models.Product.transfer_method == transfer_method)
     if location:
         query = query.filter(models.Product.location == location)
+    if category:
+        query = query.filter(models.Product.category == category)
     if brand:
         query = query.filter(models.Product.brand == brand)
 
@@ -148,6 +150,11 @@ async def delete_image(image_id: int, product_id: int, db: Session = Depends(get
     miniouploader.delete_image("pictures", product_id, image_id)
     return {"message": f"Image {deleted_image.id} deleted successfully"}
     #return {"message": f"Image deleted successfully"}
+
+@app.delete("/delete_favourite/")
+async def delete_favourite(user_id: int, product_id: int, db: Session = Depends(get_db)):
+    deleted_favourite =  deletes.deletefavourite(user_id, product_id, db)
+    return {"message": f"Favourite {deleted_favourite.user_id} deleted successfully"}
 
 
 # Update Requests

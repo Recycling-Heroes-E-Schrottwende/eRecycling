@@ -68,3 +68,18 @@ def DeleteImage(id: int, db: Session):
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
     finally:
         db.close()
+
+def deletefavourite(user_id: int, product_id: int, db: Session):
+    favourite = db.query(models.Favourite).filter(models.Favourite.user_id == user_id, models.Favourite.product_id == product_id).first()
+    if not favourite:
+        raise HTTPException(status_code=404, detail="Favourite not found")
+
+    try:
+        db.delete(favourite)
+        db.commit()
+        return favourite
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {e}")
+    finally:
+        db.close()
