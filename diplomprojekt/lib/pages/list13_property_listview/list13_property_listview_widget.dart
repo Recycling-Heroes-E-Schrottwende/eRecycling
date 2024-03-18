@@ -181,6 +181,20 @@ class _List13PropertyListviewWidgetState
                             ),
                           ),
                         ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('filterSearch');
+                          },
+                          child: Icon(
+                            Icons.sort_outlined,
+                            color: FlutterFlowTheme.of(context).secondaryText,
+                            size: 30.0,
+                          ),
+                        ),
                       ],
                     ),
                   ),

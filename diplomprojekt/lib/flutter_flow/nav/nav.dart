@@ -9,7 +9,6 @@ import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 import '../../pages/edit_profile/edit_profile_widget.dart';
-import '/auth/custom_auth/custom_auth_user_provider.dart';
 
 import '/index.dart';
 import '/main.dart';
