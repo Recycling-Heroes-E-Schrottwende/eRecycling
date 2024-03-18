@@ -35,6 +35,8 @@ class _AddProductWidgetState extends State<AddProductWidget>
     with TickerProviderStateMixin {
   late AddProductModel _model;
 
+  bool isUploading = false;
+
   List<XFile>? selectedImages = [];
   List<Uint8List> imageBytesList = [];
 

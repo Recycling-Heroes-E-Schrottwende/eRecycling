@@ -251,10 +251,9 @@ class _List13PropertyListviewWidgetState
                                           } else if (snapshot.hasError) {
                                             return _error_message(snapshot);
                                           } else if (snapshot.hasData) {
-                                            return Expanded(
-                                                child: ListView.builder(
+                                            return ListView.builder(
                                               physics:
-                                                  const AlwaysScrollableScrollPhysics(),
+                                                  const NeverScrollableScrollPhysics(),
                                               padding: EdgeInsets.zero,
                                               shrinkWrap: true,
                                               cacheExtent:
@@ -264,7 +263,7 @@ class _List13PropertyListviewWidgetState
                                                 return _buildProductCard(
                                                     snapshot.data![index]);
                                               },
-                                            ));
+                                            );
                                           } else {
                                             return const Center(
                                                 child: Text(
@@ -298,10 +297,9 @@ class _List13PropertyListviewWidgetState
                                             } else if (snapshot.hasError) {
                                               return _error_message(snapshot);
                                             } else if (snapshot.hasData) {
-                                              return Expanded(
-                                                  child: ListView.builder(
+                                              return ListView.builder(
                                                 physics:
-                                                    const AlwaysScrollableScrollPhysics(),
+                                                    const NeverScrollableScrollPhysics(),
                                                 padding: EdgeInsets.zero,
                                                 shrinkWrap: true,
                                                 cacheExtent:
@@ -312,7 +310,7 @@ class _List13PropertyListviewWidgetState
                                                   return _buildProductCard(
                                                       snapshot.data![index]);
                                                 },
-                                              ));
+                                              );
                                             } else {
                                               return const Center(
                                                   child: Text(
@@ -345,10 +343,9 @@ class _List13PropertyListviewWidgetState
                                         } else if (snapshot.hasError) {
                                           return _error_message(snapshot);
                                         } else if (snapshot.hasData) {
-                                          return Expanded(
-                                              child: ListView.builder(
+                                          return ListView.builder(
                                             physics:
-                                                const AlwaysScrollableScrollPhysics(),
+                                                const NeverScrollableScrollPhysics(),
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             cacheExtent:
@@ -358,7 +355,7 @@ class _List13PropertyListviewWidgetState
                                               return _buildProductCard(
                                                   snapshot.data![index]);
                                             },
-                                          ));
+                                          );
                                         } else {
                                           return const Center(
                                               child: Text(
