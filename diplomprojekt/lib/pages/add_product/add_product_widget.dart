@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:diplomprojekt/fetch.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
@@ -45,18 +46,32 @@ class _AddProductWidgetState extends State<AddProductWidget>
     final List<XFile>? images = await _picker.pickMultiImage();
 
     if (images != null) {
-      // Bilder für Web in Byte-Daten konvertieren
-      if (kIsWeb) {
-        List<Uint8List> newImageBytesList =
-            await Future.wait(images.map((image) => image.readAsBytes()));
-        setState(() {
-          imageBytesList
-              .addAll(newImageBytesList); // Hinzufügen neuer Bilder zur Liste
-        });
+      List<Uint8List> compressedImageBytesList = [];
+
+      for (var image in images) {
+        // Komprimiere das Bild
+        var compressedBytes = await compressImage(image.path);
+        if (compressedBytes != null) {
+          compressedImageBytesList.add(compressedBytes);
+        }
       }
+
+      setState(() {
+        imageBytesList.addAll(compressedImageBytesList);
+      });
     } else {
       print("Keine Bilder ausgewählt");
     }
+  }
+
+  Future<Uint8List?> compressImage(String imagePath) async {
+    var result = await FlutterImageCompress.compressWithFile(
+      imagePath,
+      minWidth: 1024, // Setze die gewünschte Breite
+      minHeight: 1024, // Setze die gewünschte Höhe
+      quality: 70, // Qualität zwischen 0 und 100
+    );
+    return result;
   }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -734,8 +749,15 @@ class _AddProductWidgetState extends State<AddProductWidget>
                         String price = _model.textController4.text;
 
                         // Call the create_product method with the title and description
-                        create_product(title, description, category!,
-                            condition!, delivery!, postcode, price, imageBytesList);
+                        create_product(
+                            title,
+                            description,
+                            category!,
+                            condition!,
+                            delivery!,
+                            postcode,
+                            price,
+                            imageBytesList);
                       },
                       text: 'Anzeige hochladen ',
                       icon: Icon(
