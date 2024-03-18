@@ -623,8 +623,12 @@ class _AddProductWidgetState extends State<AddProductWidget>
                               autofocus: true,
                               autofillHints: [AutofillHints.postalCode],
                               obscureText: false,
+                              keyboardType: TextInputType
+                                  .number, // Erlaube nur numerische Eingaben
+                              maxLength: 5, // Maximale Länge auf 5 setzen
                               decoration: InputDecoration(
                                 labelText: 'Postleitzahl hier eingeben...',
+                                counterText: '',
                                 labelStyle:
                                     FlutterFlowTheme.of(context).labelMedium,
                                 hintStyle:
@@ -681,6 +685,8 @@ class _AddProductWidgetState extends State<AddProductWidget>
                             focusNode: _model.textFieldFocusNode4,
                             autofocus: true,
                             obscureText: false,
+                            keyboardType:
+                                const TextInputType.numberWithOptions(decimal: true),
                             decoration: InputDecoration(
                               labelText: 'Preis in €',
                               labelStyle: FlutterFlowTheme.of(context)
