@@ -74,6 +74,47 @@ Future<List<Map<String, dynamic>>> fetch_newest_products() async {
   }
 }
 
+Future<List<Map<String, dynamic>>> fetch_products_from_user(int userId) async {
+  final response = await http.get(
+      Uri.parse('http://app.recyclingheroes.at/api/products/?user_id=$userId'));
+
+  if (response.statusCode == 200) {
+    List<dynamic> productsJson = jsonDecode(response.body);
+    List<Map<String, dynamic>> products =
+        List<Map<String, dynamic>>.from(productsJson);
+
+    for (var product in products) {
+      int productId = product['id'];
+      String imageUrl = await fetch_image(productId);
+      product['image_url'] = imageUrl;
+    }
+
+    return products;
+  } else {
+    if (response.body.contains('error')) {
+      throw Exception(
+          'Fehler beim Laden der Daten. Bitte versuchen Sie es später erneut.');
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+}
+
+Future<bool> deleteProduct(int productId) async {
+  final response = await http.delete(
+      Uri.parse("http://app.recyclingheroes.at/api/delete_product/$productId"));
+
+  if (response.statusCode == 200) {
+    // Erfolgreich gelöscht
+    print("Produkt erfolgreich gelöscht.");
+    return true;
+  } else {
+    // Fehlerbehandlung
+    print("Fehler beim Löschen des Produkts: ${response.body}");
+    return false;
+  }
+}
+
 Future<List<Map<String, dynamic>>> fetch_favourite_products() async {
   final response = await http.get(Uri.parse('$serverUrl/user/favourites'));
 
