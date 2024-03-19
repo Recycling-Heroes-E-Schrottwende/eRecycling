@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:diplomprojekt/fetch.dart';
+import 'package:diplomprojekt/pages/profile/profile_widget.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -55,35 +56,6 @@ class _EditProductWidgetState extends State<EditProductWidget>
     with TickerProviderStateMixin {
   late EditProductModel _model;
 
-  bool isUploading = false;
-
-  void startUpload() async {
-    setState(() {
-      isUploading = true; // Starte den Upload und zeige den Spinner
-    });
-  }
-
-  List<XFile>? selectedImages = [];
-  List<Uint8List> imageBytesList = [];
-
-  Future<void> selectAndUploadImages() async {
-    final ImagePicker _picker = ImagePicker();
-    final List<XFile>? images = await _picker.pickMultiImage();
-
-    if (images != null) {
-      if (kIsWeb) {
-        List<Uint8List> newImageBytesList =
-            await Future.wait(images.map((image) => image.readAsBytes()));
-        setState(() {
-          imageBytesList
-              .addAll(newImageBytesList); // Hinzufügen neuer Bilder zur Liste
-        });
-      } else {
-        print("Keine Bilder ausgewählt");
-      }
-    }
-  }
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -119,11 +91,24 @@ class _EditProductWidgetState extends State<EditProductWidget>
     _model.textController2 ??= TextEditingController(text: widget.description);
     _model.textFieldFocusNode2 ??= FocusNode();
 
-    _model.textController3 ??= TextEditingController(text: widget.postcode.toString());
+    _model.textController3 ??=
+        TextEditingController(text: widget.postcode.toString());
     _model.textFieldFocusNode3 ??= FocusNode();
 
-    _model.textController4 ??= TextEditingController(text: widget.price.toString());
+    _model.textController4 ??=
+        TextEditingController(text: widget.price.toString());
     _model.textFieldFocusNode4 ??= FocusNode();
+
+    _model.choiceChipsValueController1 ??=
+        FormFieldController<List<String>>([widget.condition]);
+
+    _model.choiceChipsValueController2 ??=
+        FormFieldController<List<String>>([widget.delivery]);
+
+    _model.dropDownValueController =
+        FormFieldController<String>(widget.category);
+
+    _model.dropDownValue = widget.category;
 
     setupAnimations(
       animationsMap.values.where((anim) =>
@@ -163,7 +148,10 @@ class _EditProductWidgetState extends State<EditProductWidget>
               size: 30.0,
             ),
             onPressed: () async {
-              context.pushNamed('List13PropertyListview');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileWidget()),
+              );
             },
           ),
           actions: [],
@@ -188,113 +176,9 @@ class _EditProductWidgetState extends State<EditProductWidget>
                           fontWeight: FontWeight.w500,
                         ),
                   ),
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                    child: Text(
-                      'Füllen Sie das nachstehende Formular aus, um Ihren Artikel auf dem Marktplatz zu listen.',
-                      style: FlutterFlowTheme.of(context).labelLarge.override(
-                            fontFamily: 'Plus Jakarta Sans',
-                            color: Color(0xFF606A85),
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
                   Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: Container(
-                          height: 200.0, // Höhe des Containers festlegen
-                          child: imageBytesList.isEmpty
-                              ? Image.asset(
-                                  'assets/images/istockphoto-1226328537-612x612.jpg',
-                                  width: 400.0,
-                                  height: 400.0,
-                                  fit: BoxFit.cover,
-                                )
-                              : ListView.builder(
-                                  scrollDirection: Axis
-                                      .horizontal, // Horizontale Scroll-Richtung
-                                  itemCount: imageBytesList
-                                      .length, // Anzahl der Bilder in der Liste
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                          right:
-                                              8.0), // Abstand zwischen den Bildern
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                        child: Image.memory(
-                                          imageBytesList[
-                                              index], // Zugriff auf das Bild an Position index
-                                          width: 400.0, // Breite jedes Bildes
-                                          fit: BoxFit
-                                              .cover, // Bild an den ClipRRect anpassen
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                        child: GestureDetector(
-                          onTap: () async {
-                            selectAndUploadImages();
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            constraints: BoxConstraints(
-                              maxWidth: 500.0,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12.0),
-                              border: Border.all(
-                                color: Color(0xFFE5E7EB),
-                                width: 2.0,
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Icon(
-                                    Icons.add_a_photo_rounded,
-                                    color: Color(0xFF81AC26),
-                                    size: 32.0,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      'Produktbilder hochladen',
-                                      textAlign: TextAlign.center,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Plus Jakarta Sans',
-                                            color: Color(0xFF15161E),
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ).animateOnPageLoad(
-                          animationsMap['containerOnPageLoadAnimation']!),
                       TextFormField(
                         controller: _model.textController1,
                         focusNode: _model.textFieldFocusNode1,
@@ -428,8 +312,8 @@ class _EditProductWidgetState extends State<EditProductWidget>
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           FlutterFlowDropDown<String>(
-                            controller: _model.dropDownValueController ??=
-                                FormFieldController<String>(null),
+                            controller: _model.dropDownValueController =
+                                FormFieldController<String>(widget.category),
                             options: [
                               'Desktop Komplettsysteme',
                               'Barebone-PCs',
@@ -628,7 +512,11 @@ class _EditProductWidgetState extends State<EditProductWidget>
                               controller: _model.textController3,
                               focusNode: _model.textFieldFocusNode3,
                               onFieldSubmitted: (_) async {
-                                context.pushNamed('List13PropertyListview');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfileWidget()),
+                                );
                               },
                               autofocus: true,
                               autofillHints: [AutofillHints.postalCode],
@@ -756,43 +644,20 @@ class _EditProductWidgetState extends State<EditProductWidget>
                     padding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 12.0),
                     child: FFButtonWidget(
-                      onPressed: isUploading
-                          ? null
-                          : () async {
-                              String title = _model.textController1.text;
-                              String description = _model.textController2.text;
-                              String? category = _model.dropDownValue;
-                              String? condition = _model.choiceChipsValue1;
-                              String? delivery = _model.choiceChipsValue2;
-                              String postcode = _model.textController3.text;
-                              String price = _model.textController4.text;
-
-                              // Call the create_product method with the title and description
-                              bool uploadSuccessful = await create_product(
-                                  title,
-                                  description,
-                                  category!,
-                                  condition!,
-                                  delivery!,
-                                  postcode,
-                                  price,
-                                  imageBytesList);
-
-                              setState(() {
-                                isUploading =
-                                    false; // Beende den Upload und verstecke den Spinner
-                              });
-                              if (uploadSuccessful) {
-                                context.pushNamed('List13PropertyListview');
-                              }
-                            },
-                      text: 'Anzeige hochladen ',
-                      icon: isUploading
-                          ? null
-                          : Icon(
-                              Icons.receipt_long,
-                              size: 15.0,
-                            ),
+                      onPressed: () async {
+                        String title = _model.textController1.text;
+                        String description = _model.textController2.text;
+                        String? category = _model.dropDownValue;
+                        String? coisUploadingndition = _model.choiceChipsValue1;
+                        String? delivery = _model.choiceChipsValue2;
+                        String postcode = _model.textController3.text;
+                        String price = _model.textController4.text;
+                      },
+                      text: 'Anzeige aktualisieren ',
+                      icon: Icon(
+                        Icons.receipt_long,
+                        size: 15.0,
+                      ),
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 54.0,
