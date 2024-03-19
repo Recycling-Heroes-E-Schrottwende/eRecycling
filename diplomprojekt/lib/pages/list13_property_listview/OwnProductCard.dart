@@ -74,8 +74,14 @@ class OwnProductCard extends StatelessWidget {
                 Positioned(
                   top: 0,
                   right: 8,
-                  child:
-                      deleteButton(context), // Der rote Lösch-Button wird hier positioniert
+                  child: deleteButton(
+                      context), // Der rote Lösch-Button wird hier positioniert
+                ),
+                Positioned(
+                  top: 0,
+                  right: 50,
+                  child: editButton(
+                      context), // Der rote Lösch-Button wird hier positioniert
                 ),
               ]),
               Padding(
@@ -157,6 +163,23 @@ class OwnProductCard extends StatelessWidget {
               );
             },
           );
+        },
+      ),
+    );
+  }
+
+  Widget editButton(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 8, right: 8),
+      decoration: BoxDecoration(
+        color: Colors.orange, // Orangener Hintergrund für den Button
+        borderRadius: BorderRadius.circular(5), // Abgerundete Ecken
+      ),
+      child: IconButton(
+        icon: Icon(Icons.edit, color: Colors.white), // Weißes Stift-Icon
+        onPressed: () {
+          // Füge hier die Logik für die Bearbeitungsaktion ein
+          // Zum Beispiel das Öffnen eines Dialogs oder einer neuen Seite zur Bearbeitung des Produkts
         },
       ),
     );
