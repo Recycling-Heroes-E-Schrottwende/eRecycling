@@ -75,7 +75,10 @@ Future<List<Map<String, dynamic>>> fetch_newest_products() async {
 }
 
 Future<List<Map<String, dynamic>>> fetch_products_from_user(int userId) async {
-  var headers = {'accept': 'application/json', 'X-API-Key': "#Baum9Gebaeude5Laptop"};
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop"
+  };
   final response = await http.get(
       Uri.parse('http://app.recyclingheroes.at/api/products/?user_id=$userId'),
       headers: headers);
@@ -103,7 +106,10 @@ Future<List<Map<String, dynamic>>> fetch_products_from_user(int userId) async {
 }
 
 Future<bool> deleteProduct(int productId) async {
-  var headers = {'accept': 'application/json', 'X-API-Key': "#Baum9Gebaeude5Laptop"};
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop"
+  };
   final response = await http.delete(
       Uri.parse("http://app.recyclingheroes.at/api/delete_product/$productId"),
       headers: headers);
@@ -191,7 +197,10 @@ Future<bool> create_product(
   if (createResponse.statusCode == 200) {
     print('Produkt erfolgreich erstellt');
 
-    var headers = {'accept': 'application/json', 'X-API-Key': "#Baum9Gebaeude5Laptop"};
+    var headers = {
+      'accept': 'application/json',
+      'X-API-Key': "#Baum9Gebaeude5Laptop"
+    };
 
     // Abrufen der Produktliste, um die ID des zuletzt erstellten Produkts zu ermitteln
     var getProductsUri =
@@ -226,13 +235,16 @@ Future<bool> create_product(
 }
 
 Future<void> uploadImage(int productId, List<Uint8List> imageBytesList) async {
-  var headers = {'accept': 'application/json', 'X-API-Key': "#Baum9Gebaeude5Laptop"};
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop"
+  };
   var uri = Uri.parse(
       'http://app.recyclingheroes.at/api/uploadImage/?product_id=$productId');
 
   // Für jedes Bild in der Liste eine separate Anfrage erstellen und senden
   for (int i = 0; i < imageBytesList.length; i++) {
-    var request = http.MultipartRequest('POST', uri);
+    var request = http.MultipartRequest('POST', uri)..headers.addAll(headers);
     var image = imageBytesList[i];
     String fileName =
         'image_$i.png'; // Der Dateiname kann eindeutig generiert oder statisch sein
@@ -257,9 +269,14 @@ Future<void> uploadImage(int productId, List<Uint8List> imageBytesList) async {
 }
 
 Future<List<String>> fetchImageUrls(int productId) async {
-  var headers = {'accept': 'application/json', 'X-API-Key': "#Baum9Gebaeude5Laptop"};
-  final response = await http.get(Uri.parse(
-      'http://app.recyclingheroes.at/api/picture_url/?product_id=$productId'), headers: headers);
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop"
+  };
+  final response = await http.get(
+      Uri.parse(
+          'http://app.recyclingheroes.at/api/picture_url/?product_id=$productId'),
+      headers: headers);
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
