@@ -1,3 +1,5 @@
+import 'package:diplomprojekt/fetch.dart';
+import 'package:diplomprojekt/pages/list13_property_listview/OwnProductCard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -18,6 +20,7 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
+  List<Map<String, dynamic>> _products = [];
   late ProfileModel _model;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -29,8 +32,20 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   void initState() {
     super.initState();
+    _loadProducts();
     _loadUserData();
     _model = createModel(context, () => ProfileModel());
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final products = await fetch_products_from_user(10);
+      setState(() {
+        _products = products;
+      });
+    } catch (e) {
+      print('Fehler beim Laden der Produkte: $e');
+    }
   }
 
   @override
@@ -38,6 +53,63 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  Widget _buildProductCard(Map<String, dynamic> product) {
+    return OwnProductCard(
+        title: product['product_name'] ?? 'Unbekanntes Produkt',
+        description: product['description'] ?? 'Keine Beschreibung verfügbar.',
+        imageUrl: product['image_url'] ??
+            'https://microsites.pearl.de/i/76/sd2208_5.jpg',
+        productId: product['id'],
+        price: product['price'].toDouble(),
+        postcode: int.tryParse(product['postcode']) ?? 1190,
+        condition: product['condition'],
+        category: product['category'],
+        onDelete: () async {
+          bool result = await deleteProduct(product['id']);
+          if (result) {
+            reloadProducts();
+          }
+        });
+  }
+
+  Widget _error_message(var snapshot) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize
+            .min, // Minimiert die Größe der Column basierend auf dem Inhalt
+        children: [
+          Icon(
+            Icons.error_outline, // Icon, das einen Fehler anzeigt
+            color: Colors.red[700], // Rote Farbe für das Fehlericon
+            size: 50, // Größe des Icons
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 16), // Abstand zwischen Icon und Text
+            child: Text(
+              'Fehler beim Laden der Produkte', // Benutzerfreundliche Fehlermeldung
+              style: TextStyle(
+                fontSize: 18, // Schriftgröße
+                color: Colors.red[700], // Textfarbe, passend zum Icon
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(
+              "${snapshot.error}", // Technische Fehlermeldung
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color:
+                    Colors.grey[600], // Farbe für die technische Fehlermeldung
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _loadUserData() async {
@@ -79,143 +151,229 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         centerTitle: false,
         elevation: 0.0,
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                width: MediaQuery.sizeOf(context).width * 1.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 1.0,
-                      color: Color(0xFFF1F4F8),
-                      offset: Offset(0.0, 0.0),
-                    )
-                  ],
-                ),
-                child: Padding(
-                  padding:
-                      EdgeInsetsDirectional.fromSTEB(24.0, 12.0, 24.0, 12.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '$_displayName',
-                              style: FlutterFlowTheme.of(context)
-                                  .headlineSmall
-                                  .override(
-                                    fontFamily: 'Outfit',
-                                    color: Color(0xFF14181B),
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 4.0, 0.0, 0.0),
-                              child: Text(
-                                '$_emailAddress',
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 1.0,
+                        color: Color(0xFFF1F4F8),
+                        offset: Offset(0.0, 0.0),
+                      )
+                    ],
+                  ),
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(24.0, 12.0, 24.0, 12.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              16.0, 0.0, 0.0, 0.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '$_displayName',
                                 style: FlutterFlowTheme.of(context)
-                                    .bodySmall
+                                    .headlineSmall
                                     .override(
                                       fontFamily: 'Outfit',
-                                      color: Color(0xFF387B2E),
+                                      color: Color(0xFF14181B),
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 4.0, 0.0, 0.0),
+                                child: Text(
+                                  '$_emailAddress',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodySmall
+                                      .override(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF387B2E),
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 1.0, 0.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  if (Theme.of(context).brightness == Brightness.light)
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        setDarkModeSetting(context, ThemeMode.dark);
+                      },
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width * 1.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 12.0, 24.0, 12.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'In den dunklen Modus wechseln',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Plus Jakarta Sans',
+                                      color: Color(0xFF14181B),
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.normal,
                                     ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 1.0, 0.0, 0.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                if (Theme.of(context).brightness == Brightness.light)
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () async {
-                      setDarkModeSetting(context, ThemeMode.dark);
-                    },
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).width * 1.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            24.0, 12.0, 24.0, 12.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'In den dunklen Modus wechseln',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    color: Color(0xFF14181B),
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                            ),
-                            Container(
-                              width: 80.0,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFF1F4F8),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: Stack(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                children: [
-                                  Align(
-                                    alignment: AlignmentDirectional(0.95, 0.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 8.0, 0.0),
-                                      child: Icon(
-                                        Icons.nights_stay,
-                                        color: Color(0xFF57636C),
-                                        size: 20.0,
+                              Container(
+                                width: 80.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF1F4F8),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child: Stack(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  children: [
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.95, 0.0),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 8.0, 0.0),
+                                        child: Icon(
+                                          Icons.nights_stay,
+                                          color: Color(0xFF57636C),
+                                          size: 20.0,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(-0.85, 0.0),
-                                    child: InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        context.pushNamed(
-                                            'List13PropertyListview');
-                                      },
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(-0.85, 0.0),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed(
+                                              'List13PropertyListview');
+                                        },
+                                        child: Container(
+                                          width: 36.0,
+                                          height: 36.0,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 4.0,
+                                                color: Color(0x430B0D0F),
+                                                offset: Offset(0.0, 2.0),
+                                              )
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(30.0),
+                                            shape: BoxShape.rectangle,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (Theme.of(context).brightness == Brightness.dark)
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        setDarkModeSetting(context, ThemeMode.light);
+                      },
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width * 1.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 12.0, 24.0, 12.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Switch to Light Mode',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Plus Jakarta Sans',
+                                      color: Color(0xFF14181B),
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                              Container(
+                                width: 80.0,
+                                height: 40.0,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF1F4F8),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child: Stack(
+                                  alignment: AlignmentDirectional(0.0, 0.0),
+                                  children: [
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(-0.9, 0.0),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            8.0, 2.0, 0.0, 0.0),
+                                        child: Icon(
+                                          Icons.wb_sunny_rounded,
+                                          color: Color(0xFF57636C),
+                                          size: 24.0,
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: AlignmentDirectional(0.9, 0.0),
                                       child: Container(
                                         width: 36.0,
                                         height: 36.0,
@@ -234,205 +392,170 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                if (Theme.of(context).brightness == Brightness.dark)
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () async {
-                      setDarkModeSetting(context, ThemeMode.light);
-                    },
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).width * 1.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            24.0, 12.0, 24.0, 12.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Switch to Light Mode',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(20.0, 12.0, 20.0, 0.0),
+              child: Container(
+                width: double.infinity,
+                height: 60.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 5.0,
+                      color: Color(0x3416202A),
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                        child: Text(
+                          'Profil bearbeiten',
+                          style:
+                              FlutterFlowTheme.of(context).labelMedium.override(
                                     fontFamily: 'Plus Jakarta Sans',
-                                    color: Color(0xFF14181B),
+                                    color: Color(0xFF57636C),
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.normal,
                                   ),
-                            ),
-                            Container(
-                              width: 80.0,
-                              height: 40.0,
-                              decoration: BoxDecoration(
-                                color: Color(0xFFF1F4F8),
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              child: Stack(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                children: [
-                                  Align(
-                                    alignment: AlignmentDirectional(-0.9, 0.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          8.0, 2.0, 0.0, 0.0),
-                                      child: Icon(
-                                        Icons.wb_sunny_rounded,
-                                        color: Color(0xFF57636C),
-                                        size: 24.0,
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.9, 0.0),
-                                    child: Container(
-                                      width: 36.0,
-                                      height: 36.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 4.0,
-                                            color: Color(0x430B0D0F),
-                                            offset: Offset(0.0, 2.0),
-                                          )
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                        shape: BoxShape.rectangle,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
                         ),
                       ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20.0, 12.0, 20.0, 0.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 60.0,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 5.0,
-                        color: Color(0x3416202A),
-                        offset: Offset(0.0, 2.0),
-                      )
+                      Expanded(
+                        child: Align(
+                          alignment: AlignmentDirectional(0.9, 0.0),
+                          child: InkWell(
+                            onTap: () async {
+                              context.pushNamed('editProfile');
+                            },
+                            child: Icon(
+                              Icons.arrow_forward_ios,
+                              color: Color(0xFF57636C),
+                              size: 18.0,
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
-                    borderRadius: BorderRadius.circular(12.0),
-                    shape: BoxShape.rectangle,
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              12.0, 0.0, 0.0, 0.0),
-                          child: Text(
-                            'Profil bearbeiten',
-                            style: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .override(
-                                  fontFamily: 'Plus Jakarta Sans',
-                                  color: Color(0xFF57636C),
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Align(
-                            alignment: AlignmentDirectional(0.9, 0.0),
-                            child: InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                context.pushNamed('editProfile');
-                              },
-                              child: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Color(0xFF57636C),
-                                size: 18.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FFButtonWidget(
-                      onPressed: () async {
-                        context.pushNamed('login');
-                      },
-                      text: 'Abmelden',
-                      options: FFButtonOptions(
-                        width: 90.0,
-                        height: 40.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Color(0xFF387B2E),
-                        textStyle:
-                            FlutterFlowTheme.of(context).bodySmall.override(
-                                  fontFamily: 'Lexend Deca',
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                        elevation: 1.0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
-                        ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FFButtonWidget(
+                    onPressed: () async {
+                      context.pushNamed('login');
+                    },
+                    text: 'Abmelden',
+                    options: FFButtonOptions(
+                      width: 90.0,
+                      height: 40.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: Color(0xFF387B2E),
+                      textStyle:
+                          FlutterFlowTheme.of(context).bodySmall.override(
+                                fontFamily: 'Lexend Deca',
+                                color: Colors.white,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                      elevation: 1.0,
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                        width: 1.0,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.fromLTRB(20, 20, 20, 10), // Anpassen nach Bedarf
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Meine Produkte',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                      height:
+                          10), // Etwas Platz zwischen Überschrift und Produkten
+                  ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    cacheExtent: 10, // Optimierung der Performance
+                    itemCount:
+                        _products.length, // Nutze die Länge von _products
+                    itemBuilder: (context, index) {
+                      return _buildProductCard(_products[index]);
+                    },
+                  )
+                  /*FutureBuilder<List<Map<String, dynamic>>>(
+                      future: fetch_products_from_user(10),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return _error_message(snapshot);
+                        } else if (snapshot.hasData) {
+                          return ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            cacheExtent: 10, // Optimierung der Performance
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return _buildProductCard(snapshot.data![index]);
+                            },
+                          );
+                        } else {
+                          return const Center(
+                              child: Text('Keine Produkte gefunden'));
+                        }
+                      })*/
+                ],
+              ),
+            ),
+// Füge hier weitere Widgets ein, wenn nötig.
+          ],
+        ),
       ),
     );
+  }
+
+  void reloadProducts() async {
+    await _loadProducts(); // Lädt die Produkte neu und aktualisiert den State
   }
 }

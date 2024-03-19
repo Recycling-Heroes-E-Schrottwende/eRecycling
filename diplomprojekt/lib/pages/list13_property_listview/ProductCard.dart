@@ -47,7 +47,7 @@ class ProductCard extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).secondaryBackground,
+          //color: FlutterFlowTheme.of(context).secondaryBackground,
         ),
         child: Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
