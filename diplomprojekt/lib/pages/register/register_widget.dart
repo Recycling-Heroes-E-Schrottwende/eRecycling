@@ -492,9 +492,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                           try {
                                             var username =
                                                 _model.usernameController.text;
+                                            var email =
+                                                userCredential.user?.uid;
                                             final response = await http.post(
                                               Uri.parse(
-                                                  "http://app.recyclingheroes.at/api/create_user/?user=$username"),
+                                                  "http://app.recyclingheroes.at/api/create_user/?user=$username&id=$email"),
                                             );
 
                                             if (response.statusCode == 200) {

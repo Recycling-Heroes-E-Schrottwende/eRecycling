@@ -154,7 +154,7 @@ class _InsideChatWidgetState extends State<InsideChatWidget> {
 
   void _sendMessage() async {
     var user = _auth.currentUser;
-    if (user != null) {
+    if (user != null && _messageController.text.isNotEmpty) {
       var chatId = _generateChatId();
       var messageText = _messageController.text.trim();
 
