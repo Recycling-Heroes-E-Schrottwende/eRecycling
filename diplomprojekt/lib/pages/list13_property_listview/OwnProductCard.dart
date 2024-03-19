@@ -1,4 +1,6 @@
 import 'package:diplomprojekt/fetch.dart';
+import 'package:diplomprojekt/pages/list13_property_listview/edit_product/edit_product_model.dart';
+import 'package:diplomprojekt/pages/list13_property_listview/edit_product/edit_product_widget.dart';
 import 'package:diplomprojekt/pages/profile/profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:diplomprojekt/flutter_flow/flutter_flow_theme.dart';
@@ -178,6 +180,20 @@ class OwnProductCard extends StatelessWidget {
       child: IconButton(
         icon: Icon(Icons.edit, color: Colors.white), // Weißes Stift-Icon
         onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditProductWidget(
+                      title: title,
+                      description: description,
+                      price: price,
+                      postcode: postcode,
+                      condition: condition,
+                      category: category,
+                      imageBytesList: [],
+                      delivery: '',
+                    )),
+          );
           // Füge hier die Logik für die Bearbeitungsaktion ein
           // Zum Beispiel das Öffnen eines Dialogs oder einer neuen Seite zur Bearbeitung des Produkts
         },
