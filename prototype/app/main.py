@@ -1,4 +1,4 @@
-from fastapi import Depends, FastAPI, HTTPException, File, UploadFile
+from fastapi import Depends, FastAPI, HTTPException, File, UploadFile, Security
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import joinedload
 from pydantic import BaseModel
@@ -6,10 +6,11 @@ from datetime import datetime
 from typing import List
 from model.database import SessionLocal, engine
 from fastapi.responses import FileResponse
-from starlette.responses import StreamingResponse
+from starlette import status
 from io import BytesIO
 from typing_extensions import Annotated
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import APIKeyHeader
 import os.path
 
 
@@ -28,6 +29,9 @@ from model import miniouploader
 
 app = FastAPI()
 
+api_key_header = APIKeyHeader(name="Api_Key")
+#api_key = os.getenv("API_KEY")
+api_key = "key"
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -50,10 +54,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+def get_api_key(api_key_header: str = Security(api_key_header)) -> str:
+    if api_key_header == api_key:
+        print("hello")
+        return api_key_header
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid or missing API Key",
+    )
+
+
 # Get Requests
 
 @app.get("/users/")
-async def read_users(user_id: int = None, db: Session = Depends(get_db)):
+async def read_users(api_key: str = Security(get_api_key), user_id: int = None, db: Session = Depends(get_db)):
     if user_id is None:
         users = db.query(models.User).all()
         return users
