@@ -103,9 +103,13 @@ class OwnProductCard extends StatelessWidget {
                     Padding(
                       padding:
                           const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                      child: Text(
-                        '${price.toStringAsFixed(2)} €',
-                        style: FlutterFlowTheme.of(context).titleLarge,
+                      child: Flexible(
+                        child: Text(
+                          '${price.toStringAsFixed(2)} €',
+                          style: FlutterFlowTheme.of(context)
+                              .titleLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],
