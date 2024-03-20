@@ -60,7 +60,7 @@ class OwnProductCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(children: [
+              Stack(children: <Widget>[
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                   child: ClipRRect(
@@ -75,15 +75,14 @@ class OwnProductCard extends StatelessWidget {
                 ),
                 Positioned(
                   top: 0,
-                  right: 8,
-                  child: deleteButton(
-                      context), // Der rote Lösch-Button wird hier positioniert
-                ),
-                Positioned(
-                  top: 0,
-                  right: 50,
-                  child: editButton(
-                      context), // Der rote Lösch-Button wird hier positioniert
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      editButton(context),
+                      deleteButton(context),
+                    ],
+                  ),
                 ),
               ]),
               Padding(
