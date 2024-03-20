@@ -28,6 +28,7 @@ import 'package:image_picker/image_picker.dart';
 
 class EditProductWidget extends StatefulWidget {
   final String title;
+  final int productId;
   final List<Uint8List> imageBytesList;
   final String description;
   final int postcode;
@@ -46,6 +47,7 @@ class EditProductWidget extends StatefulWidget {
     required this.condition,
     required this.category,
     required this.delivery,
+    required this.productId,
   }) : super(key: key);
 
   @override
@@ -652,6 +654,31 @@ class _EditProductWidgetState extends State<EditProductWidget>
                         String? delivery = _model.choiceChipsValue2;
                         String postcode = _model.textController3.text;
                         String price = _model.textController4.text;
+
+                        bool success = await editProduct(
+                            widget.productId,
+                            title,
+                            description,
+                            category!,
+                            coisUploadingndition!,
+                            delivery!,
+                            postcode,
+                            price);
+
+                        if (success) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ProfileWidget()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Fehler beim Aktualisieren der Anzeige. Bitte versuchen Sie es später erneut.'),
+                            ),
+                          );
+                        }
                       },
                       text: 'Anzeige aktualisieren ',
                       icon: Icon(

@@ -192,6 +192,7 @@ class OwnProductCard extends StatelessWidget {
                       category: category,
                       imageBytesList: [],
                       delivery: '',
+                      productId: productId,
                     )),
           );
           // Füge hier die Logik für die Bearbeitungsaktion ein
