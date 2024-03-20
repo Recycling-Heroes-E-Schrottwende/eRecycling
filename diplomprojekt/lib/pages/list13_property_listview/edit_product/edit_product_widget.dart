@@ -150,10 +150,7 @@ class _EditProductWidgetState extends State<EditProductWidget>
               size: 30.0,
             ),
             onPressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileWidget()),
-              );
+              Navigator.pop(context);
             },
           ),
           actions: [],
@@ -514,11 +511,7 @@ class _EditProductWidgetState extends State<EditProductWidget>
                               controller: _model.textController3,
                               focusNode: _model.textFieldFocusNode3,
                               onFieldSubmitted: (_) async {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfileWidget()),
-                                );
+                                Navigator.pop(context);
                               },
                               autofocus: true,
                               autofillHints: [AutofillHints.postalCode],
@@ -666,11 +659,7 @@ class _EditProductWidgetState extends State<EditProductWidget>
                             price);
 
                         if (success) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ProfileWidget()),
-                          );
+                          Navigator.pop(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
