@@ -3,7 +3,7 @@
 import 'dart:io';
 import 'dart:js_interop';
 import 'dart:typed_data';
-import 'dart:convert';
+import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -86,7 +86,8 @@ Future<List<Map<String, dynamic>>> fetch_products_from_user(int userId) async {
       headers: headers);
 
   if (response.statusCode == 200) {
-    List<dynamic> productsJson = jsonDecode(response.body);
+    String body = convert.utf8.decode(convert.latin1.encode(response.body));
+    List<dynamic> productsJson = convert.jsonDecode(body);
     List<Map<String, dynamic>> products =
         List<Map<String, dynamic>>.from(productsJson);
 
