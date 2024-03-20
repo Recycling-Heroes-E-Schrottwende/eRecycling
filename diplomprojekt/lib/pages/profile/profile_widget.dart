@@ -60,7 +60,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         title: product['product_name'] ?? 'Unbekanntes Produkt',
         description: product['description'] ?? 'Keine Beschreibung verfügbar.',
         imageUrl: product['image_url'] ??
-            'https://microsites.pearl.de/i/76/sd2208_5.jpg',
+            'https://fakeimg.pl/600x400?text=Recycling+Heroes',
         productId: product['id'],
         price: product['price'].toDouble(),
         postcode: int.tryParse(product['postcode']) ?? 1190,
