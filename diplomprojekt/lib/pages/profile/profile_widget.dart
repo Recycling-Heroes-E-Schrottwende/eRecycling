@@ -56,11 +56,17 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   }
 
   Widget _buildProductCard(Map<String, dynamic> product) {
+    String imageUrl;
+    if (product['image_url'].toString().contains("error")) {
+      print('Image not found or failed to load');
+      imageUrl = 'https://fakeimg.pl/600x400?text=Recycling+Heroes';
+    } else {
+      imageUrl = product['image_url'];
+    }
     return OwnProductCard(
         title: product['product_name'] ?? 'Unbekanntes Produkt',
         description: product['description'] ?? 'Keine Beschreibung verfügbar.',
-        imageUrl: product['image_url'] ??
-            'https://fakeimg.pl/600x400?text=Recycling+Heroes',
+        imageUrl: imageUrl,
         productId: product['id'],
         price: product['price'].toDouble(),
         postcode: int.tryParse(product['postcode']) ?? 1190,
