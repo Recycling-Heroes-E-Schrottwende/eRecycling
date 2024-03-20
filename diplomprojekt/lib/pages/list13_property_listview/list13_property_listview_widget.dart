@@ -59,7 +59,8 @@ class _List13PropertyListviewWidgetState
         price: product['price'].toDouble(),
         postcode: int.tryParse(product['postcode']) ?? 1190,
         condition: product['condition'],
-        category: product['category']);
+        category: product['category'],
+        delivery: product['transfer_method'] ?? "Unbekannt");
   }
 
   // ignore: non_constant_identifier_names

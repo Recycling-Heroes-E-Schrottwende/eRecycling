@@ -15,7 +15,9 @@ class OwnProductCard extends StatelessWidget {
   final String condition;
   final String category;
   final double price;
+  final String delivery;
   final VoidCallback onDelete;
+  final VoidCallback onProductUpdated;
 
   const OwnProductCard({
     super.key,
@@ -28,6 +30,8 @@ class OwnProductCard extends StatelessWidget {
     required this.condition,
     required this.category,
     required this.onDelete,
+    required this.delivery,
+    required this.onProductUpdated,
   });
 
   @override
@@ -46,6 +50,7 @@ class OwnProductCard extends StatelessWidget {
                     category: category,
                     price: price,
                     productId: productId,
+                    delivery: delivery,
                   )),
         );
       },
@@ -190,8 +195,9 @@ class OwnProductCard extends StatelessWidget {
                       condition: condition,
                       category: category,
                       imageBytesList: [],
-                      delivery: '',
+                      delivery: delivery,
                       productId: productId,
+                      onProductUpdated: onProductUpdated,
                     )),
           );
           // Füge hier die Logik für die Bearbeitungsaktion ein

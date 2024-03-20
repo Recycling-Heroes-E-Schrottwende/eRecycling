@@ -10,6 +10,7 @@ class ProductCard extends StatelessWidget {
   final String description;
   final String condition;
   final String category;
+  final String delivery;
   final double price;
 
   const ProductCard({
@@ -22,6 +23,7 @@ class ProductCard extends StatelessWidget {
     required this.postcode,
     required this.condition,
     required this.category,
+    required this.delivery,
   });
 
   @override
@@ -39,6 +41,7 @@ class ProductCard extends StatelessWidget {
               description: description,
               category: category,
               price: price,
+              delivery: delivery,
               productId: productId,
             )
           ),

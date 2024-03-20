@@ -66,6 +66,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         postcode: int.tryParse(product['postcode']) ?? 1190,
         condition: product['condition'],
         category: product['category'],
+        delivery: product['transfer_method'],
+        onProductUpdated: () {
+          reloadProducts();
+        },
         onDelete: () async {
           bool result = await deleteProduct(product['id']);
           if (result) {

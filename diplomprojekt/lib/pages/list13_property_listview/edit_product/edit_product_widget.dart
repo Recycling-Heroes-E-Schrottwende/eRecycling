@@ -36,6 +36,7 @@ class EditProductWidget extends StatefulWidget {
   final String condition;
   final String category;
   final String delivery;
+  final VoidCallback onProductUpdated;
 
   const EditProductWidget({
     Key? key,
@@ -48,6 +49,7 @@ class EditProductWidget extends StatefulWidget {
     required this.category,
     required this.delivery,
     required this.productId,
+    required this.onProductUpdated,
   }) : super(key: key);
 
   @override
@@ -659,6 +661,7 @@ class _EditProductWidgetState extends State<EditProductWidget>
                             price);
 
                         if (success) {
+                          widget.onProductUpdated();
                           Navigator.pop(context);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
