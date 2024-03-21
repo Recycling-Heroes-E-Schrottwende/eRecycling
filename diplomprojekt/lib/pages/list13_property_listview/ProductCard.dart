@@ -10,6 +10,7 @@ class ProductCard extends StatelessWidget {
   final String description;
   final String condition;
   final String category;
+  final String delivery;
   final double price;
 
   const ProductCard({
@@ -22,6 +23,7 @@ class ProductCard extends StatelessWidget {
     required this.postcode,
     required this.condition,
     required this.category,
+    required this.delivery,
   });
 
   @override
@@ -31,24 +33,24 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetailsWidget(
-              title: title,
-              postcode: postcode,
-              condition: condition,
-              imageUrl: imageUrl,
-              description: description,
-              category: category,
-              price: price,
-              productId: productId,
-            )
-          ),
+              builder: (context) => ProductDetailsWidget(
+                    title: title,
+                    postcode: postcode,
+                    condition: condition,
+                    imageUrl: imageUrl,
+                    description: description,
+                    category: category,
+                    price: price,
+                    delivery: delivery,
+                    productId: productId,
+                  )),
         );
       },
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          //color: FlutterFlowTheme.of(context).secondaryBackground,
-        ),
+            //color: FlutterFlowTheme.of(context).secondaryBackground,
+            ),
         child: Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
           child: Column(
@@ -78,10 +80,14 @@ class ProductCard extends StatelessWidget {
                       style: FlutterFlowTheme.of(context).bodyLarge,
                     ),
                     Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                      child: Text(
-                        '${price.toStringAsFixed(2)} €',
-                        style: FlutterFlowTheme.of(context).titleLarge,
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
+                      child: Flexible(
+                        child: Text(
+                          '${price.toStringAsFixed(2)} €',
+                          style: FlutterFlowTheme.of(context).titleLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],

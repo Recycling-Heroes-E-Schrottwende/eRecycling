@@ -1,7 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:io';
+import 'dart:js_interop';
 import 'dart:typed_data';
+import 'dart:convert' as convert;
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -84,7 +86,8 @@ Future<List<Map<String, dynamic>>> fetch_products_from_user(int userId) async {
       headers: headers);
 
   if (response.statusCode == 200) {
-    List<dynamic> productsJson = jsonDecode(response.body);
+    String body = convert.utf8.decode(convert.latin1.encode(response.body));
+    List<dynamic> productsJson = convert.jsonDecode(body);
     List<Map<String, dynamic>> products =
         List<Map<String, dynamic>>.from(productsJson);
 
@@ -121,6 +124,52 @@ Future<bool> deleteProduct(int productId) async {
   } else {
     // Fehlerbehandlung
     print("Fehler beim Löschen des Produkts: ${response.body}");
+    return false;
+  }
+}
+
+Future<bool> editProduct(
+    int productId,
+    String title,
+    String desc,
+    String category,
+    String condition,
+    String delivery,
+    String postcode,
+    String price) async {
+  var headers = {
+    'accept': 'application/json',
+    'Content-Type': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop"
+  };
+  var fields = {
+    'product_name': title,
+    'description': desc,
+    'category': category,
+    'condition': condition,
+    'transfer_method': delivery,
+    'postcode': postcode,
+    'price': price,
+    'user_id': "10",
+    'location': 'string',
+    'brand': 'string',
+    'technical_details': 'string',
+    'details': 'string'
+  };
+  var editProductUri =
+      Uri.parse('http://app.recyclingheroes.at/api/update_product/$productId');
+  var editResponse = await http.put(
+    editProductUri,
+    headers: headers,
+    body: jsonEncode(fields),
+  );
+
+  if (editResponse.statusCode == 200) {
+    print('Produkt erfolgreich bearbeitet');
+    return true;
+  } else {
+    print(
+        'Fehler beim Bearbeiten des Produkts: ${jsonDecode(editResponse.body)}');
     return false;
   }
 }

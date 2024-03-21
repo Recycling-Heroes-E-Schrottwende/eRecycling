@@ -15,7 +15,9 @@ class OwnProductCard extends StatelessWidget {
   final String condition;
   final String category;
   final double price;
+  final String delivery;
   final VoidCallback onDelete;
+  final VoidCallback onProductUpdated;
 
   const OwnProductCard({
     super.key,
@@ -28,6 +30,8 @@ class OwnProductCard extends StatelessWidget {
     required this.condition,
     required this.category,
     required this.onDelete,
+    required this.delivery,
+    required this.onProductUpdated,
   });
 
   @override
@@ -46,6 +50,7 @@ class OwnProductCard extends StatelessWidget {
                     category: category,
                     price: price,
                     productId: productId,
+                    delivery: delivery,
                   )),
         );
       },
@@ -60,7 +65,7 @@ class OwnProductCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack(children: [
+              Stack(children: <Widget>[
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
                   child: ClipRRect(
@@ -75,15 +80,14 @@ class OwnProductCard extends StatelessWidget {
                 ),
                 Positioned(
                   top: 0,
-                  right: 8,
-                  child: deleteButton(
-                      context), // Der rote Lösch-Button wird hier positioniert
-                ),
-                Positioned(
-                  top: 0,
-                  right: 50,
-                  child: editButton(
-                      context), // Der rote Lösch-Button wird hier positioniert
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      editButton(context),
+                      deleteButton(context),
+                    ],
+                  ),
                 ),
               ]),
               Padding(
@@ -99,9 +103,13 @@ class OwnProductCard extends StatelessWidget {
                     Padding(
                       padding:
                           const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                      child: Text(
-                        '${price.toStringAsFixed(2)} €',
-                        style: FlutterFlowTheme.of(context).titleLarge,
+                      child: Flexible(
+                        child: Text(
+                          '${price.toStringAsFixed(2)} €',
+                          style: FlutterFlowTheme.of(context)
+                              .titleLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                   ],
@@ -191,7 +199,9 @@ class OwnProductCard extends StatelessWidget {
                       condition: condition,
                       category: category,
                       imageBytesList: [],
-                      delivery: '',
+                      delivery: delivery,
+                      productId: productId,
+                      onProductUpdated: onProductUpdated,
                     )),
           );
           // Füge hier die Logik für die Bearbeitungsaktion ein

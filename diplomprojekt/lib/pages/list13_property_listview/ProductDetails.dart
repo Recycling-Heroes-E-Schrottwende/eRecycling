@@ -29,6 +29,7 @@ class ProductDetailsWidget extends StatefulWidget {
   final String condition;
   final String category;
   final double price;
+  final String delivery;
   final int postcode;
 
   const ProductDetailsWidget({
@@ -41,6 +42,7 @@ class ProductDetailsWidget extends StatefulWidget {
     required this.postcode,
     required this.condition,
     required this.category,
+    required this.delivery,
   });
 
   @override
@@ -413,6 +415,28 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 12.0, 0.0, 12.0, 0.0),
                             child: Text(
+                              widget.delivery.toString(),
+                              style: FlutterFlowTheme.of(context).bodySmall,
+                            ),
+                          ),
+                        ).animateOnPageLoad(
+                            animationsMap['containerOnPageLoadAnimation2']!),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 0.0, 0.0),
+                        child: Container(
+                          height: 36.0,
+                          decoration: BoxDecoration(
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            borderRadius: BorderRadius.circular(40.0),
+                          ),
+                          alignment: const AlignmentDirectional(0.0, 0.0),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                12.0, 0.0, 12.0, 0.0),
+                            child: Text(
                               widget.productId.toString(),
                               style: FlutterFlowTheme.of(context).bodySmall,
                             ),
@@ -504,8 +528,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                   padding: const EdgeInsetsDirectional.fromSTEB(
                       24.0, 0.0, 24.0, 0.0),
                   child: FFButtonWidget(
-                    onPressed: () {
-                    },
+                    onPressed: () {},
                     text: 'Verkäufer kontaktieren',
                     options: FFButtonOptions(
                       width: double.infinity,
