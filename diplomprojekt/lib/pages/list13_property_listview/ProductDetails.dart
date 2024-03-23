@@ -245,12 +245,21 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
     super.initState();
     _model = createModel(context, () => ProductDetailsModel());
 
+    _loadData();
+
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
           !anim.applyInitialState),
       this,
     );
+  }
+
+  void _loadData() async {
+    bool fav = await isFavourite(widget.productId);
+    setState(() {
+      isFavorited = fav;
+    });
   }
 
   @override
@@ -295,11 +304,11 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                         .star_border, // Dieses Icon wird zu "Icons.favorite" wechseln, wenn der Artikel favorisiert ist.
                 color: FlutterFlowTheme.of(context).secondaryText,
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (isFavorited) {
-                  removeFavourite(widget.productId);
+                  await removeFavourite(widget.productId);
                 } else {
-                  addFavourite(widget.productId);
+                  await addFavourite(widget.productId);
                 }
 
                 setState(() {
