@@ -299,6 +299,12 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                 setState(() {
                   isFavorited = !isFavorited;
                 });
+
+                if (isFavorited) {
+                  removeFavourite(widget.productId);
+                } else {
+                  addFavourite(widget.productId);
+                }
               },
             ),
           ],

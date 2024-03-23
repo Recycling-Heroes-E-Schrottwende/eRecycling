@@ -354,3 +354,22 @@ Future<bool> addFavourite(int productId) async {
     throw Exception('Failed to add favourite');
   }
 }
+
+Future<bool> removeFavourite(int productId) async {
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop",
+    'Content-Type': 'application/json'
+  };
+  var body = jsonEncode({'product_id': productId, 'user_id': 10});
+  final response = await http.post(
+      Uri.parse('http://app.recyclingheroes.at/api/delete_favourite/'),
+      headers: headers,
+      body: body);
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    throw Exception('Failed to add favourite');
+  }
+}
