@@ -296,15 +296,15 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                 color: FlutterFlowTheme.of(context).secondaryText,
               ),
               onPressed: () {
-                setState(() {
-                  isFavorited = !isFavorited;
-                });
-
                 if (isFavorited) {
                   removeFavourite(widget.productId);
                 } else {
                   addFavourite(widget.productId);
                 }
+
+                setState(() {
+                  isFavorited = !isFavorited;
+                });
               },
             ),
           ],

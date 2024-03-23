@@ -337,11 +337,23 @@ Future<List<String>> fetchImageUrls(int productId) async {
 }
 
 Future<bool> addFavourite(int productId) async {
+  /*
+  curl -X 'POST' \
+  'http://app.recyclingheroes.at/api/addFavourite/' \
+  -H 'accept: application/json' \
+  -H 'X-API-Key: #Baum9Gebaeude5Laptop' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "user_id": 10,
+  "product_id": 264
+}'
+*/
   var headers = {
     'accept': 'application/json',
     'X-API-Key': "#Baum9Gebaeude5Laptop",
     'Content-Type': 'application/json'
   };
+  print('Adding favourite for product $productId');
   var body = jsonEncode({'product_id': productId, 'user_id': 10});
   final response = await http.post(
       Uri.parse('http://app.recyclingheroes.at/api/addFavourite/'),
@@ -351,7 +363,8 @@ Future<bool> addFavourite(int productId) async {
   if (response.statusCode == 200) {
     return true;
   } else {
-    throw Exception('Failed to add favourite');
+    print('Failed to add favourite: ${response.body}');
+    return false;
   }
 }
 
@@ -361,6 +374,7 @@ Future<bool> removeFavourite(int productId) async {
     'X-API-Key': "#Baum9Gebaeude5Laptop",
     'Content-Type': 'application/json'
   };
+  print('Deleting favourite for product $productId');
   var body = jsonEncode({'product_id': productId, 'user_id': 10});
   final response = await http.post(
       Uri.parse('http://app.recyclingheroes.at/api/delete_favourite/'),
@@ -370,6 +384,7 @@ Future<bool> removeFavourite(int productId) async {
   if (response.statusCode == 200) {
     return true;
   } else {
-    throw Exception('Failed to add favourite');
+    print('Failed to delete favourite: ${response.body}');
+    return false;
   }
 }
