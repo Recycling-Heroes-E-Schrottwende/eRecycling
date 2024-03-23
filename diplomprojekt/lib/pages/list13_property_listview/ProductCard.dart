@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:diplomprojekt/flutter_flow/flutter_flow_theme.dart';
 import 'ProductDetails.dart';
+import 'dart:ui_web';
 
 class ProductCard extends StatelessWidget {
   final int productId;
@@ -66,6 +67,17 @@ class ProductCard extends StatelessWidget {
                     width: double.infinity,
                     height: 230,
                     fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return CircularProgressIndicator(
+                        value: loadingProgress.expectedTotalBytes != null
+                            ? loadingProgress.cumulativeBytesLoaded /
+                                loadingProgress.expectedTotalBytes!
+                            : null,
+                      );
+                    },
+                    errorBuilder: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
               ),
