@@ -79,10 +79,10 @@ class ProductCard extends StatelessWidget {
                       title,
                       style: FlutterFlowTheme.of(context).bodyLarge,
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                      child: Flexible(
+                    Flexible(
+                      child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
                         child: Text(
                           '${price.toStringAsFixed(2)} €',
                           style: FlutterFlowTheme.of(context).titleLarge,
