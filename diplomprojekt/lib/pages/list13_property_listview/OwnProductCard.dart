@@ -9,6 +9,7 @@ import 'ProductDetails.dart';
 class OwnProductCard extends StatelessWidget {
   final int productId;
   final int postcode;
+  final int viewCount;
   final String title;
   final String imageUrl;
   final String description;
@@ -32,6 +33,7 @@ class OwnProductCard extends StatelessWidget {
     required this.onDelete,
     required this.delivery,
     required this.onProductUpdated,
+    required this.viewCount,
   });
 
   @override
@@ -80,7 +82,7 @@ class OwnProductCard extends StatelessWidget {
                 ),
                 Positioned(
                   top: 0,
-                  right: 0,
+                  right: 7,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -89,6 +91,30 @@ class OwnProductCard extends StatelessWidget {
                     ],
                   ),
                 ),
+                Positioned(
+                  top: 8,
+                  left: 15,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5), // Semi-transparenter schwarzer Hintergrund
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.remove_red_eye, color: Colors.white),
+                          Text(
+                            ' $viewCount',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ]),
               Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 4),
@@ -100,14 +126,13 @@ class OwnProductCard extends StatelessWidget {
                       title,
                       style: FlutterFlowTheme.of(context).bodyLarge,
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
-                      child: Flexible(
+                    Flexible(
+                      child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(16, 0, 0, 0),
                         child: Text(
                           '${price.toStringAsFixed(2)} €',
-                          style: FlutterFlowTheme.of(context)
-                              .titleLarge,
+                          style: FlutterFlowTheme.of(context).titleLarge,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -142,7 +167,12 @@ class OwnProductCard extends StatelessWidget {
       margin: EdgeInsets.only(top: 8, right: 8),
       decoration: BoxDecoration(
         color: Colors.red, // Roten Hintergrund für den Button
-        borderRadius: BorderRadius.circular(5), // Abgerundete Ecken
+        borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(5),
+                        bottomRight: Radius.circular(5),
+                        bottomLeft: Radius.circular(5),
+                        topRight: Radius.circular(12),
+                      ),
       ),
       child: IconButton(
         icon: Icon(Icons.delete, color: Colors.white), // Weißes Mülleimer-Icon
