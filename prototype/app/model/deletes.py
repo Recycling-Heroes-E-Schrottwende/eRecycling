@@ -8,7 +8,7 @@ from . import miniouploader
 
 from fastapi import HTTPException
 
-def DeleteUser(id: int, db: Session):
+def delete_User(id: int, db: Session):
     user = db.query(models.User).filter(models.User.id == id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -31,7 +31,7 @@ def DeleteUser(id: int, db: Session):
         db.close()
 
 
-def DeleteProduct(id: int, db: Session):
+def delete_Product(id: int, db: Session):
     product = db.query(models.Product).filter(models.Product.id == id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -54,7 +54,7 @@ def DeleteProduct(id: int, db: Session):
         db.close()
 
 
-def DeleteImage(id: int, db: Session):
+def delete_Image(id: int, db: Session):
     image = db.query(models.Image).filter(models.Image.id == id).first()
     if not image:
         raise HTTPException(status_code=404, detail="Image not found")
@@ -69,7 +69,7 @@ def DeleteImage(id: int, db: Session):
     finally:
         db.close()
 
-def deletefavourite(user_id: int, product_id: int, db: Session):
+def delete_favourite(user_id: int, product_id: int, db: Session):
     favourite = db.query(models.Favourite).filter(models.Favourite.user_id == user_id, models.Favourite.product_id == product_id).first()
     if not favourite:
         raise HTTPException(status_code=404, detail="Favourite not found")
