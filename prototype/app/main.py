@@ -116,11 +116,11 @@ async def read_favourites(user_id: int, db: Session = Depends(get_db)):
 
 @app.post("/create_user/")
 async def create_user(user_create: shemas.User, db: Session = Depends(get_db)):
-    return posts.Usercreate(user_create, db)
+    return posts.user_create(user_create, db)
 
 @app.post("/create_product/")
 async def create_product(product_create: shemas.Product, db: Session = Depends(get_db)):
-    return posts.Productcreate(product_create, db)
+    return posts.product_create(product_create, db)
 
 @app.post("/uploadImage/")
 async def upload_image(product_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
@@ -145,7 +145,7 @@ async def upload_image(product_id: int, file: UploadFile = File(...), db: Sessio
 
 @app.post("/addFavourite/")
 async def add_favourite(add_favourites: shemas.Favourite, db: Session = Depends(get_db)):
-    return posts.addfavourite(add_favourites, db)
+    return posts.add_favourite(add_favourites, db)
 
 
 # Delete Requests
