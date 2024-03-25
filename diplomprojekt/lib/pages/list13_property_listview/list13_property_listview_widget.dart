@@ -27,6 +27,37 @@ class _List13PropertyListviewWidgetState
   @override
   bool get wantKeepAlive => true;
 
+  List<Map<String, dynamic>>? _cachedProducts;
+  List<Map<String, dynamic>>? _cachedNewestProducts;
+  List<Map<String, dynamic>>? _cachedFavouriteProducts;
+
+  Future<List<Map<String, dynamic>>> _fetchProducts() async {
+    if (_cachedProducts != null) {
+      return _cachedProducts!;
+    }
+
+    _cachedProducts = await fetch_products();
+    return _cachedProducts!;
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchNewestProducts() async {
+    if (_cachedNewestProducts != null) {
+      return _cachedNewestProducts!;
+    }
+
+    _cachedNewestProducts = await fetch_newest_products();
+    return _cachedNewestProducts!;
+  }
+
+  Future<List<Map<String, dynamic>>> _fetchFavouriteProducts() async {
+    if (_cachedFavouriteProducts != null) {
+      return _cachedFavouriteProducts!;
+    }
+
+    _cachedFavouriteProducts = await fetch_favourite_products();
+    return _cachedFavouriteProducts!;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -253,61 +284,20 @@ class _List13PropertyListviewWidgetState
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Expanded(
-                                child: ListView(
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  children: [
-                                    FutureBuilder<List<Map<String, dynamic>>>(
-                                        future: fetch_products(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return const Center(
-                                                child:
-                                                    CircularProgressIndicator());
-                                          } else if (snapshot.hasError) {
-                                            return _error_message(snapshot);
-                                          } else if (snapshot.hasData) {
-                                            return ListView.builder(
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              padding: EdgeInsets.zero,
-                                              shrinkWrap: true,
-                                              cacheExtent:
-                                                  10, // Optimierung der Performance
-                                              itemCount: snapshot.data!.length,
-                                              itemBuilder: (context, index) {
-                                                return _buildProductCard(
-                                                    snapshot.data![index]);
-                                              },
-                                            );
-                                          } else {
-                                            return const Center(
-                                                child: Text(
-                                                    'Keine Produkte gefunden'));
-                                          }
-                                        })
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: ListView(
-                                    physics:
-                                        const AlwaysScrollableScrollPhysics(),
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    setState(() {
+                                      _cachedProducts = null;
+                                    });
+                                  },
+                                  child: ListView(
+                                    physics: const ClampingScrollPhysics(),
                                     padding: EdgeInsets.zero,
                                     shrinkWrap: true,
                                     scrollDirection: Axis.vertical,
                                     children: [
                                       FutureBuilder<List<Map<String, dynamic>>>(
-                                          future: fetch_newest_products(),
+                                          future: _fetchProducts(),
                                           builder: (context, snapshot) {
                                             if (snapshot.connectionState ==
                                                 ConnectionState.waiting) {
@@ -337,7 +327,9 @@ class _List13PropertyListviewWidgetState
                                                       'Keine Produkte gefunden'));
                                             }
                                           })
-                                    ]),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -345,45 +337,107 @@ class _List13PropertyListviewWidgetState
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Expanded(
-                                child: ListView(
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  children: [
-                                    FutureBuilder<List<Map<String, dynamic>>>(
-                                      future: fetch_favourite_products(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return const Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        } else if (snapshot.hasError) {
-                                          return _error_message(snapshot);
-                                        } else if (snapshot.hasData) {
-                                          return ListView.builder(
-                                            physics:
-                                                const NeverScrollableScrollPhysics(),
-                                            padding: EdgeInsets.zero,
-                                            shrinkWrap: true,
-                                            cacheExtent:
-                                                10, // Optimierung der Performance
-                                            itemCount: snapshot.data!.length,
-                                            itemBuilder: (context, index) {
-                                              return _buildProductCard(
-                                                  snapshot.data![index]);
-                                            },
-                                          );
-                                        } else {
-                                          return const Center(
-                                              child: Text(
-                                                  'Keine Produkte gefunden'));
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    setState(() {
+                                      _cachedNewestProducts = null;
+                                    });
+                                  },
+                                  child: ListView(
+                                      physics:
+                                          const ClampingScrollPhysics(),
+                                      padding: EdgeInsets.zero,
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      children: [
+                                        FutureBuilder<
+                                                List<Map<String, dynamic>>>(
+                                            future: _fetchNewestProducts(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return const Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              } else if (snapshot.hasError) {
+                                                return _error_message(snapshot);
+                                              } else if (snapshot.hasData) {
+                                                return ListView.builder(
+                                                  physics:
+                                                      const NeverScrollableScrollPhysics(),
+                                                  padding: EdgeInsets.zero,
+                                                  shrinkWrap: true,
+                                                  cacheExtent:
+                                                      10, // Optimierung der Performance
+                                                  itemCount:
+                                                      snapshot.data!.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return _buildProductCard(
+                                                        snapshot.data![index]);
+                                                  },
+                                                );
+                                              } else {
+                                                return const Center(
+                                                    child: Text(
+                                                        'Keine Produkte gefunden'));
+                                              }
+                                            })
+                                      ]),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    setState(() {
+                                      _cachedFavouriteProducts = null;
+                                    });
+                                  },
+                                  child: ListView(
+                                    physics:
+                                        const ClampingScrollPhysics(),
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    children: [
+                                      FutureBuilder<List<Map<String, dynamic>>>(
+                                        future: _fetchFavouriteProducts(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const Center(
+                                                child:
+                                                    CircularProgressIndicator());
+                                          } else if (snapshot.hasError) {
+                                            return _error_message(snapshot);
+                                          } else if (snapshot.hasData) {
+                                            return ListView.builder(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              cacheExtent:
+                                                  10, // Optimierung der Performance
+                                              itemCount: snapshot.data!.length,
+                                              itemBuilder: (context, index) {
+                                                return _buildProductCard(
+                                                    snapshot.data![index]);
+                                              },
+                                            );
+                                          } else {
+                                            return const Center(
+                                                child: Text(
+                                                    'Keine Produkte gefunden'));
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

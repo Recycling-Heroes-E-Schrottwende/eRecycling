@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:diplomprojekt/fetch.dart';
 import 'package:diplomprojekt/pages/list13_property_listview/OwnProductCard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -73,6 +75,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         condition: product['condition'],
         category: product['category'],
         delivery: product['transfer_method'],
+        viewCount: randomInt(1, 30),
         onProductUpdated: () {
           reloadProducts();
         },
@@ -567,5 +570,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
 
   void reloadProducts() async {
     await _loadProducts(); // Lädt die Produkte neu und aktualisiert den State
+  }
+  
+  int randomInt(int i, int j) {
+    return Random().nextInt(j - i) + i;
   }
 }
