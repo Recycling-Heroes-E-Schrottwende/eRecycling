@@ -151,24 +151,24 @@ async def add_favourite(add_favourites: shemas.Favourite, db: Session = Depends(
 # Delete Requests
 @app.delete("/delete_user/{user_id}")
 async def delete_user(user_id: int, db: Session = Depends(get_db)):
-    deleted_user = deletes.DeleteUser(user_id, db)
+    deleted_user = deletes.delete_User(user_id, db)
     return {"message": f"User {deleted_user.id} deleted successfully"}
 
 @app.delete("/delete_product/{product_id}")
 async def delete_product(product_id: int, db: Session = Depends(get_db)):
-    deleted_product =  deletes.DeleteProduct(product_id, db)
+    deleted_product =  deletes.delete_Product(product_id, db)
     return {"message": f"Product {deleted_product.id} deleted successfully"}
 
 @app.delete("/delete_image/")
 async def delete_image(image_id: int, product_id: int, db: Session = Depends(get_db)):
-    deleted_image =  deletes.DeleteImage(image_id, db)
+    deleted_image =  deletes.delete_Image(image_id, db)
     miniouploader.delete_image("pictures", product_id, image_id)
     return {"message": f"Image {deleted_image.id} deleted successfully"}
     #return {"message": f"Image deleted successfully"}
 
 @app.delete("/delete_favourite/")
 async def delete_favourite(user_id: int, product_id: int, db: Session = Depends(get_db)):
-    deleted_favourite =  deletes.deletefavourite(user_id, product_id, db)
+    deleted_favourite =  deletes.delete_favourite(user_id, product_id, db)
     return {"message": f"Favourite {deleted_favourite.user_id} deleted successfully"}
 
 
