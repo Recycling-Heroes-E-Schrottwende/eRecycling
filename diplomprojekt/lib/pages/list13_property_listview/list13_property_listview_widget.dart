@@ -52,7 +52,6 @@ class _List13PropertyListviewWidgetState
   Widget _buildProductCard(Map<String, dynamic> product) {
     String imageUrl;
     if (product['image_url'].toString().contains("error")) {
-          print('Image not found or failed to load');
       imageUrl = 'https://fakeimg.pl/600x400?text=Recycling+Heroes';
     } else {
       imageUrl = product['image_url'];
