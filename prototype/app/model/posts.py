@@ -4,7 +4,7 @@ from fastapi import HTTPException, Depends
 from . import shemas, models, utils
 from datetime import datetime, timedelta
 
-def Usercreate(user_create: shemas.User, db: Session):
+def user_create(user_create: shemas.User, db: Session):
     existing_user = db.query(models.User).filter(models.User.username == user_create.username).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Der Username wird schon verwendet")
@@ -22,7 +22,7 @@ def Usercreate(user_create: shemas.User, db: Session):
 
     return {"user": new_user}
 
-def Productcreate(product_create: shemas.Product, db: Session):
+def product_create(product_create: shemas.Product, db: Session):
     # Erstellen Sie ein neues Produkt
     new_product = models.Product(
         user_id=product_create.user_id,
@@ -46,7 +46,7 @@ def Productcreate(product_create: shemas.Product, db: Session):
 
     return new_product
 
-def Imagecreate(image_create: shemas.Image, db: Session):
+def image_create(image_create: shemas.Image, db: Session):
     # Erstellen Sie ein neues Bild
     new_image = models.Picture(
         product_id=image_create.product_id,
@@ -60,7 +60,7 @@ def Imagecreate(image_create: shemas.Image, db: Session):
 
     return new_image
 
-def addfavourite(addfavourite: shemas.Favourite, db: Session):
+def add_favourite(addfavourite: shemas.Favourite, db: Session):
     # Check if the product exists
     product = db.query(models.Product).filter(models.Product.id == addfavourite.product_id).first()
     if not product:
