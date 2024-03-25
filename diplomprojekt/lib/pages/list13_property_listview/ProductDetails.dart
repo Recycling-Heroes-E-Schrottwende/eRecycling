@@ -53,6 +53,8 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
     with TickerProviderStateMixin {
   late ProductDetailsModel _model;
 
+  bool isFavorited = false;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -243,12 +245,21 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
     super.initState();
     _model = createModel(context, () => ProductDetailsModel());
 
+    _loadData();
+
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
           !anim.applyInitialState),
       this,
     );
+  }
+
+  void _loadData() async {
+    bool fav = await isFavourite(widget.productId);
+    setState(() {
+      isFavorited = fav;
+    });
   }
 
   @override
@@ -284,7 +295,28 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
               context.pushNamed('List13PropertyListview');
             },
           ),
-          actions: const [],
+          actions: [
+            IconButton(
+              icon: Icon(
+                isFavorited
+                    ? Icons.star
+                    : Icons
+                        .star_border, // Dieses Icon wird zu "Icons.favorite" wechseln, wenn der Artikel favorisiert ist.
+                color: FlutterFlowTheme.of(context).secondaryText,
+              ),
+              onPressed: () async {
+                if (isFavorited) {
+                  await removeFavourite(widget.productId);
+                } else {
+                  await addFavourite(widget.productId);
+                }
+
+                setState(() {
+                  isFavorited = !isFavorited;
+                });
+              },
+            ),
+          ],
           centerTitle: false,
           elevation: 0.0,
         ),
@@ -314,6 +346,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                               //height: 320.0,
                               width: double.infinity,
                               fit: BoxFit.fitWidth,
+                              alignment: Alignment.topCenter,
                             ).animateOnPageLoad(
                                 animationsMap['imageOnPageLoadAnimation1']!)),
                       )),

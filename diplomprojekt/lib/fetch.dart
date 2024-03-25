@@ -335,3 +335,65 @@ Future<List<String>> fetchImageUrls(int productId) async {
     throw Exception('Failed to load image urls');
   }
 }
+
+Future<bool> addFavourite(int productId) async {
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop",
+    'Content-Type': 'application/json'
+  };
+  print('Adding favourite for product $productId');
+  var body = jsonEncode({'product_id': productId, 'user_id': 10});
+  final response = await http.post(
+      Uri.parse('http://app.recyclingheroes.at/api/addFavourite/'),
+      headers: headers,
+      body: body);
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    print('Failed to add favourite: ${response.body}');
+    return false;
+  }
+}
+
+Future<bool> removeFavourite(int productId) async {
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop"
+  };
+  print('Deleting favourite for product $productId');
+  final response = await http.delete(
+      Uri.parse('http://app.recyclingheroes.at/api/delete_favourite/?user_id=10&product_id=$productId'),
+      headers: headers);
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    print('Failed to delete favourite: ${response.body}');
+    return false;
+  }
+}
+
+Future<bool> isFavourite(int productId) async {
+  var headers = {
+    'accept': 'application/json',
+    'X-API-Key': "#Baum9Gebaeude5Laptop",
+  };
+  final response = await http.get(
+      Uri.parse('http://app.recyclingheroes.at/api/favourites/?user_id=10'),
+      headers: headers);
+
+  if (response.statusCode == 200) {
+    List<dynamic> favorites = jsonDecode(response.body);
+    for (var item in favorites) {
+      if (item['id'] == productId) {
+        print('Product $productId is a favorite');
+        return true;
+      }
+    }
+  } else {
+    throw Exception('Failed to load favorites');
+  }
+  return false;
+}
